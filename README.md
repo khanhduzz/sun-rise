@@ -3,7 +3,7 @@ Budgeting Service System is a project provides features for tracking and managin
 
 
 <div style="text-align: center;">
-  <img width="491" alt="Screenshot 2024-08-22 at 21 34 38" src="https://github.com/user-attachments/assets/06cc18d4-99c8-4800-ab54-d0bf85147908">
+  <img width="491" alt="Screenshot 2024-08-22 at 21 34 38" src="https://github.com/user-attachments/assets/cbd54394-b9be-4ca9-a12c-e774efd4e52e">
 </div>
 
 # Technologies
