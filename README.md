@@ -14,6 +14,11 @@ Budgeting Service System is a project provides features for tracking and managin
 - Thymeleaf
 - Jquery
 
+# Current Feature
+- Init the spring boot project, setup README.md, MIT license
+- Configure Github action, apply Pull request rules
+- Setup packages, initial models and relationships
+
 # Architecture
 
 
