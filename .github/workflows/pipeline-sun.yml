@@ -10,7 +10,7 @@ on:
       - main
       - ci-cd
     paths:
-      - ".github/workflows/pipeline-sun.yaml"
+      - ".github/workflows/pipeline-sun.yml"
 
 jobs:
   compile:
