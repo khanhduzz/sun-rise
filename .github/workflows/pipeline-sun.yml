@@ -1,4 +1,4 @@
-name: Java CI Employee Management
+name: Budgeting service
 
 on:
   push:
