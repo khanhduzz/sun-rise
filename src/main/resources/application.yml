@@ -18,3 +18,13 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
+server:
+  port: 8086
+  servlet:
+    context-path: /sun
+
+application:
+  admin:
+    default:
+      username: testuser
+      password: 123456
