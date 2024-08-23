@@ -29,12 +29,12 @@ public class ApplicationConfig {
     private String adminPassword;
 
     @Bean
-    public AuthenticationManager authenticationManager (AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder () {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -43,7 +43,7 @@ public class ApplicationConfig {
         prefix = "spring",
         value = "datasource.driver-class-name",
         havingValue = "org.postgresql.Driver")
-    ApplicationRunner applicationRunner () {
+    ApplicationRunner applicationRunner() {
         log.info("Initializing application.....");
         return args -> {
             if (!userRepository.existsByUsername(adminUsername)) {

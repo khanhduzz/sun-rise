@@ -10,15 +10,23 @@ on:
       - main
       - ci-cd
     paths:
-      - ".github/workflows/pipeline-sun.yml"
+      - ".github/workflows/pipeline-sun.yaml"
 
 jobs:
+  style:
+    runs-on: ubuntu-latest
+    name: Check style
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run maven checkstyle
+        run: mvn checkstyle:checkstyle
   compile:
     runs-on: ubuntu-latest
     name: Compile project
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -37,7 +45,7 @@ jobs:
     name: Unit tests
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -57,7 +65,7 @@ jobs:
     needs: [compile, unit-tests]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
