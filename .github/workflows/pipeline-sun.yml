@@ -13,6 +13,17 @@ on:
       - ".github/workflows/pipeline-sun.yml"
 
 jobs:
+  style:
+    runs-on: ubuntu-lastest
+    name: Check style
+    steps:
+      - name: Run Maven Checkstyle
+        uses: actions/checkout@v4
+        run: mvn checkstyle:checkstyle
+      - name: Upload Checkstyle result
+        uses: jwgmeligmeyling/checkstyle-github-action@master
+        with:
+          path: '**/checkstyle-result.xml'
   compile:
     runs-on: ubuntu-latest
     name: Compile project

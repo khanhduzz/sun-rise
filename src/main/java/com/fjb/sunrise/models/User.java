@@ -19,7 +19,7 @@ import lombok.Setter;
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends AuditEntity<Long>{
+public class User extends AuditEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

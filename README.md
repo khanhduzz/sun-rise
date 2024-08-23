@@ -43,6 +43,10 @@ Include setup steps for PostgreSQL database connection, and any other necessary 
     - Update environment variable in file **.env**
 
 ## Run
+0. Remember checkstyle
+```bash
+   ./mvnw checkstyle:checkstyle
+```
 1. Build the Project
 ```bash
     ./mvnw clean install  

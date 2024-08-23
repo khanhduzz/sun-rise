@@ -18,7 +18,7 @@ import lombok.Setter;
 @Table(name = "transactions")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Transaction extends AuditEntity<Long>{
+public class Transaction extends AuditEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
