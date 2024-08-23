@@ -17,8 +17,9 @@ jobs:
     runs-on: ubuntu-lastest
     name: Check style
     steps:
-      - name: Run Maven Checkstyle
+      - name: Checkout code
         uses: actions/checkout@v4
+      - name: Run maven checkstyle
         run: mvn checkstyle:checkstyle
       - name: Upload Checkstyle result
         uses: jwgmeligmeyling/checkstyle-github-action@master
