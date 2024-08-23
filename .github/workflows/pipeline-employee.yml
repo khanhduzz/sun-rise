@@ -1,0 +1,73 @@
+# CI for normal merge to main
+name: Java CI Employee Management
+
+on:
+  push:
+    branches:
+      - main
+      - ci-cd
+  pull_request:
+    branches:
+      - main
+      - ci-cd
+    paths:
+      - ".github/workflows/pipeline-employee.yaml"
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    name: Compile project
+    steps:
+      - name: Checkout cde
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Compile project
+        run: mvn clean compile
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    name: Unit tests
+    steps:
+      - name: Checkout cde
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Running unit tests
+        run: mvn clean test
+
+  build:
+    runs-on: ubuntu-latest
+    name: Build project
+    needs: [compile, unit-tests]
+    steps:
+      - name: Checkout cde
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Building project
+        run: mvn clean package
