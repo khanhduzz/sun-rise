@@ -21,10 +21,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Run maven checkstyle
         run: mvn checkstyle:checkstyle
-      - name: Upload Checkstyle result
-        uses: jwgmeligmeyling/checkstyle-github-action@master
-        with:
-          path: '**/checkstyle-result.xml'
+#      - name: Upload Checkstyle result
+#        uses: jwgmeligmeyling/checkstyle-github-action@master
+#        with:
+#          path: '**/checkstyle-result.xml'
   compile:
     runs-on: ubuntu-latest
     name: Compile project
