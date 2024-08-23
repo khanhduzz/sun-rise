@@ -18,19 +18,15 @@ jobs:
     name: Check style
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
       - name: Run maven checkstyle
         run: mvn checkstyle:checkstyle
-#      - name: Upload Checkstyle result
-#        uses: jwgmeligmeyling/checkstyle-github-action@master
-#        with:
-#          path: '**/checkstyle-result.xml'
   compile:
     runs-on: ubuntu-latest
     name: Compile project
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -49,7 +45,7 @@ jobs:
     name: Unit tests
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -69,7 +65,7 @@ jobs:
     needs: [compile, unit-tests]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
