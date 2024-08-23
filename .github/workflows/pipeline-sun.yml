@@ -14,7 +14,7 @@ on:
 
 jobs:
   style:
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     name: Check style
     steps:
       - name: Checkout code
