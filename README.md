@@ -18,6 +18,7 @@ Budgeting Service System is a project provides features for tracking and managin
 - Init the spring boot project, setup README.md, MIT license
 - Configure Github action, apply Pull request rules
 - Setup packages, initial models and relationships
+- Added checkstyle, ci pipeline for checking maven build and test.
 
 # Architecture
 
