@@ -26,5 +26,5 @@ server:
 application:
   admin:
     default:
-      username: testuser
-      password: 123456
+      username: sunrise
+      password: test1234

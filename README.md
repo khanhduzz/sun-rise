@@ -60,6 +60,6 @@ Include setup steps for PostgreSQL database connection, and any other necessary 
    - Test account:
    ```bash
        username: sunrise
-       password: Test#1234
+       password: test1234
     ```
 # References
