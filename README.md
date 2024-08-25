@@ -24,9 +24,11 @@ Budgeting Service System is a project provides features for tracking and managin
 - Added docker config to create docker image and container.
 
 # Architecture
-![sunrise drawio](https://github.com/user-attachments/assets/bd277802-8eb7-4130-b2ae-69328ad551a3)
+![sunrise drawio](https://github.com/user-attachments/assets/023d7e2c-6476-4da1-8be2-f7ef0272a794)
+
 # Database Modeling
 ![detb-service-diagram](https://github.com/user-attachments/assets/f60b95b4-bb9a-44cb-8e95-3b5f1987e2d1)
+
 # Setting Up and Running at Local
 
 ## Configuration
