@@ -8,10 +8,6 @@ on:
   pull_request:
     branches:
       - main
-      - ci-cd
-    paths:
-      - 'pom.xml'
-      - '.github/workflows/pipeline-sun.yml'
 
 jobs:
   style:
