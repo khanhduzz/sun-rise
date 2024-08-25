@@ -12,7 +12,7 @@ public class HealthController {
     @GetMapping
     public ModelAndView health() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/health");
+        modelAndView.setViewName("health");
         return modelAndView;
     }
 }
