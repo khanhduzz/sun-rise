@@ -1,0 +1,52 @@
+services:
+  sunrise:
+    build: .
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mock_project
+      - SERVER_SERVLET_CONTEXT_PATH=/sun
+      - SUN_SERVICES_MEDIA
+#      - SERVER_PORT
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./deployment/app-config:/app-config
+    networks:
+      - sun-network
+
+  postgres:
+    image: debezium/postgres:15-alpine
+    build: src/docker/postgres
+    hostname: ${POSTGRES_HOST}
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - ./docker/postgres/postgresql.conf.sample:/usr/share/postgresql/postgresql.conf.sample
+      - ./postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql
+      - postgres:/var/lib/postgresql/data
+    command: postgres -c 'max_connections=500'
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    networks:
+      - sun-network
+
+  pgadmin:
+    image: dpage/pgadmin4:6.20
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@sun.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8081:80"
+    networks:
+      - sun-network
+
+networks:
+  sun-network:
+    driver: bridge
+    name: sun-network
+
+volumes:
+  postgres:
+  pgadmin:
