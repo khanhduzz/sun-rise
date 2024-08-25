@@ -1,11 +1,11 @@
 services:
   sunrise:
     build: .
+    image: sunrise:latest
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mock_project
       - SERVER_SERVLET_CONTEXT_PATH=/sun
       - SUN_SERVICES_MEDIA
-#      - SERVER_PORT
     ports:
       - "8086:8086"
     volumes:
