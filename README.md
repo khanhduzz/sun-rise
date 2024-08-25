@@ -8,24 +8,27 @@ Budgeting Service System is a project provides features for tracking and managin
 
 # Technologies
 - Java 17
-- Spring boot 3.3.0
+- Spring boot 3.3.3
 - Swagger
 - PostgreSQL
 - Thymeleaf
+- Bootstrap
 - Jquery
+- Docker
 
 # Current Feature
 - Init the spring boot project, setup README.md, MIT license
 - Configure Github action, apply Pull request rules
 - Setup packages, initial models and relationships
 - Added checkstyle, ci pipeline for checking maven build and test.
+- Added docker config to create docker image and container.
 
 # Architecture
 
 
 
 # Database Modeling
-
+![detb-service-diagram](https://github.com/user-attachments/assets/f60b95b4-bb9a-44cb-8e95-3b5f1987e2d1)
 
 # Setting Up and Running at Local
 
