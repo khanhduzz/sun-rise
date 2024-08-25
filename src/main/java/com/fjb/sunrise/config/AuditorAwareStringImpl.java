@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuditorAwareStringImpl implements AuditorAware<String> {
     @Override
-    public Optional<String> getCurrentAuditor () {
+    public Optional<String> getCurrentAuditor() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
