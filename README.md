@@ -1,6 +1,7 @@
 # Budgeting Service System
 Budgeting Service System is a project provides features for tracking and managing budget, money, users, and trading transactions.
 
+[![storefront-ci](https://github.com/khanhduzz/sun-rise/actions/workflows/pipeline-sun.yml/badge.svg)](https://github.com/khanhduzz/sun-rise/actions/workflows/pipeline-sun.yml)
 
 <div style="text-align: center;">
   <img width="491" alt="Screenshot 2024-08-22 at 21 34 38" src="https://github.com/user-attachments/assets/cbd54394-b9be-4ca9-a12c-e774efd4e52e">
@@ -15,6 +16,20 @@ Budgeting Service System is a project provides features for tracking and managin
 - Bootstrap
 - Jquery
 - Docker
+
+> *_Running:_* You can run this project with Docker container
+> - Run docker on your local machine.
+> - Go to the project, run `docker compose up` on `terminal/command promt`, then waiting for project starting
+> - The project is run on: `localhost:8086/sun/`
+> - The postgres container is run on: `localhost:5432`\
+>   Default user:\
+>     `username: admin`\
+>     `password: admin`  
+> - The PgAdmin is run on: `localhost:8081`\
+>   Defaul pgAdmin user:\
+>     `username: admin@sun.com`\
+>     `password: admin`\
+>   After login to `PgAmin -> Register -> Create new -> Create postgres database`
 
 # Current Feature
 - Init the spring boot project, setup README.md, MIT license
