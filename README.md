@@ -16,8 +16,9 @@ Budgeting Service System is a project provides features for tracking and managin
 - Bootstrap
 - Jquery
 - Docker
+- Sonar cloud for checking clean code.
 
-> *_Running:_* You can run this project with Docker container
+> *_Running:_* You can run this project with Docker container (not available now)
 > - Run docker on your local machine.
 > - Go to the project, run `docker compose up` on `terminal/command promt`, then waiting for project starting
 > - The project is run on: `localhost:8086/sun/`
