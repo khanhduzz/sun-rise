@@ -1,6 +1,7 @@
 package com.fjb.sunrise.models;
 
 import com.fjb.sunrise.enums.ERole;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,15 @@ public class User extends AuditEntity<Long> {
     private Long id;
 
     private String username;
+
+    @Column(name = "first_name", nullable = false)
+    private String firstname;
+    @Column(name = "last_name", nullable = false)
+    private String lastname;
+    private String email;
+    @Column(length = 12)
+    private String phone;
+    @Column(nullable = false)
     private String password;
 
     private ERole role;
