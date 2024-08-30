@@ -28,6 +28,12 @@ public class ApplicationConfig {
     @Value("${application.admin.default.password}")
     private String adminPassword;
 
+    @Value("${application.admin.default.firstname}")
+    private String adminFirstname;
+
+    @Value("${application.admin.default.lastname}")
+    private String adminLastname;
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
@@ -50,6 +56,8 @@ public class ApplicationConfig {
 
                 User user = User.builder()
                     .username(adminUsername)
+                    .firstname(adminFirstname)
+                    .lastname(adminLastname)
                     .password(passwordEncoder().encode(adminPassword))
                     .role(ERole.ADMIN)
                     .build();

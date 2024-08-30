@@ -10,3 +10,5 @@ application:
     default:
       username: testuser
       password: 123456
+      firstname: james
+      lastname: bond
