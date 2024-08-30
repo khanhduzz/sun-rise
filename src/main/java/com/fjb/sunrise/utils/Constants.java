@@ -2,6 +2,8 @@ package com.fjb.sunrise.utils;
 
 public class Constants {
 
+    private Constants() {}
+
     public static final class ErrorCode {
 
         private ErrorCode() {}
