@@ -6,9 +6,9 @@ spring:
 #    url: ${DB_URL}
 #    username: ${DB_USERNAME}
 #    password: ${DB_PASSWORD}
-    url: jdbc:postgresql://localhost:5432/mock_project
-    username: admin
-    password: admin
+    url: jdbc:postgresql://ep-orange-lake-a504982s.us-east-2.aws.neon.tech/dang-quy
+    username: sun
+    password: ameHN4MXxVQ5
     driver-class-name: org.postgresql.Driver
 
   jpa:

@@ -30,11 +30,15 @@ public class User extends AuditEntity<Long> {
 
     @Column(name = "first_name", nullable = false)
     private String firstname;
+
     @Column(name = "last_name", nullable = false)
     private String lastname;
+
     private String email;
+
     @Column(length = 12)
     private String phone;
+
     @Column(nullable = false)
     private String password;
 
