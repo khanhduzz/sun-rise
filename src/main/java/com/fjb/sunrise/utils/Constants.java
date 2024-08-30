@@ -2,7 +2,9 @@ package com.fjb.sunrise.utils;
 
 public class Constants {
 
-    public final class ErrorCode {
+    public static final class ErrorCode {
+
+        private ErrorCode() {}
 
         public static final String USER_NOT_FOUND = "USER_NOT_FOUND";
         public static final String USER_ALREADY_EXISTED = "USER_ALREADY_EXISTED";
@@ -10,13 +12,17 @@ public class Constants {
         public static final String CATEGORY_ALREADY_EXISTED = "CATEGORY_ALREADY_EXISTED";
     }
 
-    public final class PageableConstant {
+    public static final class PageableConstant {
+
+        private PageableConstant() {}
 
         public static final String DEFAULT_PAGE_SIZE = "10";
         public static final String DEFAULT_PAGE_NUMBER = "0";
     }
 
-    public final class ApiConstant {
+    public static final class ApiConstant {
+
+        private ApiConstant() {}
 
         public static final String HEALTH_URL = "/health";
 
