@@ -54,9 +54,10 @@ public class ApplicationConfig {
                     .role(ERole.ADMIN)
                     .build();
                 userRepository.save(user);
-                log.warn("admin user has been created: username = {}, password = {} ", adminUsername, adminPassword);
+                log.warn("Create: admin user has been created: username = {}, password = {} ",
+                    adminUsername, adminPassword);
             } else {
-                log.warn("admin user: username = {}, password = {} ", adminUsername, adminPassword);
+                log.warn("Admin user: username = {}, password = {} ", adminUsername, adminPassword);
             }
             log.info("Application initialization completed .....");
         };

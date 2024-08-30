@@ -3,12 +3,9 @@ spring:
     name: sun-rise
 
   datasource:
-#    url: ${DB_URL}
-#    username: ${DB_USERNAME}
-#    password: ${DB_PASSWORD}
-    url: jdbc:postgresql://ep-orange-lake-a504982s.us-east-2.aws.neon.tech/dang-quy
-    username: sun
-    password: ameHN4MXxVQ5
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -30,12 +27,12 @@ spring:
           aop: DEBUG
 
 server:
-  port: 8086
+  port: ${SERVER_LOCAL_PORT}
   servlet:
     context-path: /sun
 
 application:
   admin:
     default:
-      username: sunrise
-      password: test1234
+      username: ${ADMIN_DEFAULT_USERNAME}
+      password: ${ADMIN_DEFAULT_PASSWORD}

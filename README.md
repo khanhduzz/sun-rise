@@ -20,9 +20,9 @@ Budgeting Service System is a project provides features for tracking and managin
 - Docker
 - Sonar cloud for checking clean code.
 
-> *_Running:_* You can run this project with Docker container (not available now)
+> *_Running:_* You can run this project with Docker container
 > - Run docker on your local machine.
-> - Go to the project, run `docker compose up` on `terminal/command promt`, then waiting for project starting
+> - Go to the project, run `docker compose build` then `docker compose up` on `terminal/command promt`, then waiting for project starting
 > - The project is run on: `localhost:8086/sun/`
 > - The postgres container is run on: `localhost:5432`\
 >   Default user:\
@@ -40,6 +40,7 @@ Budgeting Service System is a project provides features for tracking and managin
 - Setup packages, initial models and relationships
 - Added checkstyle, ci pipeline for checking maven build and test.
 - Added docker config to create docker image and container.
+- Able to run in local and with docker
 
 # Architecture
 ![sunrise drawio](https://github.com/user-attachments/assets/023d7e2c-6476-4da1-8be2-f7ef0272a794)
