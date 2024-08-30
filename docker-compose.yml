@@ -7,6 +7,11 @@ services:
       - SERVER_SERVLET_CONTEXT_PATH=/sun
       - DB_USERNAME=admin
       - DB_PASSWORD=admin
+      - SERVER_LOCAL_PORT
+      - ADMIN_DEFAULT_USERNAME=sunrise
+      - ADMIN_DEFAULT_PASSWORD=test1234
+      - ADMIN_DEFAULT_FIRST=james
+      - ADMIN_DEFAULT_LAST=bond
     ports:
       - ${SERVER_LOCAL_PORT}:${SERVER_LOCAL_PORT}
     volumes:

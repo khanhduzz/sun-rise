@@ -36,3 +36,5 @@ application:
     default:
       username: ${ADMIN_DEFAULT_USERNAME}
       password: ${ADMIN_DEFAULT_PASSWORD}
+      firstname: ${ADMIN_DEFAULT_FIRST}
+      lastname: ${ADMIN_DEFAULT_LAST}
