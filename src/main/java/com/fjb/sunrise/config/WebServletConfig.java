@@ -56,6 +56,5 @@ public class WebServletConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/health").setViewName("health");
         registry.addViewController("/auth/login").setViewName("loginAndRegister");
-        registry.addViewController("/auth/register").setViewName("loginAndRegister");
     }
 }

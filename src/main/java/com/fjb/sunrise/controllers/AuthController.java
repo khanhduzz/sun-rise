@@ -18,12 +18,11 @@ public class AuthController {
     private final UserService service;
 
     @GetMapping({ "/login", "/register"})
-    public ModelAndView index(){
+    public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("loginAndRegister");
         modelAndView.addObject("login", new LoginRequest());
         modelAndView.addObject("register", new RegisterRequest());
-        modelAndView.addObject("errorMessage", null);
         return modelAndView;
     }
 
