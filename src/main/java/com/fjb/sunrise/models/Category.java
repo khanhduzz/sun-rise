@@ -18,7 +18,7 @@ import lombok.Setter;
 @Table(name = "categories")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category extends AuditEntity<Long> {
+public class Category extends AuditEntity<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
