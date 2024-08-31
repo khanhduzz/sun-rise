@@ -12,6 +12,7 @@ services:
       - ADMIN_DEFAULT_PASSWORD=test1234
       - ADMIN_DEFAULT_FIRST=james
       - ADMIN_DEFAULT_LAST=bond
+      - ADMIN_CREATE_KEY=dfjkNdkMAnje
     ports:
       - ${SERVER_LOCAL_PORT}:${SERVER_LOCAL_PORT}
     volumes:
@@ -56,3 +57,4 @@ networks:
 volumes:
   postgres:
   pgadmin:
+

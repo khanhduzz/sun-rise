@@ -12,3 +12,6 @@ application:
       password: 123456
       firstname: james
       lastname: bond
+
+default:
+  admin-create-key: dfjkNdkMAnje
