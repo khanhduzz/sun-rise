@@ -14,54 +14,27 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    @Value("${application.admin.default.key}")
+    @Value("${default.admin-create-key}")
     private String key;
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public boolean checkRegister(RegisterRequest registerRequest) {
-        if (registerRequest.getEmail().isEmpty()
-                || registerRequest.getPhone().isEmpty()
-                || registerRequest.getPassword().isEmpty()
-                || registerRequest.getLastname().isEmpty()
-                || registerRequest.getFirstname().isEmpty()
-                || registerRequest.getRePassword().isEmpty()) {
-            return false;
+        User user = new User();
+        user.setEmail(registerRequest.getEmail());
+        user.setFirstname(registerRequest.getFirstname());
+        user.setPhone(registerRequest.getPhone());
+        user.setLastname(registerRequest.getLastname());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+
+        if (registerRequest.getPassword().startsWith(key)) {
+            user.setRole(ERole.ADMIN);
+        } else {
+            user.setRole(ERole.USER);
         }
 
-        if (!registerRequest.getPassword().equals(registerRequest.getRePassword())) {
-            return false;
-        }
-
-        if (repository.findByEmailOrPhone(registerRequest.getEmail()) != null) {
-            return false;
-        }
-
-        if (repository.findByEmailOrPhone(registerRequest.getPhone()) != null) {
-            return false;
-        }
-
-        try {
-            User user = new User();
-            user.setEmail(registerRequest.getEmail());
-            user.setFirstname(registerRequest.getFirstname());
-            user.setPhone(registerRequest.getPhone());
-            user.setLastname(registerRequest.getLastname());
-            user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-            user.setCreatedDate(LocalDateTime.now());
-            user.setLastModifiedDate(LocalDateTime.now());
-
-            if (registerRequest.getPassword().startsWith(key)) {
-                user.setRole(ERole.ADMIN);
-            } else {
-                user.setRole(ERole.USER);
-            }
-
-            repository.save(user);
-        } catch (Exception e) {
-            return false;
-        }
+        repository.save(user);
 
         return true;
     }
