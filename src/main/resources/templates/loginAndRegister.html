@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budgeting Service</title>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/Style.css}" type="text/css">
+</head>
+<body>
+<div class="background-custom">
+
+    <th:block th:if="${errorMessage != null}">
+<!--        <div id="overlay" class="overlay show"></div>-->
+        <div id="popup" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
+<!--            <button class="btn btn-primary" id = "closePopup">Đóng</button>-->
+        </div>
+    </th:block>
+
+    <div class="box-custom row">
+        <div class="col-custom hidden" id="formRegister">
+            <div style="width: 100%; height: 100%">
+                <h3 class="text-center text-nowrap" style="color: #486EDB; font-size: 40px">ĐĂNG KÝ</h3>
+                <form th:action="@{/auth/register}" th:method="POST" th:object="${register}">
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" maxlength="200" class="form-control input-custom" id="firstname" th:field="*{firstname}" placeholder="Vui lòng nhập tên"/>
+                            <input type="text" maxlength="250" class="form-control input-custom" id="email" th:field="*{email}" placeholder="Địa chỉ Email"/>
+                            <input type="password" maxlength="200" class="form-control input-custom" id="passwordRegister" th:field="*{password}" placeholder="Mật khẩu"/>
+                        </div>
+
+                        <div class="col">
+                            <input type="text" maxlength="200" class="form-control input-custom" id="lastname" th:field="*{lastname}" placeholder="Vui lòng nhập họ"/>
+                            <input type="text" maxlength="12" class="form-control input-custom" id="phone" th:field="*{phone}" placeholder="Số điện thoại"/>
+                            <input type="password" class="form-control input-custom" id="rePasswordRegister" th:field="*{rePassword}" placeholder="Nhập lại mật khẩu"/>
+                        </div>
+                    </div>
+                    <button type="submit" id="buttonRegister" class="btn-login input-custom">Đăng ký</button>
+                </form>
+
+                <hr>
+
+                <p class="text-center m-0"><a class="text-decoration-none" style="font-size: small">Quên mật khẩu?</a></p>
+                <p class="text-center m-0"><a class="text-decoration-none" style="font-size: small" id="login">Bạn đã có tài khoản?Đăng nhập!</a></p>
+            </div>
+        </div>
+
+        <div class="cover-form pt-12 text-center border-register hidden" id="tabRegister">
+            <h2>Chào mừng bạn đến với</h2>
+            <h2>Budgeting Service </h2>
+            <div id="message">
+                <p class="mt-5" style="font-size: large;">
+                    Hãy nhập thông tin để đăng ký tài khoản người dùng của bạn!
+                </p>
+                <i class="bi bi-emoji-heart-eyes" style="font-size: 7rem;"></i>
+            </div>
+
+        </div>
+
+
+        <div class="col-4 cover-form border-login pt-12 text-center" id="tabLogin">
+            <h2>Chào mừng bạn trở lại</h2>
+            <h2>Budgeting Service </h2>
+            <p class="mt-5" style="font-size: large">
+                Hãy nhập thông tin để đăng nhập vào tài khoản của bạn!
+            </p>
+            <i class="bi bi-emoji-wink" style="font-size: 7rem;"></i>
+        </div>
+
+
+        <div class="col-8 col-custom" id="formLogin">
+            <div style="width: 100%; height: 100%">
+                <h1 class="text-center text-nowrap" style="color: #486EDB; font-size: 40px">ĐĂNG NHẬP</h1>
+                <form method="POST" th:action="@{/auth/login}">
+                    <input type="text" class="form-control input-custom" id="username" placeholder="Nhập email hoặc số điện thoại">
+                    <input type="password" class="form-control input-custom" id="passwordLogin" placeholder="Nhập mật khẩu">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="remember">
+                        <label class="form-check-label remember" for="remember">Ghi nhớ đăng nhập</label>
+                    </div>
+                    <button type="submit" class="btn-login input-custom">Đăng nhập</button>
+                </form>
+
+                <hr>
+
+                <p class="text-center m-0"><a class="text-decoration-none" style="font-size: small">Quên mật khẩu?</a></p>
+                <p class="text-center m-0"><a class="text-decoration-none" style="font-size: small" id="register">Tạo tài khoản!</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script defer type="text/javascript" th:src="@{/js/action.js}"></script>
+    <script defer type="text/javascript" th:src="@{/js/valid.js}"></script>
+    <script async type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
