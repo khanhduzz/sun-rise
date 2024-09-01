@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Check {
-    public Check() {}
+    private Check() {}
 
     public static boolean isEmail(String email) {
         String regex = "^[a-zA-Z0-9_+&*-]+(?:\\."

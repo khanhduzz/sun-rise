@@ -18,18 +18,13 @@ public class UserServiceImpl implements UserService {
     @Value("${default.admin-create-key}")
     private String key;
     private final UserMapper mapper;
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public boolean checkRegister(RegisterRequest registerRequest) {
-        //check already exist email -> unique email
-        if (repository.findByEmailOrPhone(registerRequest.getEmail()) != null) {
-            return false;
-        }
-
-        //check already exist phone -> unique phone
-        if (repository.findByEmailOrPhone(registerRequest.getPhone()) != null) {
+        //check already exist email or phone
+        if (userRepository.existsUserByEmailOrPhone(registerRequest.getEmail(), registerRequest.getPhone())) {
             return false;
         }
 
@@ -43,7 +38,7 @@ public class UserServiceImpl implements UserService {
             user.setRole(ERole.USER);
         }
 
-        user = repository.save(user);
+        user = userRepository.save(user);
 
         return true;
     }
