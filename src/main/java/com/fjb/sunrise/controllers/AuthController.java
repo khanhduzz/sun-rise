@@ -5,6 +5,7 @@ import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,22 +28,17 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ModelAndView doRegister(@ModelAttribute("register") RegisterRequest registerRequest) {
+    public ModelAndView doRegister(@ModelAttribute("register") RegisterRequest registerRequest,
+                                   BindingResult bindingResult) {
         //setup object for view
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("loginAndRegister");
         modelAndView.addObject("login", new LoginRequest());
         modelAndView.addObject("register", new RegisterRequest());
 
-        // check null fields
-        if (registerRequest.getEmail().isEmpty()
-            || registerRequest.getPhone().isEmpty()
-            || registerRequest.getPassword().isEmpty()
-            || registerRequest.getLastname().isEmpty()
-            || registerRequest.getFirstname().isEmpty()
-            || registerRequest.getRePassword().isEmpty()) {
-            modelAndView.addObject("errorMessage", "Đăng kí không thành công");
-            return modelAndView;
+        //check valid
+        if (bindingResult.hasErrors()) {
+            return  modelAndView;
         }
 
         // implement register for user
@@ -51,6 +47,7 @@ public class AuthController {
         } else {
             modelAndView.addObject("errorMessage", "Đăng kí không thành công");
         }
+
         return modelAndView;
     }
 
