@@ -30,6 +30,14 @@ server:
   port: ${SERVER_LOCAL_PORT}
   servlet:
     context-path: /sun
+    session:
+      timeout: 10s
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
 
 application:
   admin:
