@@ -10,7 +10,7 @@
 <body>
     <h2>Server is up and running</h2>
     <h2>Welcome</h2>
-    <p>Spring Security Thymeleaf tutorial</p>
+    <p>This for checking authentication</p>
     <div sec:authorize="hasRole('ROLE_USER')">Text visible to user.</div>
     <div sec:authorize="hasRole('ROLE_ADMIN')">Text visible to admin.</div>
     <div sec:authorize="isAuthenticated()">Text visible only to authenticated users.</div>

@@ -31,7 +31,7 @@ server:
   servlet:
     context-path: /sun
     session:
-      timeout: 10s
+      timeout: 30s
 
 logging:
   level:
@@ -46,6 +46,7 @@ application:
       password: ${ADMIN_DEFAULT_PASSWORD}
       firstname: ${ADMIN_DEFAULT_FIRST}
       lastname: ${ADMIN_DEFAULT_LAST}
+      email: ${ADMIN_DEFAULT_EMAIL}
 
 default:
   admin-create-key: ${ADMIN_CREATE_KEY}

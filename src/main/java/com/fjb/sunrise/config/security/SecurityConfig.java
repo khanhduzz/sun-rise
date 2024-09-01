@@ -21,7 +21,7 @@ public class SecurityConfig {
     private final CustomUserDetailService userDetailsService;
 
 
-    static final String[] PUBLIC_ENDPOINTS = {"/img/**", "/css/**", "/js/**"};
+    static final String[] PUBLIC_ENDPOINTS = {"/img/**", "/css/**", "/js/**", "/health/**"};
 
     static final String[] ALLOWED_METHODS = {"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"};
 
@@ -58,7 +58,6 @@ public class SecurityConfig {
                     .sessionFixation().migrateSession()
                     .maximumSessions(1)
                     .expiredUrl("/login?session=expired")
-//                    .invalidSessionUrl("/login?session=expired")
             )
             .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
