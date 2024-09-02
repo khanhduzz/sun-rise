@@ -18,5 +18,8 @@
     <div sec:authentication="name"></div>
     Authenticated user roles:
     <div sec:authentication="principal.authorities"></div>
+    <div class="nav-item me-3" sec:authorize="isAuthenticated()">
+        <a class="btn btn-outline-danger w-100" th:href="@{/logout}">Logout</a>
+    </div>
 </body>
 </html>

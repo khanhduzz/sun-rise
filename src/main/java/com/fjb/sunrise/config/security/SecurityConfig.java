@@ -59,6 +59,12 @@ public class SecurityConfig {
                     .maximumSessions(1)
                     .expiredUrl("/login?session=expired")
             )
+            .rememberMe(rememberMe -> rememberMe
+                .rememberMeParameter("remember-me")
+                .rememberMeCookieName("remember-me-cookie")
+                .tokenValiditySeconds(86400)
+                .userDetailsService(userDetailsService)
+            )
             .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
         return http.build();
