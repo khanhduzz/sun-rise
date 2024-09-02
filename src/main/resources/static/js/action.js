@@ -1,5 +1,5 @@
 // index file
-window.onload = function (e) {
+window.onload = function () {
     let link = window.location.href;
     let endpoint = link.split("/").pop();
     if (endpoint === "register") {

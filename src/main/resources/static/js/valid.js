@@ -36,7 +36,7 @@ function validName() {
     const value = document.activeElement.value.trim();
     const validations = [
         [v => v !== "", 0],
-        [v => !/[!@#\$%\^\&*\)\(+=._-]+/g.test(v), 1],
+        [v => !/[!@#$%^&*)(+=._-]+/g.test(v), 1],
         [v => /^[A-Z][a-z]*( [A-Z][a-z]*)*$/.test(v.replace(/[@#!]/g, '')), 2]
     ];
     const elementId = document.activeElement.id === "lastname" ? "messageL" : "messageF";
@@ -69,7 +69,7 @@ function validPassword() {
     const value = document.activeElement.value.trim();
     const validations = [
         [v => v !== "", 0],
-        [v => /[!@#\$%\^\&*\)\(+=._-]+/.test(v), 1],
+        [v => /[!@#$%^&*)(+=._-]+/.test(v), 1],
         [v => /[A-Z]/.test(v), 2]
     ];
     validateField(value, validations, MESSAGE.password, "messagePW");
