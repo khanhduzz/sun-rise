@@ -54,7 +54,7 @@ jobs:
           cache: maven
 
       - name: Running unit tests
-        run: mvn test
+        run: mvn test jacoco:report
 
   build:
     runs-on: ubuntu-latest
@@ -80,8 +80,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FROM_ORIGINAL_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name == github.repository || github.ref == 'refs/heads/main' }}
+    permissions:
+      pull-requests: write
     name: Coverage and Package
-    needs: [unit-tests]
+    needs: [build]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
