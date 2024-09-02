@@ -28,7 +28,4 @@ public class RegisterRequest {
 
     @NotEmpty(message = "Mật khẩu không được để trống")
     private String password;
-
-    @NotEmpty(message = "Vui lòng điền vào trường xác nhận mật khẩu")
-    private String rePassword;
 }
