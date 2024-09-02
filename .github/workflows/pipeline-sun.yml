@@ -83,7 +83,6 @@ jobs:
     permissions:
       pull-requests: write
     name: Coverage and Package
-    needs: [build]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
