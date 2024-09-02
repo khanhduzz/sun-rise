@@ -107,10 +107,6 @@ jobs:
           min-coverage-changed-files: 20
           title: 'Sunrise Coverage Report'
           update-comment: true
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Log in to the Container registry
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: docker/login-action@v3
