@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
-import org.thymeleaf.templatemode.TemplateMode;
 
 @Configuration
 @EnableWebMvc
@@ -23,7 +22,7 @@ public class WebServletConfig implements WebMvcConfigurer {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
         resolver.setPrefix("classpath:/templates/");
         resolver.setSuffix(".html");
-        resolver.setTemplateMode(TemplateMode.HTML);
+        resolver.setTemplateMode("TemplateMode.HTML");
         resolver.setCacheable(false);
         return resolver;
     }
