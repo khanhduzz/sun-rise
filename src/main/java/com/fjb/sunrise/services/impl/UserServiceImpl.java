@@ -2,6 +2,7 @@ package com.fjb.sunrise.services.impl;
 
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.enums.ERole;
+import com.fjb.sunrise.mappers.UserMapper;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.UserService;
@@ -16,25 +17,28 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     @Value("${default.admin-create-key}")
     private String key;
-    private final UserRepository repository;
+    private final UserMapper mapper;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public boolean checkRegister(RegisterRequest registerRequest) {
-        User user = new User();
-        user.setEmail(registerRequest.getEmail());
-        user.setFirstname(registerRequest.getFirstname());
-        user.setPhone(registerRequest.getPhone());
-        user.setLastname(registerRequest.getLastname());
+        //check already exist email or phone
+        if (userRepository.existsUserByEmailOrPhone(registerRequest.getEmail(), registerRequest.getPhone())) {
+            return false;
+        }
+
+        User user = mapper.toEntity(registerRequest);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
+        // check password start with create admin key -> create with role admin
         if (registerRequest.getPassword().startsWith(key)) {
             user.setRole(ERole.ADMIN);
         } else {
             user.setRole(ERole.USER);
         }
 
-        repository.save(user);
+        user = userRepository.save(user);
 
         return true;
     }

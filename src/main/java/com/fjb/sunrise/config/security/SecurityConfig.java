@@ -19,7 +19,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailService userDetailsService;
 
-    static final String[] PUBLIC_ENDPOINTS = {"/img/**", "/css/**", "/js/**"};
+    static final String[] PUBLIC_ENDPOINTS = {"/img/**", "/css/**", "/js/**", "/auth/**"};
 
     static final String[] ALLOWED_METHODS = {"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"};
 
@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        // .loginPage("/sun/login")
+                         .loginPage("/auth/login")
                         .defaultSuccessUrl("/health", true)
                         .permitAll()
                 )

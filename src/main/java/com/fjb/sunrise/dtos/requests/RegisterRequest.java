@@ -10,26 +10,22 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegisterRequest {
-
     @Size(max = 250)
-    @NotBlank
+    @NotBlank(message = "Tên không được để trống")
     private String firstname;
 
     @Size(max = 250)
-    @NotBlank
+    @NotBlank(message = "Họ không được để trống")
     private String lastname;
 
-    @Email
-    @NotBlank
+    @Email(message = "Email phải có dạng của email")
+    @NotBlank(message = "Email không được để trống")
     private String email;
 
-    @NotBlank
-    @Size(max = 12)
+    @NotBlank(message = "Số điện thoại không được để trống")
+    @Size(max = 10, message = "Số điện thoại có đúng 10 chữ số")
     private String phone;
 
-    @NotEmpty
+    @NotEmpty(message = "Mật khẩu không được để trống")
     private String password;
-
-    @NotEmpty
-    private String rePassword;
 }
