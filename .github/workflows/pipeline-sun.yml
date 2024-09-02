@@ -80,6 +80,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FROM_ORIGINAL_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name == github.repository || github.ref == 'refs/heads/main' }}
+    permissions:
+      pull-requests: write
     name: Coverage and Package
     needs: [build]
     steps:
