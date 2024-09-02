@@ -54,7 +54,7 @@ jobs:
           cache: maven
 
       - name: Running unit tests
-        run: mvn clean test
+        run: mvn test
 
   build:
     runs-on: ubuntu-latest
@@ -74,4 +74,40 @@ jobs:
           cache: maven
 
       - name: Building project
-        run: mvn clean package
+        run: mvn package
+
+  coverage:
+    runs-on: ubuntu-latest
+    env:
+      FROM_ORIGINAL_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name == github.repository || github.ref == 'refs/heads/main' }}
+    name: Coverage and Package
+    needs: [unit-tests]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Add coverage report to PR
+        uses: madrapps/jacoco-report@v1.6.1
+        if: ${{ env.FROM_ORIGINAL_REPOSITORY == 'true' }}
+        with:
+          paths: ${{github.workspace}}/target/site/jacoco/jacoco.xml
+          token: ${{secrets.GITHUB_TOKEN}}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 60
+          title: 'Sunrise Coverage Report'
+          update-comment: true
+      - name: Log in to the Container registry
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push Docker images
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/sun-rise:latest
