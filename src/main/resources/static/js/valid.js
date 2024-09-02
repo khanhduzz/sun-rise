@@ -1,228 +1,127 @@
 const MESSAGE = {
-    name: ["Không được để trống", "Không chứa kí tự đặc biệt", "Viết hoa chữ cái đầu "],
+    name: ["Không được để trống", "Không chứa kí tự đặc biệt", "Viết hoa chữ cái đầu"],
     email: ["Không được để trống", "Đúng định dạng(vd: name@example.com)"],
     phone: ["Không được để trống", "Có 10 chữ số", "Đúng định dạng(vd: 0123456789)"],
     password: ["Không được để trống", "Có ít nhất 1 kí tự đặc biệt", "Có ít nhất 1 kí tự in hoa"],
     rePassword: ["Không được để trống", "Trùng với mật khẩu"]
+};
+
+let validRegister = {};
+
+// Hàm chung cho việc xác thực các trường dữ liệu
+function validateField(value, validations, messages, elementId) {
+    validRegister[elementId] = true;
+    let message = `<ul class="custom-list"></ul>`;
+
+    validations.forEach(([test, errorIndex]) => {
+        if (!test(value)) {
+            message += `<li class="inValid">${messages[errorIndex]}</li>`;
+            validRegister[elementId] = false;
+        } else {
+            message += `<li class="valid">${messages[errorIndex]}</li>`;
+        }
+    });
+
+    document.getElementById(elementId).innerHTML = message;
+    updateBorderColor(elementId);
 }
 
-function printMessage(message) {
-    document.getElementById("message").innerHTML = message;
+function updateBorderColor(elementId) {
+    const field = document.getElementById(elementId.replace('message', ''));
+    field.style.borderColor = validRegister[elementId] ? "green" : "red";
 }
 
-//register
-const firstname = document.getElementById("firstname");
-const lastname = document.getElementById("lastname");
-const email = document.getElementById("email");
-const phone = document.getElementById("phone");
-const passwordRegister = document.getElementById("passwordRegister");
-const rePasswordRegister = document.getElementById("rePasswordRegister");
-
-const buttonRegister = document.getElementById("buttonRegister");
-
-
-var validRegister = true;
-
-
-function validFirstname() {
-    let message = `<ul class="custom-list">Trường này yêu cầu: </ul>`;
-    let value = firstname.value;
-    let listMsg = MESSAGE.name;
-
-    if(value == null || value === "" || value.trim() === "") {
-        message+= `<li class="inValid">${listMsg[0]}</li>`;
-        validRegister = false;
-    } else {
-        message+= `<li class="valid">${listMsg[0]}</li>`;
-        validRegister = true;
-    }
-
-    let specialCharsPattern = /[!@#\$%\^\&*\)\(+=._-]+/g;
-    if(specialCharsPattern.test(value)) {
-        message+= `<li class="inValid">${listMsg[1]}</li>`;
-        validRegister = false;
-    } else {
-        message+= `<li class="valid">${listMsg[1]}</li>`;
-        validRegister = true;
-    }
-
-    let upperCasePattern = /^[A-Z][a-z]*( [A-Z][a-z]*)*$/;
-    let cleanedString = value.replace(/[@#!]/g, '');
-    if(upperCasePattern.test(cleanedString)) {
-        message+= `<li class="valid">${listMsg[2]}</li>`;
-        validRegister = true;
-    } else{
-        message+= `<li class="inValid">${listMsg[2]}</li>`;
-        validRegister = false;
-    }
-    printMessage(message);
+// Hàm xác thực tên
+function validName() {
+    const value = document.activeElement.value.trim();
+    const validations = [
+        [v => v !== "", 0],
+        [v => !/[!@#\$%\^\&*\)\(+=._-]+/g.test(v), 1],
+        [v => /^[A-Z][a-z]*( [A-Z][a-z]*)*$/.test(v.replace(/[@#!]/g, '')), 2]
+    ];
+    const elementId = document.activeElement.id === "lastname" ? "messageL" : "messageF";
+    validateField(value, validations, MESSAGE.name, elementId);
 }
 
-function validLastname() {
-    let message = `<ul class="custom-list">Trường này yêu cầu: </ul>`;
-    let value = lastname.value;
-    let listMsg = MESSAGE.name;
-
-    if(value == null || value === "" || value.trim() === "") {
-        message+= `<li class="inValid">${listMsg[0]}</li>`;
-        validRegister = false;
-    } else {
-        message+= `<li class="valid">${listMsg[0]}</li>`;
-        validRegister = true;
-    }
-
-    let specialCharsPattern = /[!@#\$%\^\&*\)\(+=._-]+/g;
-    if(specialCharsPattern.test(value)) {
-        message+= `<li class="inValid">${listMsg[1]}</li>`;
-        validRegister = false;
-    } else {
-        message+= `<li class="valid">${listMsg[1]}</li>`;
-        validRegister = true;
-    }
-
-    let upperCasePattern = /^[A-Z][a-z]*( [A-Z][a-z]*)*$/;
-    let cleanedString = value.replace(/[@#!]/g, '');
-    if(upperCasePattern.test(cleanedString)) {
-        message+= `<li class="valid">${listMsg[2]}</li>`;
-        validRegister = true;
-    } else{
-        message+= `<li class="inValid">${listMsg[2]}</li>`;
-        validRegister = false;
-    }
-    printMessage(message);
-}
-
+// Hàm xác thực email
 function validEmail() {
-    let message = `<ul class="custom-list">Trường này yêu cầu: </ul>`;
-    let value = email.value;
-    let listMsg = MESSAGE.email;
-
-    if(value == null || value === "" || value.trim() === "") {
-        message+= `<li class="inValid">${listMsg[0]}</li>`;
-        validRegister = false;
-    } else {
-        message+= `<li class="valid">${listMsg[0]}</li>`;
-        validRegister = true;
-    }
-
-    let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if(emailPattern.test(value)) {
-        message+= `<li class="valid">${listMsg[1]}</li>`;
-        validRegister = true;
-    } else {
-        message+= `<li class="inValid">${listMsg[1]}</li>`;
-        validRegister = false;
-    }
-    printMessage(message);
+    const value = document.activeElement.value.trim();
+    const validations = [
+        [v => v !== "", 0],
+        [v => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v), 1]
+    ];
+    validateField(value, validations, MESSAGE.email, "messageE");
 }
 
+// Hàm xác thực số điện thoại
 function validPhone() {
-    let message = `<ul class="custom-list">Trường này yêu cầu: </ul>`;
-    let value = phone.value;
-    let listMsg = MESSAGE.phone;
-
-    if(value == null || value === "" || value.trim() === "") {
-        message+= `<li class="inValid">${listMsg[0]}</li>`;
-        validRegister = false;
-    } else {
-        message+= `<li class="valid">${listMsg[0]}</li>`;
-        validRegister = true;
-    }
-
-    if(value.length !== 10) {
-        message+= `<li class="inValid">${listMsg[1]}</li>`;
-        validRegister = false;
-    } else {
-        message+= `<li class="valid">${listMsg[1]}</li>`;
-        validRegister = true;
-    }
-
-    let phonePattern = /^0\d{9}$/;
-    if(phonePattern.test(value)) {
-        message+= `<li class="valid">${listMsg[2]}</li>`;
-        validRegister = true;
-    } else {
-        message+= `<li class="inValid">${listMsg[2]}</li>`;
-        validRegister = false;
-    }
-    printMessage(message);
+    const value = document.activeElement.value.trim();
+    const validations = [
+        [v => v !== "", 0],
+        [v => v.length === 10, 1],
+        [v => /^0\d{9}$/.test(v), 2]
+    ];
+    validateField(value, validations, MESSAGE.phone, "messageP");
 }
 
+// Hàm xác thực mật khẩu
 function validPassword() {
-    let message = `<ul class="custom-list">Trường này yêu cầu: </ul>`;
-    let value = passwordRegister.value;
-    let listMsg = MESSAGE.password;
-
-    if(value == null || value === "" || value.trim() === "") {
-        message+= `<li class="inValid">${listMsg[0]}</li>`;
-        validRegister = false;
-    } else {
-        message+= `<li class="valid">${listMsg[0]}</li>`;
-        validRegister = true;
-    }
-
-    let specialCharsPattern = /[!@#\$%\^\&*\)\(+=._-]+/g;
-    if(specialCharsPattern.test(value)) {
-        message+= `<li class="valid">${listMsg[1]}</li>`;
-        validRegister = true;
-    } else {
-        message+= `<li class="inValid">${listMsg[1]}</li>`;
-        validRegister = false;
-    }
-
-    let upperCasePattern = /[A-Z]/;
-    if(upperCasePattern.test(value)) {
-        message+= `<li class="valid">${listMsg[2]}</li>`;
-        validRegister = true;
-    } else {
-        message+= `<li class="inValid">${listMsg[2]}</li>`;
-        validRegister = false;
-    }
-    printMessage(message);
+    const value = document.activeElement.value.trim();
+    const validations = [
+        [v => v !== "", 0],
+        [v => /[!@#\$%\^\&*\)\(+=._-]+/.test(v), 1],
+        [v => /[A-Z]/.test(v), 2]
+    ];
+    validateField(value, validations, MESSAGE.password, "messagePW");
 }
 
+// Hàm xác thực xác nhận mật khẩu
 function validRePassword() {
-    let message = `<ul class="custom-list">Trường này yêu cầu: </ul>`;
-    let value = rePasswordRegister.value;
-    let listMsg = MESSAGE.rePassword;
-
-    if(value == null || value === "" || value.trim() === "") {
-        message+= `<li class="inValid">${listMsg[0]}</li>`;
-        validRegister = false;
-    } else {
-        message+= `<li class="valid">${listMsg[0]}</li>`;
-        validRegister = true;
-    }
-
-    let pw = passwordRegister.value;
-    if(value === pw) {
-        message+= `<li class="valid">${listMsg[1]}</li>`;
-        validRegister = true;
-    } else {
-        message+= `<li class="inValid">${listMsg[1]}</li>`;
-        validRegister = false;
-    }
-    printMessage(message);
+    const value = document.activeElement.value.trim();
+    const password = document.getElementById("passwordRegister").value.trim();
+    const validations = [
+        [v => v !== "", 0],
+        [v => v === password, 1]
+    ];
+    validateField(value, validations, MESSAGE.rePassword, "messageR");
 }
 
+// Hàm đóng các phần tử collapse
+function closeCollapse() {
+    document.querySelectorAll('.collapse').forEach(collapseElement => {
+        new bootstrap.Collapse(collapseElement, { toggle: false }).hide();
+    });
+}
 
-firstname.addEventListener("click", validFirstname);
-lastname.addEventListener("click", validLastname);
-email.addEventListener("click", validEmail);
-phone.addEventListener("click", validPhone);
-passwordRegister.addEventListener("click", validPassword);
-rePasswordRegister.addEventListener("click", validRePassword);
+// Thêm sự kiện cho các input để đóng collapse khi có focus
+document.querySelectorAll('input[data-bs-target]').forEach(input => {
+    input.addEventListener('focus', closeCollapse);
+});
 
-firstname.addEventListener("input", validFirstname);
-lastname.addEventListener("input", validLastname);
-email.addEventListener("input", validEmail);
-phone.addEventListener("input", validPhone);
-passwordRegister.addEventListener("input", validPassword);
-rePasswordRegister.addEventListener("input", validRePassword);
+// Hàm kiểm tra thông tin đã điền đầy đủ
+function checkFillOut() {
+    const popup = new bootstrap.Modal(document.getElementById('popup'));
+    if (!Object.values(validRegister).every(value => value === true)) {
+        document.activeElement.type = "button";
+        popup.show();
+        document.getElementById("erroeMsg").textContent = "Vui lòng điền lại thông tin!";
+    } else {
+        document.activeElement.type = "submit";
+        popup.hide();
+    }
+}
 
-
-
-
-
-
-
+// Hàm kiểm tra thông tin đăng nhập
+function checkLogin() {
+    const popup = new bootstrap.Modal(document.getElementById('popup'));
+    const username = document.getElementById("username");
+    const password = document.getElementById("passwordLogin");
+    if (!username.value.trim() || !password.value.trim()) {
+        document.activeElement.type = "button";
+        document.getElementById("erroeMsg").textContent = "Vui lòng điền lại thông tin!";
+        popup.show();
+    } else {
+        document.activeElement.type = "submit";
+        popup.hide();
+    }
+}
