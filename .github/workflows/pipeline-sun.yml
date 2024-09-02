@@ -54,7 +54,7 @@ jobs:
           cache: maven
 
       - name: Running unit tests
-        run: mvn test
+        run: mvn test jacoco:report
 
   build:
     runs-on: ubuntu-latest
