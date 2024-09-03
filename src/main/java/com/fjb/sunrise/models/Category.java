@@ -1,5 +1,6 @@
 package com.fjb.sunrise.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,5 +25,9 @@ public class Category extends AuditEntity<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(name = "is_activate")
+    private boolean isActivate = true;
 }
