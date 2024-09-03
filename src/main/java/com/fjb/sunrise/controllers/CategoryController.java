@@ -1,7 +1,7 @@
 package com.fjb.sunrise.controllers;
 
-import com.fjb.sunrise.dtos.request.CategoryCreateDto;
-import com.fjb.sunrise.dtos.request.CategoryUpdateDto;
+import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
+import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.services.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
