@@ -13,6 +13,7 @@ services:
       - ADMIN_DEFAULT_FIRST=james
       - ADMIN_DEFAULT_LAST=bond
       - ADMIN_CREATE_KEY=dfjkNdkMAnje
+      - ADMIN_DEFAULT_EMAIL=sun@sun.com
     ports:
       - ${SERVER_LOCAL_PORT}:${SERVER_LOCAL_PORT}
     volumes:

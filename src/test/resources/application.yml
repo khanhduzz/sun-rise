@@ -12,6 +12,7 @@ application:
       password: 123456
       firstname: james
       lastname: bond
+      email: sun@sun.com
 
 default:
   admin-create-key: dfjkNdkMAnje

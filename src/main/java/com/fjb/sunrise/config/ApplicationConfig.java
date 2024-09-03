@@ -34,6 +34,9 @@ public class ApplicationConfig {
     @Value("${application.admin.default.lastname}")
     private String adminLastname;
 
+    @Value("${application.admin.default.email}")
+    private String adminEmail;
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
@@ -53,19 +56,19 @@ public class ApplicationConfig {
         log.info("Initializing application.....");
         return args -> {
             if (!userRepository.existsByUsername(adminUsername)) {
-
                 User user = User.builder()
                     .username(adminUsername)
                     .firstname(adminFirstname)
                     .lastname(adminLastname)
+                    .email(adminEmail)
                     .password(passwordEncoder().encode(adminPassword))
                     .role(ERole.ADMIN)
                     .build();
                 userRepository.save(user);
-                log.warn("Create: admin user has been created: username = {}, password = {} ",
-                    adminUsername, adminPassword);
+                log.warn("Create: admin user has been created: email = {}, password = {} ",
+                    adminEmail, adminPassword);
             } else {
-                log.warn("Admin user: username = {}, password = {} ", adminUsername, adminPassword);
+                log.warn("Admin user: email = {}, password = {} ", adminEmail, adminPassword);
             }
             log.info("Application initialization completed .....");
         };
