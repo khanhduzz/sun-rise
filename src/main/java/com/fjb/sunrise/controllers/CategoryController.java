@@ -1,7 +1,8 @@
 package com.fjb.sunrise.controllers;
 
-import com.example.demo.model.Category;
-import com.example.demo.service.CategoryService;
+
+import com.fjb.sunrise.models.Category;
+import com.fjb.sunrise.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

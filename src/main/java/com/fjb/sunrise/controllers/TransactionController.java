@@ -1,10 +1,10 @@
 package com.fjb.sunrise.controllers;
 
-import com.example.demo.model.Category;
-import com.example.demo.model.Transaction;
-import com.example.demo.model.TransactionType;
-import com.example.demo.service.CategoryService;
-import com.example.demo.service.TransactionService;
+
+import com.fjb.sunrise.models.Transaction;
+import com.fjb.sunrise.models.TransactionType;
+import com.fjb.sunrise.services.CategoryService;
+import com.fjb.sunrise.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

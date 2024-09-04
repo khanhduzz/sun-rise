@@ -1,8 +1,9 @@
 package com.fjb.sunrise.services;
 
-import com.example.demo.model.Category;
-import com.example.demo.model.TransactionType;
-import com.example.demo.repository.CategoryRepository;
+
+import com.fjb.sunrise.models.Category;
+import com.fjb.sunrise.models.TransactionType;
+import com.fjb.sunrise.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

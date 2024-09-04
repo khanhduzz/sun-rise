@@ -1,7 +1,8 @@
 package com.fjb.sunrise.repositories;
 
-import com.example.demo.model.Category;
-import com.example.demo.model.TransactionType;
+
+import com.fjb.sunrise.models.Category;
+import com.fjb.sunrise.models.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
