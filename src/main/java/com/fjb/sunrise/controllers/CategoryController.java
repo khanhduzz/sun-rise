@@ -19,12 +19,13 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
-
+    private final String CATEGORY_INDEX = "category/index";
+    private final String CATEGORY_REDIRECT = "redirect:/category";
     @GetMapping
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categories", categoryService.getAllCategories());
-        modelAndView.setViewName("category/index");
+        modelAndView.setViewName(CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -35,9 +36,9 @@ public class CategoryController {
                                     @Valid CategoryCreateDto categoryCreateDto,
                                     BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("category/index");
+        modelAndView.setViewName(CATEGORY_INDEX);
         categoryService.createCategory(categoryCreateDto);
-        modelAndView.setViewName("redirect:/category");
+        modelAndView.setViewName(CATEGORY_REDIRECT);
         return modelAndView;
     }
 
@@ -45,7 +46,7 @@ public class CategoryController {
     public ModelAndView addCategory() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categoryCreate", new CategoryCreateDto());
-        modelAndView.setViewName("category/index");
+        modelAndView.setViewName(CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -55,9 +56,9 @@ public class CategoryController {
     public ModelAndView updateCategory(@PathVariable("id") Long id, @ModelAttribute("categoryUpdate")
         @Valid CategoryUpdateDto categoryUpdateDto, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("category/index");
+        modelAndView.setViewName(CATEGORY_INDEX);
         categoryService.updateCategory(id, categoryUpdateDto);
-        modelAndView.setViewName("redirect:/category");
+        modelAndView.setViewName(CATEGORY_REDIRECT);
         return modelAndView;
     }
 
@@ -67,7 +68,7 @@ public class CategoryController {
     public ModelAndView changeStatusCategory(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
         categoryService.changeStatusCategory(id);
-        modelAndView.setViewName("redirect:/category");
+        modelAndView.setViewName(CATEGORY_REDIRECT);
         return modelAndView;
     }
 
@@ -77,7 +78,7 @@ public class CategoryController {
     public ModelAndView getList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("category", categoryService.getAllCategories());
-        modelAndView.setViewName("category/index");
+        modelAndView.setViewName(CATEGORY_INDEX);
         return modelAndView;
     }
 }

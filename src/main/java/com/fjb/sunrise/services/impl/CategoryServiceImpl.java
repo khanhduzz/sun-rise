@@ -33,7 +33,6 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(id).orElseThrow();
         category = categoryMapper.updateCategory(category, categoryUpdateDto);
         category = categoryRepository.save(category);
-        System.out.println(category.toString());
         return categoryMapper.toCategoryResponseDto(category);
     }
 
