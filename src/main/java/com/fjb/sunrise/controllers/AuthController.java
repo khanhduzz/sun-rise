@@ -25,7 +25,7 @@ public class AuthController {
         modelAndView.setViewName("loginAndRegister");
         modelAndView.addObject("login", new LoginRequest());
         modelAndView.addObject("register", new RegisterRequest());
-        if (error != null && error.equals("true")) {
+        if (error != null) {
             modelAndView.addObject("errorMessage", "Đăng nhập không thành công!");
         }
         return modelAndView;
