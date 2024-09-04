@@ -11,7 +11,6 @@ import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,18 +46,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ModelAndView doRegister(@ModelAttribute("register") RegisterRequest registerRequest,
-                                   BindingResult bindingResult) {
+    public ModelAndView doRegister(@ModelAttribute("register") RegisterRequest registerRequest) {
         //setup object for view
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(AUTH_VIEW);
         modelAndView.addObject(LOGIN_ATTRIBUTE, new LoginRequest());
         modelAndView.addObject(REGISTER_ATTRIBUTE, new RegisterRequest());
-
-        //check valid
-        if (bindingResult.hasErrors()) {
-            return  modelAndView;
-        }
 
         // implement register for user
         if (service.checkRegister(registerRequest)) {
