@@ -100,16 +100,22 @@ function validName(input) {
 }
 
 function validEmail(input) {
-    if(checkBlank(input)) return false;
-    if(input.includes("@") || input.includes(".")) return false;
+    // Check if input is blank
+    if (!checkBlank(input)) return false;
 
-    const name = input.split("@")[0];
-    if(containsSpecialCharacter(name)) return false;
+    // Check if the email contains both "@" and "."
+    if (!input.includes("@") || !input.includes(".")) return false;
 
-    const domain = input.split("@")[0].split(".");
-    for(const ele of domain) {
-        if(containsSpecialCharacter(ele)) return false;
-    }
+    // Split the input into local part and domain part
+    const [name, domainPart] = input.split("@");
+    if (!name || !domainPart) return false; // Ensure both parts exist
+
+    // Check for special characters in the local part
+    if (containsSpecialCharacter(name)) return false;
+
+    // Split domain part by "."
+    const domain = domainPart.split(".");
+    if (domain.some(ele => ele === "" || containsSpecialCharacter(ele))) return false; // Ensure no empty segment and no special characters
 
     return true;
 }
