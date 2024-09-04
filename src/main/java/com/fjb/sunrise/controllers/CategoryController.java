@@ -19,13 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
-    private final String CATEGORY_INDEX = "category/index";
-    private final String CATEGORY_REDIRECT = "redirect:/category";
+
     @GetMapping
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categories", categoryService.getAllCategories());
-        modelAndView.setViewName(CATEGORY_INDEX);
+        modelAndView.setViewName("category/index");
         return modelAndView;
     }
 
@@ -36,9 +35,12 @@ public class CategoryController {
                                     @Valid CategoryCreateDto categoryCreateDto,
                                     BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(CATEGORY_INDEX);
+        modelAndView.setViewName("category/index");
+        if (result.hasErrors()) {
+            return modelAndView;
+        }
         categoryService.createCategory(categoryCreateDto);
-        modelAndView.setViewName(CATEGORY_REDIRECT);
+        modelAndView.setViewName("redirect:/category");
         return modelAndView;
     }
 
@@ -46,7 +48,7 @@ public class CategoryController {
     public ModelAndView addCategory() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categoryCreate", new CategoryCreateDto());
-        modelAndView.setViewName(CATEGORY_INDEX);
+        modelAndView.setViewName("category/index");
         return modelAndView;
     }
 
@@ -56,9 +58,12 @@ public class CategoryController {
     public ModelAndView updateCategory(@PathVariable("id") Long id, @ModelAttribute("categoryUpdate")
         @Valid CategoryUpdateDto categoryUpdateDto, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(CATEGORY_INDEX);
+        modelAndView.setViewName("category/index");
+        if (result.hasErrors()) {
+            return modelAndView;
+        }
         categoryService.updateCategory(id, categoryUpdateDto);
-        modelAndView.setViewName(CATEGORY_REDIRECT);
+        modelAndView.setViewName("redirect:/category");
         return modelAndView;
     }
 
@@ -67,8 +72,8 @@ public class CategoryController {
     @PostMapping("/delete/{id}")
     public ModelAndView changeStatusCategory(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
-        categoryService.changeStatusCategory(id);
-        modelAndView.setViewName(CATEGORY_REDIRECT);
+        categoryService.disableCategory(id);
+        modelAndView.setViewName("redirect:/category");
         return modelAndView;
     }
 
@@ -78,7 +83,7 @@ public class CategoryController {
     public ModelAndView getList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("category", categoryService.getAllCategories());
-        modelAndView.setViewName(CATEGORY_INDEX);
+        modelAndView.setViewName("category/index");
         return modelAndView;
     }
 }

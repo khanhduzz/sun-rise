@@ -37,11 +37,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void changeStatusCategory(Long id) {
-        Optional<Category> optionalCategory = categoryRepository.findById(id);
-        Category category = optionalCategory.get();
-        category.setActivate(false);
-        categoryRepository.save(category);
+    public void disableCategory(Long id) {
+        categoryRepository.findById(id).ifPresent(x -> {
+            x.setActivate(false);
+            categoryRepository.save(x);
+        });
     }
 
     @Override

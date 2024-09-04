@@ -10,7 +10,7 @@ public interface CategoryService {
 
     CategoryResponseDto updateCategory(Long id, CategoryUpdateDto categoryUpdateDto);
 
-    void changeStatusCategory(Long id);
+    void disableCategory(Long id);
 
     List<CategoryResponseDto> getAllCategories();
 }
