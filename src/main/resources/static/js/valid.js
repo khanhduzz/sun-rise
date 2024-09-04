@@ -17,8 +17,8 @@ const username = document.getElementById("username");
 const passwordLogin = document.getElementById("password-login");
 const buttonSubmitLogin = document.getElementById("submit-button-login");
 
-firstname.addEventListener("focus", () => changeStyle(firstname, validname(firstname.value)));
-lastname.addEventListener("focus", () => changeStyle(lastname, validname(lastname.value)));
+firstname.addEventListener("focus", () => changeStyle(firstname, validName(firstname.value)));
+lastname.addEventListener("focus", () => changeStyle(lastname, validName(lastname.value)));
 email.addEventListener("focus", () => changeStyle(email, validEmail(email.value)));
 phone.addEventListener("focus", () => changeStyle(phone, validPhone(phone.value)));
 passwordRegister.addEventListener("focus", () => changeStyle(passwordRegister, validPassword(passwordRegister.value)));
@@ -27,8 +27,8 @@ rePasswordRegister.addEventListener("focus", () => changeStyle(rePasswordRegiste
 username.addEventListener("focus", () => changeStyle(username, validEmail(username.value) || validPhone(username.value)));
 passwordLogin.addEventListener("focus", () => changeStyle(passwordLogin, validPassword(passwordLogin.value)));
 
-firstname.addEventListener("input", () => changeStyle(firstname, validname(firstname.value)));
-lastname.addEventListener("input", () => changeStyle(lastname, validname(lastname.value)));
+firstname.addEventListener("input", () => changeStyle(firstname, validName(firstname.value)));
+lastname.addEventListener("input", () => changeStyle(lastname, validName(lastname.value)));
 email.addEventListener("input", () => changeStyle(email, validEmail(email.value)));
 phone.addEventListener("input", () => changeStyle(phone, validPhone(phone.value)));
 passwordRegister.addEventListener("input", () => changeStyle(passwordRegister, validPassword(passwordRegister.value)));
@@ -49,7 +49,7 @@ passwordLogin.addEventListener("input", () => changeStyle(passwordLogin, validPa
 
 
 buttonSubmitRegister.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitRegister,
-    validname(firstname.value) && validname(lastname.value) && validEmail(email.value)
+    validName(firstname.value) && validName(lastname.value) && validEmail(email.value)
     && validPhone(phone.value) && validPassword(passwordRegister.value)
     && validRePassword(passwordRegister.value, rePasswordRegister.value)));
 
@@ -94,15 +94,24 @@ function checkBlank(input) {
     return input.trim() !== "";
 }
 
-function validname(input) {
+function validName(input) {
     if (!checkBlank(input) || containsSpecialCharacter(input)) return false;
     return input.split(" ").every(word => isVietnameseCapitalized(word));
 }
 
 function validEmail(input) {
-    if (!checkBlank(input)) return false;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(input);
+    if(checkBlank(input)) return false;
+    if(input.includes("@") || input.includes(".")) return false;
+
+    const name = input.split("@")[0];
+    if(containsSpecialCharacter(name)) return false;
+
+    const domain = input.split("@")[0].split(".");
+    for(const ele of domain) {
+        if(containsSpecialCharacter(ele)) return false;
+    }
+
+    return true;
 }
 
 function validPhone(input) {
