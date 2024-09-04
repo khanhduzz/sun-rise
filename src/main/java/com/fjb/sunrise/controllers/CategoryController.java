@@ -3,8 +3,10 @@ package com.fjb.sunrise.controllers;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.services.CategoryService;
+import com.fjb.sunrise.utils.Constants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.apache.bcel.classfile.Constant;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,7 @@ public class CategoryController {
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categories", categoryService.getAllCategories());
-        modelAndView.setViewName("category/index");
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -35,12 +37,12 @@ public class CategoryController {
                                     @Valid CategoryCreateDto categoryCreateDto,
                                     BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("category/index");
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
             return modelAndView;
         }
         categoryService.createCategory(categoryCreateDto);
-        modelAndView.setViewName("redirect:/category");
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_REDIRECT);
         return modelAndView;
     }
 
@@ -48,7 +50,7 @@ public class CategoryController {
     public ModelAndView addCategory() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categoryCreate", new CategoryCreateDto());
-        modelAndView.setViewName("category/index");
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -58,12 +60,12 @@ public class CategoryController {
     public ModelAndView updateCategory(@PathVariable("id") Long id, @ModelAttribute("categoryUpdate")
         @Valid CategoryUpdateDto categoryUpdateDto, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("category/index");
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
             return modelAndView;
         }
         categoryService.updateCategory(id, categoryUpdateDto);
-        modelAndView.setViewName("redirect:/category");
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_REDIRECT);
         return modelAndView;
     }
 
@@ -73,7 +75,7 @@ public class CategoryController {
     public ModelAndView changeStatusCategory(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
         categoryService.disableCategory(id);
-        modelAndView.setViewName("redirect:/category");
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_REDIRECT);
         return modelAndView;
     }
 
@@ -83,7 +85,7 @@ public class CategoryController {
     public ModelAndView getList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("category", categoryService.getAllCategories());
-        modelAndView.setViewName("category/index");
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 }
