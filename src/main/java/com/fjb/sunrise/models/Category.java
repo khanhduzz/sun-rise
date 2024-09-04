@@ -1,33 +1,46 @@
 package com.fjb.sunrise.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
 
 @Entity
-@Getter
-@Setter
-@Builder
-@Table(name = "categories")
-@AllArgsConstructor
-@NoArgsConstructor
-public class Category extends AuditEntity<String> {
+public class Category {
+    @Override
+	public String toString() {
+		return "Category [id=" + id + ", name=" + name + ", type=" + type + "]";
+	}
 
-    @Id
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public TransactionType getType() {
+		return type;
+	}
+
+	public void setType(TransactionType type) {
+		this.type = type;
+	}
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(name = "is_activate")
-    private boolean isActivate = true;
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
+
+    // Constructors, Getters, and Setters
 }

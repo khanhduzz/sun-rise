@@ -1,51 +1,78 @@
 package com.fjb.sunrise.models;
 
-import com.fjb.sunrise.enums.ETrans;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.sql.Date;
 
 @Entity
-@Getter
-@Setter
-@Table(name = "transactions")
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class Transaction extends AuditEntity<String> {
+public class Transaction {
+    @Override
+	public String toString() {
+		return "Transaction [id=" + id + ", transactionDate=" + transactionDate + ", note=" + note + ", amount="
+				+ amount + ", type=" + type + ", category=" + category + "]";
+	}
 
-    @Id
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+	public TransactionType getType() {
+		return type;
+	}
+
+	public void setType(TransactionType type) {
+		this.type = type;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true)
     private Long id;
+	public Date getTransactionDate() {
+		return transactionDate;
+	}
 
-    @Column(columnDefinition = "DECIMAL(11,2)")
-    private Double amount;
+	public void setTransactionDate(Date transactionDate) {
+		this.transactionDate = transactionDate;
+	}
 
-    @Enumerated(value = EnumType.STRING)
-    private ETrans transactionType;
+	public String getNote() {
+		return note;
+	}
 
-    @Column(columnDefinition = "TEXT")
-    private String note;
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	private Date transactionDate;
+	private String note;
+    private BigDecimal amount;
+
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
 
     @ManyToOne
-    private User user;
-
-    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    // Constructors, Getters, and Setters
 }
