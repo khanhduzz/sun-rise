@@ -6,7 +6,6 @@ import com.fjb.sunrise.services.CategoryService;
 import com.fjb.sunrise.utils.Constants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.apache.bcel.classfile.Constant;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
