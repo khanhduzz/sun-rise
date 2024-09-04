@@ -27,6 +27,11 @@ public class Constants {
         private ApiConstant() {}
 
         public static final String HEALTH_URL = "/health";
+        public static final String AUTH_REDIRECT_LOGIN = "redirect:/auth/login";
+        public static final String AUTH_VIEW = "loginAndRegister";
+        public static final String REGISTER_ATTRIBUTE = "register";
+        public static final String LOGIN_ATTRIBUTE = "login";
+        public static final String ERROR_MESSAGE = "errorMessage";
 
         public static final String CODE_200 = "200";
         public static final String OK = "Ok";

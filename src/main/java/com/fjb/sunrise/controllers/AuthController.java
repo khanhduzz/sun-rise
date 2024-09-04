@@ -1,5 +1,11 @@
 package com.fjb.sunrise.controllers;
 
+import static com.fjb.sunrise.utils.Constants.ApiConstant.AUTH_REDIRECT_LOGIN;
+import static com.fjb.sunrise.utils.Constants.ApiConstant.AUTH_VIEW;
+import static com.fjb.sunrise.utils.Constants.ApiConstant.ERROR_MESSAGE;
+import static com.fjb.sunrise.utils.Constants.ApiConstant.LOGIN_ATTRIBUTE;
+import static com.fjb.sunrise.utils.Constants.ApiConstant.REGISTER_ATTRIBUTE;
+
 import com.fjb.sunrise.dtos.requests.LoginRequest;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.services.UserService;
@@ -22,11 +28,11 @@ public class AuthController {
     @GetMapping("/login")
     public ModelAndView indexR(@RequestParam(value = "error", required = false) String error) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("loginAndRegister");
-        modelAndView.addObject("login", new LoginRequest());
-        modelAndView.addObject("register", new RegisterRequest());
+        modelAndView.setViewName(AUTH_VIEW);
+        modelAndView.addObject(LOGIN_ATTRIBUTE, new LoginRequest());
+        modelAndView.addObject(REGISTER_ATTRIBUTE, new RegisterRequest());
         if (error != null) {
-            modelAndView.addObject("errorMessage", "Đăng nhập không thành công!");
+            modelAndView.addObject(ERROR_MESSAGE, "Đăng nhập không thành công!");
         }
         return modelAndView;
     }
@@ -34,9 +40,9 @@ public class AuthController {
     @GetMapping("/register")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("loginAndRegister");
-        modelAndView.addObject("login", new LoginRequest());
-        modelAndView.addObject("register", new RegisterRequest());
+        modelAndView.setViewName(AUTH_VIEW);
+        modelAndView.addObject(LOGIN_ATTRIBUTE, new LoginRequest());
+        modelAndView.addObject(REGISTER_ATTRIBUTE, new RegisterRequest());
         return modelAndView;
     }
 
@@ -45,9 +51,9 @@ public class AuthController {
                                    BindingResult bindingResult) {
         //setup object for view
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("loginAndRegister");
-        modelAndView.addObject("login", new LoginRequest());
-        modelAndView.addObject("register", new RegisterRequest());
+        modelAndView.setViewName(AUTH_VIEW);
+        modelAndView.addObject(LOGIN_ATTRIBUTE, new LoginRequest());
+        modelAndView.addObject(REGISTER_ATTRIBUTE, new RegisterRequest());
 
         //check valid
         if (bindingResult.hasErrors()) {
@@ -56,9 +62,9 @@ public class AuthController {
 
         // implement register for user
         if (service.checkRegister(registerRequest)) {
-            modelAndView.setViewName("redirect:/auth/login");
+            modelAndView.setViewName(AUTH_REDIRECT_LOGIN);
         } else {
-            modelAndView.addObject("errorMessage", "Đăng kí không thành công");
+            modelAndView.addObject(ERROR_MESSAGE, "Đăng kí không thành công");
         }
 
         return modelAndView;

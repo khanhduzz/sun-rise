@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var modalElement = document.getElementById('popup-failed-register');
+    let modalElement = document.getElementById('popup-failed-register');
 
     if (modalElement) {
-        var myModal = new bootstrap.Modal(modalElement);
+        let myModal = new bootstrap.Modal(modalElement);
         myModal.show();
     }
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    var modalElement = document.getElementById('popup-failed-login');
+    let modalElement = document.getElementById('popup-failed-login');
 
     if (modalElement) {
-        var myModal = new bootstrap.Modal(modalElement);
+        let myModal = new bootstrap.Modal(modalElement);
         myModal.show();
     }
 });
