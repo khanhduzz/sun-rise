@@ -7,53 +7,117 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css">
+    <link rel="icon" th:href="@{/img/spreadsheet_17087859.png}" type="image/png">
 </head>
 <body>
-<div>
-    <!--popup-->
-    <th:block th:if="${errorMessage != null}">
-        <div>ERROR</div>
-    </th:block>
-
-    <!-- Main Content -->
-    <div>
-        <div>
-            <h3>ĐĂNG KÝ</h3>
-            <form th:method="POST" th:href="@{/auth/register}" th:object="${register}">
-                <div class="row">
-                    <!-- Left Column -->
-                    <div class="col">
-                        <input type="text" maxlength="200" th:field="*{lastname}" id="lastname" placeholder="Vui lòng nhập tên" data-bs-target="#validLastname"/>
-                        <input type="text" maxlength="250" th:field="*{email}" id="email" placeholder="Địa chỉ Email" data-bs-target="#validEmail">
-                        <input type="password" maxlength="200" th:field="*{password}" id="password-register" placeholder="Mật khẩu" data-bs-target="#validPassword">
-                    </div>
-                    <!-- Right Column -->
-                    <div class="col">
-                        <input type="text" maxlength="200" th:field="*{firstname}" id="firstname" placeholder="Vui lòng nhập họ" data-bs-target="#validFirstname">
-                        <input type="text" maxlength="12" th:field="*{phone}" id="phone" placeholder="Số điện thoại" data-bs-target="#validPhone">
-                        <input type="password" id="re-password-register" placeholder="Nhập lại mật khẩu" data-bs-target="#validRePassword">
-                    </div>
+<th:block th:if="${errorMessage != null}">
+    <div id="popup-failed-register" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <button type="submit" id="button-register">Đăng ký</button>
-            </form>
+                <div th:text="${errorMessage}" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="button" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
+    </div>
+</th:block>
 
-        <div>
-            <h3>ĐĂNG NHẬP</h3>
-            <form th:method="POST" th:href="@{/auth/login}" th:object="${login}">
-                <input type="text" maxlength="200" th:field="*{username}" id="username" placeholder="Nhập email hoặc số điện thoại">
-                <input type="password" maxlength="200" th:field="*{password}" id="passwordLogin" placeholder="Nhập mật khẩu">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
-                    <label class="form-check-label remember" for="remember-me">Ghi nhớ đăng nhập</label>
+<th:block th:if="${param.error != null}">
+    <div id="popup-failed-login" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">NHẮC NHỞ</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <button type="submit">Đăng nhập</button>
-            </form>
+                <div class="modal-body">
+                    Đăng nhập không thành công!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="button" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<div class="modal fade" id="popup" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">NHẮC NHỞ</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Vui lòng điền chính xác và đầy đủ thông tin!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
-    <script defer type="text/javascript" th:src="@{/js/action.js}"></script>
-    <script defer type="text/javascript" th:src="@{/js/valid.js}"></script>
-    <script async type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+<div class="background-custom">
+    <div id="box-register" class="box-custom hidden">
+        <div id="form-register" class="col-custom">
+            <h2>ĐĂNG KÝ</h2>
+            <form th:method="POST" th:object="${register}" th:href="@{/auth/register}" class="register-form">
+                <input th:field="*{firstname}" id="firstname" type="text" class="field-custom" placeholder="Vui lòng nhập tên">
+                <input th:field="*{lastname}" id="lastname" type="text" class="field-custom" placeholder="Vui lòng nhập họ">
+                <input th:field="*{email}" id="email" type="email" class="field-custom" placeholder="Địa chỉ Email">
+                <input th:field="*{phone}" id="phone" type="tel" class="field-custom" placeholder="Số điện thoại">
+                <input th:field="*{password}" id="password-register" type="password" class="field-custom" placeholder="Nhập mật khẩu">
+                <input id="re-password-register" type="password" class="field-custom" placeholder="Nhập lại mật khẩu">
+                <button id="submit-button-register" type="submit">Đăng ký</button>
+            </form>
+            <hr>
+            <a href="#">Quên mật khẩu?</a>
+            <a th:method="GET" th:href="@{/auth/login}">Bạn đã  có tài khoản? Đăng nhập!</a>
+        </div>
+
+        <div id="cover-regsiter" class="col-custom cover register-cover">
+            <h3>
+                Chào mừng bạn đến đây
+            </h3>
+            <p>Vui lòng điền đầy đủ thông tin để đăng ký tài khoản!</p>
+        </div>
+    </div>
+
+    <div id="box-login" class="box-custom">
+        <div id="cover-login" class="col-custom cover login-cover">
+            <h3>
+                Chào mừng bạn trở lại!
+            </h3>
+            <p>Nhập thông tin để đăng nhập vào tài khoản!</p>
+
+        </div>
+
+        <div id="form-login" class="col-custom">
+            <h2>ĐĂNG NHẬP</h2>
+            <form th:method="POST" th:object="${login}" th:href="@{/auth/login}" class="login-form">
+                <input th:field="*{username}" id="username" type="text" class="field-custom" placeholder="Nhập email hoặc số điện thoại">
+                <input th:field="*{password}" id="password-login" type="password" class="field-custom" placeholder="Nhập mật khẩu">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="remember-me">
+                    <label for="remember-me"><a>Ghi nhớ đăng nhập</a></label>
+                </div>
+                <button id="submit-button-login" type="submit">Đăng nhập</button>
+            </form>
+            <hr>
+            <a href="#">Quên mật khẩu?</a>
+            <a th:method="GET" th:href="@{/auth/register}">Tạo tài khoản!</a>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/action.js}"></script>
+<script type="text/javascript" th:src="@{/js/valid.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
