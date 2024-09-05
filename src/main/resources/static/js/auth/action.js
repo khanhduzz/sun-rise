@@ -17,8 +17,8 @@ window.onload = function() {
         boxLogin.style.opacity = "1";
     }
 
-    codeLogin.textContent = randomCode();
-    codeRegister.textContent = randomCode();
+    codeLogin.textContent = getSecureRandomString(3);
+    codeRegister.textContent = getSecureRandomString(3);
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -40,20 +40,21 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 rollLogin.addEventListener("click", function() {
-    codeLogin.textContent = randomCode();
+    codeLogin.textContent = getSecureRandomString(3);
 });
 
 rollRegister.addEventListener("click", function() {
-    codeRegister.textContent = randomCode();
+    codeRegister.textContent = getSecureRandomString(3);
 });
 
-function randomCode() {
-    const randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let resRandom = "";
-    for (let i = 1; i <= 3; i++) {
-        let randomNum = Math.random();
-        resRandom += randomChar.charAt(Math.floor(randomNum * randomChar.length));
-    }
+function getSecureRandomString(length) {
+    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const buffer = new Uint8Array(length);
+    window.crypto.getRandomValues(buffer);
 
-    return resRandom;
+    for (let i = 0; i < length; i++) {
+        result += charset.charAt(buffer[i] % charset.length);
+    }
+    return result;
 }
