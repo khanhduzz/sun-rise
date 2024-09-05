@@ -12,9 +12,6 @@ window.onload = function() {
     if (page === "register") {
         boxRegister.style.visibility = "visible";
         boxRegister.style.opacity = "1";
-    } else if (page === "login") {
-        boxLogin.style.visibility = "visible";
-        boxLogin.style.opacity = "1";
     } else {
         boxLogin.style.visibility = "visible";
         boxLogin.style.opacity = "1";
