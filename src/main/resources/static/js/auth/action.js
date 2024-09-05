@@ -17,8 +17,8 @@ window.onload = function() {
         boxLogin.style.opacity = "1";
     }
 
-    codeLogin.textContent = random();
-    codeRegister.textContent = random();
+    codeLogin.textContent = randomCode();
+    codeRegister.textContent = randomCode();
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -40,19 +40,23 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 rollLogin.addEventListener("click", function() {
-    codeLogin.textContent = random();
+    codeLogin.textContent = randomCode();
 });
 
 rollRegister.addEventListener("click", function() {
-    codeRegister.textContent = random();
+    codeRegister.textContent = randomCode();
 });
 
-function random() {
+function randomCode() {
     const randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let resRandom = "";
     for (let i = 1; i <= 3; i++) {
-        resRandom += randomChar.charAt(Math.floor(Math.random() * randomChar.length));
+        resRandom += randomChar.charAt(random(randomChar.length));
     }
 
     return resRandom;
+}
+
+function random(length) {
+    return Math.floor(Math.random() * length);
 }
