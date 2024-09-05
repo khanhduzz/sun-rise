@@ -9,7 +9,7 @@
 .box-custom {
     background-color: white;
     min-width: 500px;
-    min-height: 500px;
+    min-height: 550px;
     width: 70%;
     height: 70%;
     box-sizing: border-box;
@@ -19,14 +19,18 @@
     grid-template-columns: 1fr 1fr;
     box-shadow: rgb(38, 38, 38) 0 0 20px 2px;
 }
+.box-custom.register {
+    position: absolute;
+    z-index: 1;
+}
+.box-custom.login {
+    position: absolute;
+    z-index: 2;
+}
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
     .box-custom {
         grid-template-columns: 1fr;
-    }
-
-    .col-custom:nth-child(2) {
-        display: none;
     }
 
     .cover {
@@ -48,6 +52,7 @@
     "field-custom field-custom"
     "field-custom field-custom"
     "field-custom field-custom"
+    "captcha captcha"
     "button button";
     gap: 16px;
 }
@@ -57,13 +62,14 @@
     grid-template-areas:
     "field-custom"
     "field-custom"
+    "captcha"
     "remember-me"
     "button";
     gap: 16px;
 }
 
 .field-custom {
-    width: 100%;
+    width: 95%;
     height: 50px;
     border-radius: 25px;
     padding: 16px;
@@ -80,7 +86,7 @@ button {
     grid-area: button;
     color: white;
     background-color: #4E73DF;
-    width: 100%;
+    width: 95%;
     height: 50px;
     border-radius: 25px;
     border: 0;
@@ -99,11 +105,13 @@ a {
 
 h2 {
     text-align: center;
-    margin: 30px;
+    margin-bottom: 30px;
 }
 
 .hidden {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 1s ease;
 }
 
 .cover {
@@ -127,4 +135,54 @@ h2 {
     padding-top: 100px;
     border-top-right-radius: 200px 200px;
     border-bottom-right-radius: 200px 200px;
+}
+
+.box-code {
+    border: 2px solid black;
+    box-shadow: 0 0 5px grey;
+    width: 150px;
+    height: 50px;
+    box-sizing: border-box;
+    color: black;
+    text-decoration:line-through;
+    font-style: italic;
+    font-size: x-large;
+    user-select: none;
+    display: grid;
+    place-items: center;
+}
+
+.captcha {
+    grid-area: captcha;
+    width: 85%;
+    height: 70px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    justify-items: center;
+    align-items: center;
+}
+
+.field-custom.field-captcha {
+    width: 200px;
+    height: 40px;
+}
+
+.roll {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    color: black;
+    transition: transform 0.5s ease, color 0.3s ease;
+}
+
+.roll:hover {
+    transform: rotate(360deg);
+}
+
+.roll:active {
+    transform: rotate(360deg) scale(1.5);
 }

@@ -6,7 +6,7 @@
     <title>Budgeting Service</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
-    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/auth/style.css}" type="text/css">
     <link rel="icon" th:href="@{/img/spreadsheet_17087859.png}" type="image/png">
 </head>
 <body>
@@ -45,7 +45,7 @@
 </div>
 
 <div class="background-custom">
-    <div id="box-register" class="box-custom hidden">
+    <div id="box-register" class="box-custom register hidden">
         <div id="form-register" class="col-custom">
             <h2>ĐĂNG KÝ</h2>
             <form th:method="POST" th:object="${register}" th:href="@{/auth/register}" class="register-form">
@@ -55,6 +55,19 @@
                 <input th:field="*{phone}" id="phone" type="tel" class="field-custom" placeholder="Số điện thoại">
                 <input th:field="*{password}" id="password-register" type="password" class="field-custom" placeholder="Nhập mật khẩu">
                 <input id="re-password-register" type="password" class="field-custom" placeholder="Nhập lại mật khẩu">
+
+                <div class="captcha">
+                    <input type="text" id="input-code-register" class="field-custom field-captcha" placeholder="Nhập mã xác nhận"/>
+
+                    <div id="roll-register" class="roll" type="button">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </div>
+
+                    <div class="box-code">
+                        <div id="code-register"></div>
+                    </div>
+                </div>
+
                 <button id="submit-button-register" type="submit">Đăng ký</button>
             </form>
             <hr>
@@ -67,16 +80,17 @@
                 Chào mừng bạn đến đây
             </h3>
             <p>Vui lòng điền đầy đủ thông tin để đăng ký tài khoản!</p>
+            <i style="font-size: 170px;" class="bi bi-emoji-kiss-fill"></i>
         </div>
     </div>
 
-    <div id="box-login" class="box-custom">
+    <div id="box-login" class="box-custom login hidden">
         <div id="cover-login" class="col-custom cover login-cover">
             <h3>
                 Chào mừng bạn trở lại!
             </h3>
             <p>Nhập thông tin để đăng nhập vào tài khoản!</p>
-
+            <i style="font-size: 170px;" class="bi bi-emoji-smile-fill"></i>
         </div>
 
         <div id="form-login" class="col-custom">
@@ -84,6 +98,19 @@
             <form th:method="POST" th:object="${login}" th:href="@{/auth/login}" class="login-form">
                 <input th:field="*{username}" id="username" type="text" class="field-custom" placeholder="Nhập email hoặc số điện thoại">
                 <input th:field="*{password}" id="password-login" type="password" class="field-custom" placeholder="Nhập mật khẩu">
+
+                <div class="captcha">
+                    <input type="text" id="input-code-login" class="field-custom field-captcha" placeholder="Nhập mã xác nhận"/>
+
+                    <div id="roll-login" class="roll" type="button">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </div>
+
+                    <div class="box-code">
+                        <div id="code-login"></div>
+                    </div>
+                </div>
+
                 <div class="form-check">
                     <input name="remember-me" type="checkbox" class="form-check-input" id="remember-me">
                     <label for="remember-me"><a>Ghi nhớ đăng nhập</a></label>
@@ -97,8 +124,8 @@
     </div>
 </div>
 
-<script type="text/javascript" th:src="@{/js/action.js}"></script>
-<script type="text/javascript" th:src="@{/js/valid.js}"></script>
+<script type="text/javascript" th:src="@{/js/auth/action.js}"></script>
+<script type="text/javascript" th:src="@{/js/auth/valid.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

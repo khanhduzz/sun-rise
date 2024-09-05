@@ -1,5 +1,7 @@
 package com.fjb.sunrise.config;
 
+import static com.fjb.sunrise.utils.Constants.ApiConstant.AUTH_VIEW;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,6 +59,6 @@ public class WebServletConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/health").setViewName("health");
-        registry.addViewController("/auth/login").setViewName("loginAndRegister");
+        registry.addViewController("/auth/login").setViewName(AUTH_VIEW);
     }
 }

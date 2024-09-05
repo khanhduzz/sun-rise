@@ -16,45 +16,34 @@ const buttonSubmitRegister = document.getElementById("submit-button-register");
 const username = document.getElementById("username");
 const passwordLogin = document.getElementById("password-login");
 const buttonSubmitLogin = document.getElementById("submit-button-login");
+const inputCodeLogin = document.getElementById("input-code-login");
+const inputCodeRegister = document.getElementById("input-code-register")
 
-firstname.addEventListener("focus", () => changeStyle(firstname, validName(firstname.value)));
-lastname.addEventListener("focus", () => changeStyle(lastname, validName(lastname.value)));
-email.addEventListener("focus", () => changeStyle(email, validEmail(email.value)));
-phone.addEventListener("focus", () => changeStyle(phone, validPhone(phone.value)));
-passwordRegister.addEventListener("focus", () => changeStyle(passwordRegister, validPassword(passwordRegister.value)));
-rePasswordRegister.addEventListener("focus", () => changeStyle(rePasswordRegister, validRePassword(passwordRegister.value, rePasswordRegister.value)));
+function addValidationListeners(inputElement, validationFunction) {
+    inputElement.addEventListener("focus", () => changeStyle(inputElement, validationFunction(inputElement.value)));
+    inputElement.addEventListener("input", () => changeStyle(inputElement, validationFunction(inputElement.value)));
+    inputElement.addEventListener("blur", () => resetStyle(inputElement));
+}
 
-username.addEventListener("focus", () => changeStyle(username, validEmail(username.value) || validPhone(username.value)));
-passwordLogin.addEventListener("focus", () => changeStyle(passwordLogin, validPassword(passwordLogin.value)));
-
-firstname.addEventListener("input", () => changeStyle(firstname, validName(firstname.value)));
-lastname.addEventListener("input", () => changeStyle(lastname, validName(lastname.value)));
-email.addEventListener("input", () => changeStyle(email, validEmail(email.value)));
-phone.addEventListener("input", () => changeStyle(phone, validPhone(phone.value)));
-passwordRegister.addEventListener("input", () => changeStyle(passwordRegister, validPassword(passwordRegister.value)));
-rePasswordRegister.addEventListener("input", () => changeStyle(rePasswordRegister, validRePassword(passwordRegister.value, rePasswordRegister.value)));
-
-firstname.addEventListener("blur", () => resetStyle(firstname));
-lastname.addEventListener("blur", () => resetStyle(lastname));
-email.addEventListener("blur", () => resetStyle(email));
-phone.addEventListener("blur", () => resetStyle(phone));
-passwordRegister.addEventListener("blur", () => resetStyle(passwordRegister));
-rePasswordRegister.addEventListener("blur", () => resetStyle(rePasswordRegister));
-
-username.addEventListener("blur", () => resetStyle(username));
-passwordLogin.addEventListener("blur", () => resetStyle(passwordLogin));
-
-username.addEventListener("input", () => changeStyle(username, validEmail(username.value) || validPhone(username.value)));
-passwordLogin.addEventListener("input", () => changeStyle(passwordLogin, validPassword(passwordLogin.value)));
-
+addValidationListeners(firstname, validName);
+addValidationListeners(lastname, validName);
+addValidationListeners(email, validEmail);
+addValidationListeners(phone, validPhone);
+addValidationListeners(passwordRegister, validPassword);
+addValidationListeners(rePasswordRegister, (val) => validRePassword(passwordRegister.value, val));
+addValidationListeners(username, (val) => validEmail(val) || validPhone(val));
+addValidationListeners(passwordLogin, validPassword);
+addValidationListeners(inputCodeLogin, () => validCaptcha("login"));
+addValidationListeners(inputCodeRegister, () => validCaptcha("register"));
 
 buttonSubmitRegister.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitRegister,
     validName(firstname.value) && validName(lastname.value) && validEmail(email.value)
     && validPhone(phone.value) && validPassword(passwordRegister.value)
-    && validRePassword(passwordRegister.value, rePasswordRegister.value)));
+    && validRePassword(passwordRegister.value, rePasswordRegister.value)
+    && validCaptcha("register")));
 
 buttonSubmitLogin.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitLogin,
-    (validEmail(username.value) || validPhone(username.value)) && validPassword(passwordLogin.value)));
+    (validEmail(username.value) || validPhone(username.value)) && validPassword(passwordLogin.value) && validCaptcha("login")));
 
 function changeTypeSubmit(element, isValid) {
     if(isValid) {
@@ -126,3 +115,10 @@ function validPassword(input) {
 function validRePassword(password, rePassword) {
     return rePassword !== "" && password === rePassword;
 }
+
+function validCaptcha(input) {
+    let inputCode = document.getElementById(`input-code-${input}`).value;
+    let code = document.getElementById(`code-${input}`).textContent;
+    return inputCode === code;
+}
+
