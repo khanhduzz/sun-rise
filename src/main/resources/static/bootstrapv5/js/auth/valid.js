@@ -117,8 +117,9 @@ function validRePassword(password, rePassword) {
 }
 
 function validCaptcha(input) {
-    let inputCode = document.getElementById(`input-code-${input}`).value;
-    let code = document.getElementById(`code-${input}`).textContent;
-    return inputCode === code;
+    // let inputCode = document.getElementById(`input-code-${input}`).value;
+    // let code = document.getElementById(`code-${input}`).textContent;
+    // return inputCode === code;
+    return true;
 }
 

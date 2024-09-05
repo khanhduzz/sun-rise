@@ -15,6 +15,9 @@ window.onload = function() {
     } else if (page === "login") {
         boxLogin.style.visibility = "visible";
         boxLogin.style.opacity = "1";
+    } else {
+        boxLogin.style.visibility = "visible";
+        boxLogin.style.opacity = "1";
     }
 
     codeLogin.textContent = getSecureRandomString(3);
