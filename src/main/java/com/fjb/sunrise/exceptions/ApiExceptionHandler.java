@@ -14,76 +14,117 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 @Slf4j
 public class ApiExceptionHandler {
 
-    private static final String ERROR_LOG_FORMAT = "Error: URI: {}, ErrorCode: {}, Message: {}";
-
     @ExceptionHandler(NotFoundException.class)
-    public ErrorVm handleNotFoundException(NotFoundException ex, WebRequest request) {
+    public ModelAndView handleNotFoundException(NotFoundException ex, WebRequest request) {
         String message = ex.getMessage();
-        ErrorVm errorVm = new ErrorVm(HttpStatus.NOT_FOUND.toString(),
-            HttpStatus.NOT_FOUND.getReasonPhrase(), message);
-        log.warn(ERROR_LOG_FORMAT, this.getServletPath(request), 404, message);
-        log.debug(ex.toString());
-        return errorVm;
+        ErrorVm errorVm = new ErrorVm(
+            HttpStatus.NOT_FOUND.toString(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            message
+        );
+        ModelAndView modelAndView = new ModelAndView(getServletPath(request));
+        modelAndView.setStatus(HttpStatus.NOT_FOUND);
+        modelAndView.addObject("error", errorVm);
+        return modelAndView;
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ErrorVm handleBadRequestException(BadRequestException ex,
-                                                             WebRequest request) {
+    public ModelAndView handleBadRequestException(BadRequestException ex, WebRequest request) {
         String message = ex.getMessage();
-        return new ErrorVm(HttpStatus.BAD_REQUEST.toString(),
-            HttpStatus.BAD_REQUEST.getReasonPhrase(), message);
+        ErrorVm errorVm = new ErrorVm(
+            HttpStatus.BAD_REQUEST.toString(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            message
+        );
+        ModelAndView modelAndView = new ModelAndView(getServletPath(request));
+        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
+        modelAndView.addObject("error", errorVm);
+        return modelAndView;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ErrorVm handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    protected ModelAndView handleMethodArgumentNotValid(MethodArgumentNotValidException ex, WebRequest request) {
         List<String> errors = ex.getBindingResult()
             .getFieldErrors()
             .stream()
             .map(error -> error.getField() + " " + error.getDefaultMessage())
             .toList();
-
-        return new ErrorVm(HttpStatus.BAD_REQUEST.toString(),
-            HttpStatus.BAD_REQUEST.getReasonPhrase(), "Request information is not valid", errors);
+        ErrorVm errorVm = new ErrorVm(
+            HttpStatus.BAD_REQUEST.toString(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            "Request information is not valid",
+            errors
+        );
+        ModelAndView modelAndView = new ModelAndView(getServletPath(request));
+        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
+        modelAndView.addObject("error", errorVm);
+        return modelAndView;
     }
 
-    @ExceptionHandler({ConstraintViolationException.class})
-    public ErrorVm handleConstraintViolation(ConstraintViolationException ex) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ModelAndView handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(violation.getRootBeanClass().getName() + " "
                 + violation.getPropertyPath() + ": " + violation.getMessage());
         }
-
-        return new ErrorVm(HttpStatus.BAD_REQUEST.toString(),
-            HttpStatus.BAD_REQUEST.getReasonPhrase(), "Request information is not valid", errors);
+        ErrorVm errorVm = new ErrorVm(
+            HttpStatus.BAD_REQUEST.toString(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            "Request information is not valid",
+            errors
+        );
+        ModelAndView modelAndView = new ModelAndView(getServletPath(request));
+        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
+        modelAndView.addObject("error", errorVm);
+        return modelAndView;
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ErrorVm handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+    public ModelAndView handleDataIntegrityViolationException(DataIntegrityViolationException e, WebRequest request) {
         String message = NestedExceptionUtils.getMostSpecificCause(e).getMessage();
-        return new ErrorVm(HttpStatus.BAD_REQUEST.toString(),
-            HttpStatus.BAD_REQUEST.getReasonPhrase(), message);
+        ErrorVm errorVm = new ErrorVm(
+            HttpStatus.BAD_REQUEST.toString(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            message
+        );
+        ModelAndView modelAndView = new ModelAndView(getServletPath(request));
+        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
+        modelAndView.addObject("error", errorVm);
+        return modelAndView;
     }
 
     @ExceptionHandler(DuplicatedException.class)
-    protected ErrorVm handleDuplicated(DuplicatedException e) {
-        return new ErrorVm(HttpStatus.BAD_REQUEST.toString(),
-            HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage());
+    protected ModelAndView handleDuplicated(DuplicatedException e, WebRequest request) {
+        ErrorVm errorVm = new ErrorVm(
+            HttpStatus.BAD_REQUEST.toString(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            e.getMessage()
+        );
+        ModelAndView modelAndView = new ModelAndView(getServletPath(request));
+        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
+        modelAndView.addObject("error", errorVm);
+        return modelAndView;
     }
 
     @ExceptionHandler(Exception.class)
-    protected ErrorVm handleOtherException(Exception ex, WebRequest request) {
+    protected ModelAndView handleOtherException(Exception ex, WebRequest request) {
         String message = ex.getMessage();
-        ErrorVm errorVm = new ErrorVm(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-            HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), message);
-        log.warn(ERROR_LOG_FORMAT, this.getServletPath(request), 500, message);
-        log.debug(ex.toString());
-        return errorVm;
+        ErrorVm errorVm = new ErrorVm(
+            HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+            HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+            message
+        );
+        ModelAndView modelAndView = new ModelAndView(getServletPath(request));
+        modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        modelAndView.addObject("error", errorVm);
+        return modelAndView;
     }
 
     private String getServletPath(WebRequest webRequest) {
