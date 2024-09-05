@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budgeting Service</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/auth/style.css}" type="text/css">
+    <link rel="icon" th:href="@{/img/spreadsheet_17087859.png}" type="image/png">
+</head>
+<body>
+<th:block th:if="${errorMessage != null}">
+    <div id="popup-failed-register" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">NHẮC NHỞ</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div th:text="${errorMessage}" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="button" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<div class="modal fade" id="popup" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">NHẮC NHỞ</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Vui lòng điền chính xác và đầy đủ thông tin!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="background-custom">
+    <div id="box-register" class="box-custom register hidden">
+        <div id="form-register" class="col-custom">
+            <h2>ĐĂNG KÝ</h2>
+            <form th:method="POST" th:object="${register}" th:href="@{/auth/register}" class="register-form">
+                <input th:field="*{firstname}" id="firstname" type="text" class="field-custom" placeholder="Vui lòng nhập tên">
+                <input th:field="*{lastname}" id="lastname" type="text" class="field-custom" placeholder="Vui lòng nhập họ">
+                <input th:field="*{email}" id="email" type="email" class="field-custom" placeholder="Địa chỉ Email">
+                <input th:field="*{phone}" id="phone" type="tel" class="field-custom" placeholder="Số điện thoại">
+                <input th:field="*{password}" id="password-register" type="password" class="field-custom" placeholder="Nhập mật khẩu">
+                <input id="re-password-register" type="password" class="field-custom" placeholder="Nhập lại mật khẩu">
+
+                <div class="captcha">
+                    <input type="text" id="input-code-register" class="field-custom field-captcha" placeholder="Nhập mã xác nhận"/>
+
+                    <div id="roll-register" class="roll" type="button">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </div>
+
+                    <div class="box-code">
+                        <div id="code-register"></div>
+                    </div>
+                </div>
+
+                <button id="submit-button-register" type="submit">Đăng ký</button>
+            </form>
+            <hr>
+            <a href="#">Quên mật khẩu?</a>
+            <a th:method="GET" th:href="@{/auth/login}">Bạn đã  có tài khoản? Đăng nhập!</a>
+        </div>
+
+        <div id="cover-regsiter" class="col-custom cover register-cover">
+            <h3>
+                Chào mừng bạn đến đây
+            </h3>
+            <p>Vui lòng điền đầy đủ thông tin để đăng ký tài khoản!</p>
+            <i style="font-size: 170px;" class="bi bi-emoji-kiss-fill"></i>
+        </div>
+    </div>
+
+    <div id="box-login" class="box-custom login hidden">
+        <div id="cover-login" class="col-custom cover login-cover">
+            <h3>
+                Chào mừng bạn trở lại!
+            </h3>
+            <p>Nhập thông tin để đăng nhập vào tài khoản!</p>
+            <i style="font-size: 170px;" class="bi bi-emoji-smile-fill"></i>
+        </div>
+
+        <div id="form-login" class="col-custom">
+            <h2>ĐĂNG NHẬP</h2>
+            <form th:method="POST" th:object="${login}" th:href="@{/auth/login}" class="login-form">
+                <input th:field="*{username}" id="username" type="text" class="field-custom" placeholder="Nhập email hoặc số điện thoại">
+                <input th:field="*{password}" id="password-login" type="password" class="field-custom" placeholder="Nhập mật khẩu">
+
+                <div class="captcha">
+                    <input type="text" id="input-code-login" class="field-custom field-captcha" placeholder="Nhập mã xác nhận"/>
+
+                    <div id="roll-login" class="roll" type="button">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </div>
+
+                    <div class="box-code">
+                        <div id="code-login"></div>
+                    </div>
+                </div>
+
+                <div class="form-check">
+                    <input name="remember-me" type="checkbox" class="form-check-input" id="remember-me">
+                    <label for="remember-me"><a>Ghi nhớ đăng nhập</a></label>
+                </div>
+                <button id="submit-button-login" type="submit">Đăng nhập</button>
+            </form>
+            <hr>
+            <a href="#">Quên mật khẩu?</a>
+            <a th:method="GET" th:href="@{/auth/register}">Tạo tài khoản!</a>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/auth/action.js}"></script>
+<script type="text/javascript" th:src="@{/js/auth/valid.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
