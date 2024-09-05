@@ -1,0 +1,188 @@
+.background-custom {
+    background: linear-gradient(to bottom, #4E73DF, #254DC0);
+    min-width: 100vw;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
+.box-custom {
+    background-color: white;
+    min-width: 500px;
+    min-height: 550px;
+    width: 70%;
+    height: 70%;
+    box-sizing: border-box;
+    padding: 1%;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: rgb(38, 38, 38) 0 0 20px 2px;
+}
+.box-custom.register {
+    position: absolute;
+    z-index: 1;
+}
+.box-custom.login {
+    position: absolute;
+    z-index: 2;
+}
+
+@media (max-width: 900px) {
+    .box-custom {
+        grid-template-columns: 1fr;
+    }
+
+    .cover {
+        display: none;
+    }
+}
+
+.col-custom {
+    width: 100%;
+    padding: 4%;
+    color: #4E73DF;
+    justify-items: center;
+    align-items: center;
+}
+
+.register-form {
+    display: grid;
+    grid-template-areas:
+    "field-custom field-custom"
+    "field-custom field-custom"
+    "field-custom field-custom"
+    "captcha captcha"
+    "button button";
+    gap: 16px;
+}
+
+.login-form {
+    display: grid;
+    grid-template-areas:
+    "field-custom"
+    "field-custom"
+    "captcha"
+    "remember-me"
+    "button";
+    gap: 16px;
+}
+
+.field-custom {
+    width: 95%;
+    height: 50px;
+    border-radius: 25px;
+    padding: 16px;
+    border: 1px solid grey;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+::placeholder {
+    font-size: small;
+}
+
+button {
+    grid-area: button;
+    color: white;
+    background-color: #4E73DF;
+    width: 95%;
+    height: 50px;
+    border-radius: 25px;
+    border: 0;
+    transition: all 0.2s;
+}
+button:hover {
+    transform: scale(1.05);
+}
+
+a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    font-size: small;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.cover {
+    background-color: #254DC0;
+    color: white;
+    width: 90%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.cover.register-cover {
+    padding-top: 100px;
+    text-align: center;
+    margin-left: 10%;
+    border-top-left-radius: 200px 200px;
+    border-bottom-left-radius: 200px 200px;
+}
+
+.cover.login-cover {
+    text-align: center;
+    padding-top: 100px;
+    border-top-right-radius: 200px 200px;
+    border-bottom-right-radius: 200px 200px;
+}
+
+.box-code {
+    border: 2px solid black;
+    box-shadow: 0 0 5px grey;
+    width: 150px;
+    height: 50px;
+    box-sizing: border-box;
+    color: black;
+    text-decoration:line-through;
+    font-style: italic;
+    font-size: x-large;
+    user-select: none;
+    display: grid;
+    place-items: center;
+}
+
+.captcha {
+    grid-area: captcha;
+    width: 85%;
+    height: 70px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    justify-items: center;
+    align-items: center;
+}
+
+.field-custom.field-captcha {
+    width: 200px;
+    height: 40px;
+}
+
+.roll {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    color: black;
+    transition: transform 0.5s ease, color 0.3s ease;
+}
+
+.roll:hover {
+    transform: rotate(360deg);
+}
+
+.roll:active {
+    transform: rotate(360deg) scale(1.5);
+}

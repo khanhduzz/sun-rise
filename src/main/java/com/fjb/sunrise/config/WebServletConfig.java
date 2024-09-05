@@ -1,5 +1,7 @@
 package com.fjb.sunrise.config;
 
+import static com.fjb.sunrise.utils.Constants.ApiConstant.AUTH_VIEW;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -54,12 +56,13 @@ public class WebServletConfig implements WebMvcConfigurer {
             .addResourceLocations("classpath:/META-INF/resources/webjars/",
                 "classpath:/static/img/", "classpath:/static/css/", "classpath:/static/js/",
                 "classpath:/static/bootstrapv4/vendor/", "classpath:/static/bootstrapv4/css/",
-                "classpath:/static/bootstrapv4/js/");
+                "classpath:/static/bootstrapv4/js/", "classpath:/static/bootstrapv5/css/", 
+                                  "classpath:/static/bootstrapv5/js/");
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/health").setViewName("health");
-        registry.addViewController("/auth/login").setViewName("loginAndRegister");
+        registry.addViewController("/auth/login").setViewName(AUTH_VIEW);
     }
 }
