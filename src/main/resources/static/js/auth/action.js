@@ -51,12 +51,9 @@ function randomCode() {
     const randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let resRandom = "";
     for (let i = 1; i <= 3; i++) {
-        resRandom += randomChar.charAt(random(randomChar.length));
+        let randomNum = Math.random();
+        resRandom += randomChar.charAt(Math.floor(randomNum * randomChar.length));
     }
 
     return resRandom;
-}
-
-function random(length) {
-    return Math.floor(Math.random() * length);
 }
