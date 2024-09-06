@@ -6,8 +6,48 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Health</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .error-container {
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .error-container h1 {
+            font-size: 24px;
+        }
+        .error-container p {
+            font-size: 18px;
+        }
+        .field-errors {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            background-color: #f8d7da;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
+    <div th:if="${error != null}" class="error-container">
+        <h1>Error</h1>
+        <p>Status Code: <span th:text="${error.statusCode}"></span></p>
+        <p>Title: <span th:text="${error.title}"></span></p>
+        <p>Detail: <span th:text="${error.detail}"></span></p>
+
+        <!-- Display field errors if they exist -->
+        <div th:if="${error.fieldErrors != null and !error.fieldErrors.isEmpty()}" class="field-errors">
+            <h2>Field Errors:</h2>
+            <ul>
+                <li th:each="fieldError : ${error.fieldErrors}" th:text="${fieldError}"></li>
+            </ul>
+        </div>
+    </div>
     <h2>Server is up and running</h2>
     <h2>Welcome</h2>
     <p>This for checking authentication</p>
