@@ -15,6 +15,7 @@ import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
 @Configuration
 @EnableWebMvc
@@ -25,7 +26,7 @@ public class WebServletConfig implements WebMvcConfigurer {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
         resolver.setPrefix("classpath:/templates/");
         resolver.setSuffix(".html");
-        resolver.setTemplateMode("TemplateMode.HTML");
+        resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setCharacterEncoding("UTF-8");
         resolver.setCacheable(false);
         return resolver;
@@ -33,7 +34,7 @@ public class WebServletConfig implements WebMvcConfigurer {
 
     @Bean
     public SpringTemplateEngine templateEngine(@Qualifier("templateResolver")
-                                                   SpringResourceTemplateResolver templateResolver) {
+                                               SpringResourceTemplateResolver templateResolver) {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setTemplateResolver(templateResolver());
         engine.setEnableSpringELCompiler(true);
@@ -51,10 +52,11 @@ public class WebServletConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-                .addResourceHandler("/webjars/**", "/img/**", "/css/**", "/js/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/",
-                        "classpath:/static/img/", "classpath:/static/css/", "classpath:/static/js/",
-                    "classpath:/static/bootstrapv5/css/", "classpath:/static/bootstrapv5/js/");
+            .addResourceHandler("/webjars/**", "/img/**", "/css/**", "/js/**", "/vendor/**")
+            .addResourceLocations("classpath:/META-INF/resources/webjars/",
+                "classpath:/static/img/", "classpath:/static/css/", "classpath:/static/js/",
+                "classpath:/static/bootstrapv5/css/", "classpath:/static/bootstrapv5/js/",
+                "classpath:/static/vendor/");
     }
 
     @Override
