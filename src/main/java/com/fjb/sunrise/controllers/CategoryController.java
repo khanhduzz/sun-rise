@@ -25,6 +25,7 @@ public class CategoryController {
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categories", categoryService.getAllCategories());
+        modelAndView.addObject("categoryCreate", new CategoryCreateDto());
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }

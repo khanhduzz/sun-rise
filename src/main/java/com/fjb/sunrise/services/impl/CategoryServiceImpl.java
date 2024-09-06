@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void disableCategory(Long id) {
         categoryRepository.findById(id).ifPresent(x -> {
-            x.setActivate(false);
+            x.setActivate(true);
             categoryRepository.save(x);
         });
     }

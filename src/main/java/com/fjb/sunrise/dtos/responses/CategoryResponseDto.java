@@ -16,4 +16,6 @@ public class CategoryResponseDto {
     private LocalDateTime createdDate;
 
     private LocalDateTime lastModifiedDate;
+
+    private boolean isActivate;
 }
