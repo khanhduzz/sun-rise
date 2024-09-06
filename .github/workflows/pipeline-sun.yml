@@ -123,16 +123,3 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64
           tags: ghcr.io/${{ github.repository_owner }}/sun-rise:latest
-      - name: Generate Coverage Badge
-        uses: Schneegans/dynamic-badges-action@v1.7.0
-        with:
-          badge-type: coverage
-          coverage-file: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
-          coverage-type: 'coverage'  # Adjust if needed
-          output-file: coverage-badge.svg  # The badge will be saved as coverage-badge.svg
-
-      - name: Upload coverage badge
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-badge
-          path: coverage-badge.svg
