@@ -53,6 +53,10 @@ public class User extends AuditEntity<String> implements Serializable, UserDetai
     @Enumerated(EnumType.STRING)
     private ERole role;
 
+    // This field holds the code for verification
+    @Column(name = "code_verification")
+    private String codeVerification;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));

@@ -33,9 +33,14 @@ public class Constants {
       
         public static final String AUTH_REDIRECT_LOGIN = "redirect:/auth/login";
         public static final String AUTH_VIEW = "/auth/loginAndRegister";
-        public static final String REGISTER_ATTRIBUTE = "register";
-        public static final String LOGIN_ATTRIBUTE = "login";
-        public static final String ERROR_MESSAGE = "errorMessage";
+        public static final String AUTH_VERIFICATION = "/auth/verification";
+        public static final String AUTH_VERIFICATION_CODE = "/auth/inputCode";
+        public static final String LOGIN_OBJECT = "login";
+        public static final String REGISTER_OBJECT = "register";
+        public static final String ERROR_MESSAGE_OBJECT = "errorMessage";
+        public static final String PHONE_OBJECT = "phone";
+        public static final String EMAIL_OBJECT = "email";
+        public static final String CODE_OBJECT = "code";
 
         public static final String CODE_200 = "200";
         public static final String OK = "Ok";

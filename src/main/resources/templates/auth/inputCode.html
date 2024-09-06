@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-$END$
+    <h1>Nhập code</h1>
+    <form th:method="POST" th:action="@{/auth/sendCode}">
+        <input type="text" th:object="${code}" placeholder="Nhập email"/>
+        <button type="submit" >Gửi</button>
+    </form>
 </body>
 </html>
