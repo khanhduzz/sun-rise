@@ -8,8 +8,12 @@ import org.springframework.data.domain.Page;
 
 public interface TransactionService {
     Transaction create(CreateOrUpdateTransactionRequest request) throws ParseException;
+
     Transaction findById(Long id);
+
     Page<Transaction> findByPage(Integer page, Integer pageSize, String sort, boolean isAscending);
+
     Page<Transaction> getTransactionList(DataTableInputDTO payload);
+
     Transaction update(CreateOrUpdateTransactionRequest request) throws ParseException;
 }

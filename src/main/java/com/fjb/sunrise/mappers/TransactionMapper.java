@@ -12,7 +12,7 @@ public interface TransactionMapper {
 
     @Mapping(target = "category", source = "category.name")
     @Mapping(target = "createdAt",
-        expression = "java(transaction.getUpdatedAt() == null ? " +
-            "transaction.getCreatedAt() : transaction.getUpdatedAt())")
-    TransactionPageResponse TransactionToTransactionPageResponse(Transaction transaction);
+        expression = "java(transaction.getUpdatedAt() == null ? "
+            + "transaction.getCreatedAt() : transaction.getUpdatedAt())")
+    TransactionPageResponse transactionToTransactionPageResponse(Transaction transaction);
 }

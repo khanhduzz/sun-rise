@@ -85,7 +85,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         Pageable pageable = PageRequest.of(pageNumber, payload.getLength(), sortOpt);
 
-            return transactionRepository.findAll(pageable);
+        return transactionRepository.findAll(pageable);
     }
 
     @Override

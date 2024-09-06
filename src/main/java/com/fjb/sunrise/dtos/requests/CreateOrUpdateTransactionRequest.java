@@ -21,17 +21,11 @@ public class CreateOrUpdateTransactionRequest implements Serializable {
 
     private Long category;
 
-//    private Long user;
-
-//    private String note;
-
-    // yyyy-MM-dd'T'H:mm
     private static final String MY_TIME_ZONE = "Asia/Bangkok";
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss",
         timezone = MY_TIME_ZONE)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-//    @PastOrPresent
     private LocalDateTime createdAt;
 
 
