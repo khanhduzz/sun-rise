@@ -1,5 +1,8 @@
 package com.fjb.sunrise.controllers;
 
+import static com.fjb.sunrise.utils.Constants.ApiConstant.CATEGORIES;
+import static com.fjb.sunrise.utils.Constants.ApiConstant.TRANSACTION_INDEX;
+
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CreateOrUpdateTransactionRequest;
 import com.fjb.sunrise.dtos.responses.TransactionFullPageResponse;
@@ -33,22 +36,22 @@ public class TransactionController {
 
     @GetMapping("/index")
     public String index(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
-        model.addAttribute("categories", categoryRepository.findAll());
-        return "transaction/index";
+        model.addAttribute(CATEGORIES, categoryRepository.findAll());
+        return TRANSACTION_INDEX;
     }
 
     @GetMapping("/create")
     public String getCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
-        model.addAttribute("categories", categoryRepository.findAll());
-        return "transaction/index";
+        model.addAttribute(CATEGORIES, categoryRepository.findAll());
+        return TRANSACTION_INDEX;
     }
 
     @PostMapping("/create")
     public String postCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model)
         throws ParseException {
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute(CATEGORIES, categoryRepository.findAll());
         Transaction transaction = transactionService.create(request);
-        return "transaction/index";
+        return TRANSACTION_INDEX;
     }
 
 

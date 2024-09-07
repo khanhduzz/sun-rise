@@ -3,8 +3,9 @@ Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,Bli
 Chart.defaults.global.defaultFontColor = '#858796';
 
 // Pie Chart Example
+// WARNING: change var to let/const break chart
 var ctx = document.getElementById("myPieChart");
-var myPieChart = new Chart(ctx, {
+let myPieChart = new Chart(ctx, {
   type: 'doughnut',
   data: {
     labels: ["Lương", "Chứng khoán", "Bitcoin", "Khác"],
