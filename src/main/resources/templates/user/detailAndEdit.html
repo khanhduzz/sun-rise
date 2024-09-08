@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Information and Edit</title>
+    <link rel="stylesheet" th:href="@{/css/admin/fstyle.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css"/>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+<div>
+    <nav class="navbar bg-color p-2 border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" style="color: black;">Budget Service</a>
+            <div class="dropdown">
+                <button class="btn bg-color dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-fill text-color"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid p-0">
+        <div class="row no-gutters">
+            <div class="col-2 p-0 bg-color vh-100 border border-top-0">
+                <a class="btn btn-light text-color w-100 border-bottom" th:href="@{/user/adminDashboard}">
+                    <i class="bi bi-table text-color"></i>
+                    <span class="text-color">Admin Home Page</span>
+                </a>
+                <a class="btn btn-light text-color w-100 border-bottom" th:href="@{/user/addUserByAdmin}">
+                    <i class="bi bi-pencil-square text-color"></i>
+                    <span class="text-color">Add New User</span>
+                </a>
+            </div>
+
+            <div class="col-10 p-5">
+                <h1>User Information and Edit</h1>
+                <hr>
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Display User Information -->
+                        <h5>User Information</h5>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username:</label>
+                            <input type="text" class="form-control" id="username" th:value="${userDetail.username}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="firstname" class="form-label">First Name:</label>
+                            <input type="text" class="form-control" id="firstname" th:value="${userDetail.firstname}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastname" class="form-label">Last Name:</label>
+                            <input type="text" class="form-control" id="lastname" th:value="${userDetail.lastname}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" th:value="${userDetail.email}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone:</label>
+                            <input type="text" class="form-control" id="phone" th:value="${userDetail.phone}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role:</label>
+                            <input type="text" class="form-control" id="role" th:value="${userDetail.role}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status:</label>
+                            <input type="text" class="form-control" id="status" th:value="${userDetail.status}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="createdBy" class="form-label">Created By:</label>
+                            <input type="text" class="form-control" id="createdBy" th:value="${userDetail.createdBy}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="createdDate" class="form-label">Created Date:</label>
+                            <input type="text" class="form-control" id="createdDate" th:value="${#temporals.format(userDetail.createdDate, 'dd/MM/yyyy HH:mm')}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastModifiedBy" class="form-label">Last Modified By:</label>
+                            <input type="text" class="form-control" id="lastModifiedBy" th:value="${userDetail.lastModifiedBy}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastModifiedDate" class="form-label">Last Modified Date:</label>
+                            <input type="text" class="form-control" id="lastModifiedDate" th:value="${#temporals.format(userDetail.lastModifiedDate, 'dd/MM/yyyy HH:mm')}" readonly>
+                        </div>
+
+                        <!-- Edit User Information -->
+                        <h5>Edit User Information</h5>
+                        <form th:action="@{/user/detailAndEdit}" th:object="${userDetail}" method="POST">
+                            <input type="hidden" th:field="*{id}">
+                            <div class="mb-3 row">
+                                <label for="username" class="col-sm-2 col-form-label">Username:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" th:field="*{username}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="username" class="col-sm-2 col-form-label">Password:</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" th:field="*{password}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="firstname" class="col-sm-2 col-form-label">First Name:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" th:field="*{firstname}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="lastname" class="col-sm-2 col-form-label">Last Name:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" th:field="*{lastname}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="email" class="col-sm-2 col-form-label">Email:</label>
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" th:field="*{email}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="phone" class="col-sm-2 col-form-label">Phone:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" th:field="*{phone}">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="role" class="col-sm-2 col-form-label">Role:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select w-25" th:field="*{role}">
+                                        <option value="ADMIN" th:selected="${userDetail.role == 'ROLE_ADMIN'}">Admin</option>
+                                        <option value="USER" th:selected="${userDetail.role == 'ROLE_USER'}">User</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="status" class="col-sm-2 col-form-label">Status:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select w-25" th:field="*{status}">
+                                        <option value="ACTIVE" th:selected="${userDetail.status == 'ACTIVE'}">Active</option>
+                                        <option value="NOT_ACTIVE" th:selected="${userDetail.status == 'NOT_ACTIVE'}">Not Active</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <a th:href="@{/user/adminDashboard}">
+                                <button type="submit" class="btn btn-primary">Save Changes</button></a>
+                        </form>
+                    </div>
+                </div>
+                <a class="btn btn-secondary mt-3" th:href="@{/user/adminDashboard}">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

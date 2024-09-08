@@ -1,5 +1,6 @@
 package com.fjb.sunrise.dtos;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,4 +16,8 @@ public class EditProfileByAdminDTO {
     private String phone;
     private String role;
     private String status;
+    private String createdBy;
+    private LocalDateTime createdDate;
+    private String lastModifiedBy;
+    private LocalDateTime lastModifiedDate;
 }

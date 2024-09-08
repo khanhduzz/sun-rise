@@ -37,6 +37,11 @@ public class Constants {
         public static final String LOGIN_ATTRIBUTE = "login";
         public static final String ERROR_MESSAGE = "errorMessage";
 
+        public static final String ADMIN_VIEW = "/user/adminDashboard";
+        public static final String ADMIN_ADD_NEW_USER = "/user/addUserByAdmin";
+        public static final String ADMIN_DETAILS_AND_EDIT = "/user/detailAndEdit";
+        public static final String ADMIN_REDIRECT = "redirect:/user/adminDashboard";
+
         public static final String CODE_200 = "200";
         public static final String OK = "Ok";
         public static final String CODE_404 = "404";
