@@ -25,7 +25,7 @@ public class UserController {
     private final UserService userService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/adminDashboard")
+    @GetMapping("/admin-page")
     public ModelAndView adminDashboard() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("users", userService.getAllUsers());
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/detailAndEdit")
+    @GetMapping("/detail-and-edit-by-admin")
     public String detailAndEdit(@RequestParam Long id, Model model) {
         User user = userService.getUserById(id);
         model.addAttribute("userDetail", user);
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/detailAndEdit")
+    @PostMapping("/detail-and-edit-by-admin")
     public ModelAndView doEditUser(@RequestParam Long id,
                                    @ModelAttribute("userDetail") EditProfileByAdminDTO userDTO,
                                    BindingResult bindingResult) {
@@ -70,7 +70,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/deleteUserByAdmin")
+    @GetMapping("/delete-user-by-admin")
     public String deleteUserByAdmin(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         try {
             userService.deleteUserById(id);
@@ -82,7 +82,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/deactivateUserByAdmin")
+    @GetMapping("/deactivate-user-by-admin")
     public String deactivateUserByAdmin(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         try {
             userService.deactivateUserById(id);
@@ -94,7 +94,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/addUserByAdmin")
+    @GetMapping("/add-user-by-admin")
     public ModelAndView addUserByAdmin() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("newUser", new EditProfileByAdminDTO());
@@ -103,7 +103,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/addUserByAdmin")
+    @PostMapping("/add-user-by-admin")
     public ModelAndView doAddUserByAdmin(@ModelAttribute("newUser") EditProfileByAdminDTO newUser) {
         ModelAndView modelAndView = new ModelAndView();
         userService.createUserByAdmin(newUser);

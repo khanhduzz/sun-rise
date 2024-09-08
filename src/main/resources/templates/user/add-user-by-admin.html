@@ -18,58 +18,49 @@
                     <i class="bi bi-person-fill text-color"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                    <li><a class="dropdown-item" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
     <div class="container-fluid p-0">
         <div class="row no-gutters">
             <div class="col-2 p-0 bg-color vh-100 border border-top-0">
-                <a class="btn btn-light text-color w-100 border-bottom" th:href="@{/user/adminDashboard}">
+                <a class="btn btn-light text-color w-100 border-bottom" th:href="@{/user/admin-page}">
                     <i class="bi bi-table text-color"></i>
                     <span class="text-color">Admin Home Page</span>
                 </a>
             </div>
-
             <div class="col-10 p-5">
                 <h1>Add User</h1>
                 <hr>
-
                 <div class="card">
                     <div class="card-body">
-                        <form th:method="POST" th:action="@{/user/addUserByAdmin}" th:object="${newUser}">
+                        <form th:method="POST" th:action="@{/user/add-user-by-admin}" th:object="${newUser}">
                             <div class="mb-3">
                                 <label for="username" class="form-label"><b>User name</b></label>
                                 <input class="form-control" type="text" th:field="*{username}" id="username" name="username" placeholder="Enter user name"/>
                             </div>
-
                             <div class="mb-3">
                                 <label for="password" class="form-label"><b>Password</b></label>
                                 <input class="form-control" type="password" th:field="*{password}" id="password" name="password" placeholder="Enter your password"/>
                             </div>
-
                             <div class="mb-3">
                                 <label for="firstname" class="form-label"><b>First Name</b></label>
                                 <input class="form-control" type="text" th:field="*{firstname}" id="firstname" name="firstname" placeholder="Enter your first name"/>
                             </div>
-
                             <div class="mb-3">
                                 <label for="lastname" class="form-label"><b>Last Name</b></label>
                                 <input class="form-control" type="text" th:field="*{lastname}" id="lastname" name="lastname" placeholder="Enter your last name"/>
                             </div>
-
                             <div class="mb-3">
                                 <label for="email" class="form-label"><b>Email</b></label>
                                 <input class="form-control" type="text" th:field="*{email}" id="email" name="email" placeholder="Enter your email"/>
                             </div>
-
                             <div class="mb-3">
                                 <label for="phone" class="form-label"><b>Phone Number</b></label>
                                 <input class="form-control" type="text" th:field="*{phone}" id="phone" name="phone" placeholder="Enter your phone number"/>
                             </div>
-
                             <div class="mb-3">
                                 <label for="role" class="form-label"><b>Role</b></label>
                                 <select class="form-select w-75" th:field="*{role}" id="role">
@@ -77,7 +68,6 @@
                                     <option th:value="${T(com.fjb.sunrise.enums.ERole).USER}" th:text="${T(com.fjb.sunrise.enums.ERole).USER}"></option>
                                 </select>
                             </div>
-
                             <div class="mb-3">
                                 <label for="status" class="form-label"><b>Status</b></label>
                                 <select class="form-select w-75" th:field="*{status}" id="status">

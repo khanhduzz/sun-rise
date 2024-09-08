@@ -18,25 +18,23 @@
                     <i class="bi bi-person-fill text-color"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                    <li><a class="dropdown-item" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
     <div class="container-fluid p-0">
         <div class="row no-gutters">
             <div class="col-2 p-0 bg-color vh-100 border border-top-0">
-                <a class="btn btn-light text-color w-100 border-bottom" th:href="@{/user/adminDashboard}">
+                <a class="btn btn-light text-color w-100 border-bottom" th:href="@{/user/admin-page}">
                     <i class="bi bi-table text-color"></i>
                     <span class="text-color">Admin Home Page</span>
                 </a>
-                <a class="btn btn-light text-color w-100 border-bottom" th:href="@{/user/addUserByAdmin}">
+                <a class="btn btn-light text-color w-100 border-bottom" th:href="@{/user/add-user-by-admin}">
                     <i class="bi bi-pencil-square text-color"></i>
                     <span class="text-color">Add New User</span>
                 </a>
             </div>
-
             <div class="col-10 p-5">
                 <h1>User Information and Edit</h1>
                 <hr>
@@ -88,10 +86,9 @@
                             <label for="lastModifiedDate" class="form-label">Last Modified Date:</label>
                             <input type="text" class="form-control" id="lastModifiedDate" th:value="${#temporals.format(userDetail.lastModifiedDate, 'dd/MM/yyyy HH:mm')}" readonly>
                         </div>
-
                         <!-- Edit User Information -->
                         <h5>Edit User Information</h5>
-                        <form th:action="@{/user/detailAndEdit}" th:object="${userDetail}" method="POST">
+                        <form th:action="@{/user/detail-and-edit-by-admin}" th:object="${userDetail}" method="POST">
                             <input type="hidden" th:field="*{id}">
                             <div class="mb-3 row">
                                 <label for="username" class="col-sm-2 col-form-label">Username:</label>
@@ -147,12 +144,12 @@
                                     </select>
                                 </div>
                             </div>
-                            <a th:href="@{/user/adminDashboard}">
+                            <a th:href="@{/user/admin-page}">
                                 <button type="submit" class="btn btn-primary">Save Changes</button></a>
                         </form>
                     </div>
                 </div>
-                <a class="btn btn-secondary mt-3" th:href="@{/user/adminDashboard}">Back</a>
+                <a class="btn btn-secondary mt-3" th:href="@{/user/admin-page}">Back</a>
             </div>
         </div>
     </div>
