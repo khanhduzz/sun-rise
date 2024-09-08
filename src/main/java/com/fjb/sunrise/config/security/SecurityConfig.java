@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailService userDetailsService;
 
-    static final String[] PUBLIC_ENDPOINTS = {"/img/**", "/css/**", "/js/**", "/auth/**", "/health/**"};
+    static final String[] PUBLIC_ENDPOINTS = {"/img/**", "/css/**", "/js/**", "/auth/**", "/health/**", "/vendor/**"};
 
     static final String[] ALLOWED_METHODS = {"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"};
 
