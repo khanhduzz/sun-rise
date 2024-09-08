@@ -37,44 +37,39 @@
                 <div class="card">
                     <div class="card-body">
                         <form th:method="POST" th:action="@{/user/add-user-by-admin}" th:object="${newUser}">
+
                             <div class="mb-3">
-                                <label for="username" class="form-label"><b>User name</b></label>
                                 <input class="form-control" type="text" th:field="*{username}" id="username" name="username" placeholder="Enter user name"/>
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label"><b>Password</b></label>
                                 <input class="form-control" type="password" th:field="*{password}" id="password" name="password" placeholder="Enter your password"/>
                             </div>
                             <div class="mb-3">
-                                <label for="firstname" class="form-label"><b>First Name</b></label>
                                 <input class="form-control" type="text" th:field="*{firstname}" id="firstname" name="firstname" placeholder="Enter your first name"/>
                             </div>
                             <div class="mb-3">
-                                <label for="lastname" class="form-label"><b>Last Name</b></label>
                                 <input class="form-control" type="text" th:field="*{lastname}" id="lastname" name="lastname" placeholder="Enter your last name"/>
                             </div>
                             <div class="mb-3">
-                                <label for="email" class="form-label"><b>Email</b></label>
                                 <input class="form-control" type="text" th:field="*{email}" id="email" name="email" placeholder="Enter your email"/>
                             </div>
                             <div class="mb-3">
-                                <label for="phone" class="form-label"><b>Phone Number</b></label>
                                 <input class="form-control" type="text" th:field="*{phone}" id="phone" name="phone" placeholder="Enter your phone number"/>
                             </div>
+
                             <div class="mb-3">
-                                <label for="role" class="form-label"><b>Role</b></label>
                                 <select class="form-select w-75" th:field="*{role}" id="role">
                                     <option th:value="${T(com.fjb.sunrise.enums.ERole).ADMIN}" th:text="${T(com.fjb.sunrise.enums.ERole).ADMIN}"></option>
                                     <option th:value="${T(com.fjb.sunrise.enums.ERole).USER}" th:text="${T(com.fjb.sunrise.enums.ERole).USER}"></option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="status" class="form-label"><b>Status</b></label>
                                 <select class="form-select w-75" th:field="*{status}" id="status">
                                     <option th:value="${T(com.fjb.sunrise.enums.EStatus).ACTIVE}" th:text="${T(com.fjb.sunrise.enums.EStatus).ACTIVE}"></option>
                                     <option th:value="${T(com.fjb.sunrise.enums.EStatus).NOT_ACTIVE}" th:text="${T(com.fjb.sunrise.enums.EStatus).NOT_ACTIVE}"></option>
                                 </select>
                             </div>
+
                             <button type="submit" class="btn bg-btn">Submit</button>
                             <button type="reset" class="btn bg-btn">Reset</button>
                         </form>

@@ -49,6 +49,7 @@
                                 <th scope="col" style="width: auto">Actions</th>
                             </tr>
                             </thead>
+
                             <tbody th:unless="${#lists.isEmpty(users)}">
                             <tr th:each="c : ${users}">
                                 <th scope="row" th:text="${c.getId()}"></th>

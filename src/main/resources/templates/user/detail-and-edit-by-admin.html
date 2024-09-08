@@ -43,47 +43,36 @@
                         <!-- Display User Information -->
                         <h5>User Information</h5>
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username:</label>
                             <input type="text" class="form-control" id="username" th:value="${userDetail.username}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="firstname" class="form-label">First Name:</label>
                             <input type="text" class="form-control" id="firstname" th:value="${userDetail.firstname}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="lastname" class="form-label">Last Name:</label>
                             <input type="text" class="form-control" id="lastname" th:value="${userDetail.lastname}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email:</label>
                             <input type="email" class="form-control" id="email" th:value="${userDetail.email}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="phone" class="form-label">Phone:</label>
                             <input type="text" class="form-control" id="phone" th:value="${userDetail.phone}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="role" class="form-label">Role:</label>
                             <input type="text" class="form-control" id="role" th:value="${userDetail.role}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="status" class="form-label">Status:</label>
                             <input type="text" class="form-control" id="status" th:value="${userDetail.status}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="createdBy" class="form-label">Created By:</label>
                             <input type="text" class="form-control" id="createdBy" th:value="${userDetail.createdBy}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="createdDate" class="form-label">Created Date:</label>
                             <input type="text" class="form-control" id="createdDate" th:value="${#temporals.format(userDetail.createdDate, 'dd/MM/yyyy HH:mm')}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="lastModifiedBy" class="form-label">Last Modified By:</label>
                             <input type="text" class="form-control" id="lastModifiedBy" th:value="${userDetail.lastModifiedBy}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="lastModifiedDate" class="form-label">Last Modified Date:</label>
                             <input type="text" class="form-control" id="lastModifiedDate" th:value="${#temporals.format(userDetail.lastModifiedDate, 'dd/MM/yyyy HH:mm')}" readonly>
                         </div>
                         <!-- Edit User Information -->
@@ -91,43 +80,36 @@
                         <form th:action="@{/user/detail-and-edit-by-admin}" th:object="${userDetail}" method="POST">
                             <input type="hidden" th:field="*{id}">
                             <div class="mb-3 row">
-                                <label for="username" class="col-sm-2 col-form-label">Username:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" th:field="*{username}">
+                                    <input type="text" class="form-control" th:field="*{username}" placeholder="Enter your user name">
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="username" class="col-sm-2 col-form-label">Password:</label>
                                 <div class="col-sm-10">
-                                    <input type="password" class="form-control" th:field="*{password}">
+                                    <input type="password" class="form-control" th:field="*{password}" placeholder="Enter your new password">
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="firstname" class="col-sm-2 col-form-label">First Name:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" th:field="*{firstname}">
+                                    <input type="text" class="form-control" th:field="*{firstname}" placeholder="Enter your first name">
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="lastname" class="col-sm-2 col-form-label">Last Name:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" th:field="*{lastname}">
+                                    <input type="text" class="form-control" th:field="*{lastname}" placeholder="Enter your last name">
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="email" class="col-sm-2 col-form-label">Email:</label>
                                 <div class="col-sm-10">
-                                    <input type="email" class="form-control" th:field="*{email}">
+                                    <input type="email" class="form-control" th:field="*{email}" placeholder="Enter your email">
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="phone" class="col-sm-2 col-form-label">Phone:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" th:field="*{phone}">
+                                    <input type="text" class="form-control" th:field="*{phone}" placeholder="Enter your phone number">
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="role" class="col-sm-2 col-form-label">Role:</label>
                                 <div class="col-sm-10">
                                     <select class="form-select w-25" th:field="*{role}">
                                         <option value="ADMIN" th:selected="${userDetail.role == 'ROLE_ADMIN'}">Admin</option>
@@ -136,7 +118,6 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="status" class="col-sm-2 col-form-label">Status:</label>
                                 <div class="col-sm-10">
                                     <select class="form-select w-25" th:field="*{status}">
                                         <option value="ACTIVE" th:selected="${userDetail.status == 'ACTIVE'}">Active</option>
