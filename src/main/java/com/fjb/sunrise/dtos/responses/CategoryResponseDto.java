@@ -17,5 +17,5 @@ public class CategoryResponseDto {
 
     private LocalDateTime lastModifiedDate;
 
-    private boolean isActivate;
+    private boolean active;
 }

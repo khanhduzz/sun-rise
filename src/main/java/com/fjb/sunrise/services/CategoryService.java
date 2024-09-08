@@ -12,5 +12,7 @@ public interface CategoryService {
 
     void disableCategory(Long id);
 
+    CategoryResponseDto getCategory(Long id);
+
     List<CategoryResponseDto> getAllCategories();
 }
