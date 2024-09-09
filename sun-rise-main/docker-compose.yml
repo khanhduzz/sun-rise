@@ -1,0 +1,61 @@
+services:
+  sunrise:
+    build: .
+    image: sunrise:latest
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mock_project
+      - SERVER_SERVLET_CONTEXT_PATH=/sun
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+      - SERVER_LOCAL_PORT
+      - ADMIN_DEFAULT_USERNAME=sunrise
+      - ADMIN_DEFAULT_PASSWORD=test1234
+      - ADMIN_DEFAULT_FIRST=james
+      - ADMIN_DEFAULT_LAST=bond
+      - ADMIN_CREATE_KEY=dfjkNdkMAnje
+      - ADMIN_DEFAULT_EMAIL=sun@sun.com
+    ports:
+      - ${SERVER_LOCAL_PORT}:${SERVER_LOCAL_PORT}
+    volumes:
+      - ./deployment/app-config:/app-config
+    networks:
+      - sun-network
+
+  postgres:
+    image: debezium/postgres:15-alpine
+    hostname: postgres
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - ./docker/postgres/postgresql.conf.sample:/usr/share/postgresql/postgresql.conf.sample
+      - ./postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql
+      - postgres:/var/lib/postgresql/data
+    command: postgres -c 'max_connections=500'
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    networks:
+      - sun-network
+    pull_policy: always
+
+  pgadmin:
+    image: dpage/pgadmin4:6.20
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@sun.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - ${PG_ADMIN_PORT}:${SERVER_PORT}
+    networks:
+      - sun-network
+
+networks:
+  sun-network:
+    driver: bridge
+    name: sun-network
+
+volumes:
+  postgres:
+  pgadmin:
+

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Category Management</title>
+</head>
+<body>
+<div class="container" style="max-width: 800px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;">
+    <h1 style="text-align: center; color: #007bff;">Categories</h1>
+
+    <!-- Back button -->
+    <a href="/sun/health" style="display: inline-block; background-color: #6c757d; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px; font-weight: bold;">🔙 Back to Health</a>
+
+    <!-- Form to add a new category -->
+    <form th:action="@{/category/add}" th:object="${categoryCreate}" method="post">
+        <div style="margin-bottom: 20px;">
+            <label for="name" style="font-weight: bold;">Category Name</label>
+            <input type="text" id="name" name="name" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" />
+            <div th:if="${#fields.hasErrors('name')}" style="color: red;" th:errors="*{name}"></div>
+        </div>
+        <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Add Category</button>
+    </form>
+
+    <!-- Search form -->
+    <form th:action="@{/category/search}" th:object="${categorySearch}" method="post" style="margin-top: 20px;">
+        <input type="text" name="searchQuery" placeholder="Search categories..." style="padding: 10px; width: 70%; border: 1px solid #ddd; border-radius: 5px;" />
+        <button type="submit" style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Search</button>
+    </form>
+
+    <!-- Table to display categories -->
+    <table style="width: 100%; margin-top: 20px; border-collapse: collapse; border: 1px solid #ddd;">
+        <thead>
+        <tr>
+            <th style="padding: 12px; background-color: #f2f2f2; border: 1px solid #ddd;">Name</th>
+            <th style="padding: 12px; background-color: #f2f2f2; border: 1px solid #ddd;">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="category : ${categories}">
+            <td style="padding: 12px; border: 1px solid #ddd;" th:text="${category.name}"></td>
+            <td style="padding: 12px; border: 1px solid #ddd;">
+                <a th:href="@{/category/{id}(id=${category.id})}" style="background-color: #ffc107; color: white; padding: 8px 12px; border-radius: 5px; text-decoration: none;">✏️ Edit</a>
+                <form th:action="@{/category/delete/{id}(id=${category.id})}" method="post" style="display:inline;">
+                    <button type="submit" style="background-color: #dc3545; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer;">🗑️ Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

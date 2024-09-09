@@ -1,0 +1,15 @@
+package com.fjb.sunrise;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+@SpringBootApplication
+@EnableJpaAuditing
+public class SunRiseApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SunRiseApplication.class, args);
+    }
+
+}

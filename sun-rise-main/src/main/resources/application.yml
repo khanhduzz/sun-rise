@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: sun-rise
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+
+  logging:
+    level:
+      org:
+        springframework:
+          security: DEBUG
+          aop: DEBUG
+
+server:
+  port: ${SERVER_LOCAL_PORT}
+  servlet:
+    context-path: /sun
+    session:
+      timeout: 30s
+
+logging:
+  level:
+    org:
+      springframework:
+        security: INFO
+
+application:
+  admin:
+    default:
+      username: ${ADMIN_DEFAULT_USERNAME}
+      password: ${ADMIN_DEFAULT_PASSWORD}
+      firstname: ${ADMIN_DEFAULT_FIRST}
+      lastname: ${ADMIN_DEFAULT_LAST}
+      email: ${ADMIN_DEFAULT_EMAIL}
+
+default:
+  admin-create-key: ${ADMIN_CREATE_KEY}

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+        .left-panel {
+            width: 25%;
+            background-color: #f4f4f4;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .left-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .left-panel a {
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .left-panel a:hover {
+            background-color: #ddd;
+        }
+        .right-panel {
+            width: 75%;
+            padding: 20px;
+        }
+        .role-info {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .role-info h3 {
+            margin-top: 0;
+        }
+        .btn-logout {
+            display: block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            text-align: center;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+        <h3>Dashboard</h3>
+        <a th:href="@{/category}">📦 Categories</a>
+        <a th:href="@{/transaction/index}">💵 Transactions</a>
+        <a th:href="@{/logout}" class="btn-logout">🚪 Logout</a>
+    </div>
+    <!-- Right Panel -->
+    <div class="right-panel">
+        <h2>Role-Based Information</h2>
+        <div class="role-info" sec:authorize="hasRole('ROLE_USER')">
+            <h3>Welcome User!</h3>
+            <p>Text visible to user.</p>
+        </div>
+        <div class="role-info" sec:authorize="hasRole('ROLE_ADMIN')">
+            <h3>Welcome Admin!</h3>
+            <p>Text visible to admin.</p>
+        </div>
+        <div class="role-info" sec:authorize="isAuthenticated()">
+            <h3>Authenticated Information</h3>
+            <p>Username: <span sec:authentication="name"></span></p>
+            <p>Roles: <span sec:authentication="principal.authorities"></span></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
