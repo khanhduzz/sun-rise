@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>This page only for Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin/fstyle.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css"/>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+<div>
+    <nav class="navbar bg-color p-2 border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" style="color: black;">Budget Service</a>
+            <div class="dropdown">
+                <button class="btn bg-color dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-fill text-color"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid p-0">
+        <div class="row no-gutters">
+            <div class="col-2 p-0 bg-color vh-100 border border-top-0">
+                <a class="btn btn-light text-color w-100 border-bottom" th:href="@{/user/admin-page}">
+                    <i class="bi bi-table text-color"></i>
+                    <span class="text-color">Admin Home Page</span>
+                </a>
+            </div>
+            <div class="col-10 p-5">
+                <h1>Add User</h1>
+                <hr>
+                <div class="card">
+                    <div class="card-body">
+                        <form th:method="POST" th:action="@{/user/add-user-by-admin}" th:object="${newUser}">
+
+                            <div class="mb-3">
+                                <input class="form-control" type="text" th:field="*{username}" id="username" name="username" placeholder="Enter user name"/>
+                            </div>
+                            <div class="mb-3">
+                                <input class="form-control" type="password" th:field="*{password}" id="password" name="password" placeholder="Enter your password"/>
+                            </div>
+                            <div class="mb-3">
+                                <input class="form-control" type="text" th:field="*{firstname}" id="firstname" name="firstname" placeholder="Enter your first name"/>
+                            </div>
+                            <div class="mb-3">
+                                <input class="form-control" type="text" th:field="*{lastname}" id="lastname" name="lastname" placeholder="Enter your last name"/>
+                            </div>
+                            <div class="mb-3">
+                                <input class="form-control" type="text" th:field="*{email}" id="email" name="email" placeholder="Enter your email"/>
+                            </div>
+                            <div class="mb-3">
+                                <input class="form-control" type="text" th:field="*{phone}" id="phone" name="phone" placeholder="Enter your phone number"/>
+                            </div>
+
+                            <div class="mb-3">
+                                <select class="form-select w-75" th:field="*{role}" id="role">
+                                    <option th:value="${T(com.fjb.sunrise.enums.ERole).ADMIN}" th:text="${T(com.fjb.sunrise.enums.ERole).ADMIN}"></option>
+                                    <option th:value="${T(com.fjb.sunrise.enums.ERole).USER}" th:text="${T(com.fjb.sunrise.enums.ERole).USER}"></option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <select class="form-select w-75" th:field="*{status}" id="status">
+                                    <option th:value="${T(com.fjb.sunrise.enums.EStatus).ACTIVE}" th:text="${T(com.fjb.sunrise.enums.EStatus).ACTIVE}"></option>
+                                    <option th:value="${T(com.fjb.sunrise.enums.EStatus).NOT_ACTIVE}" th:text="${T(com.fjb.sunrise.enums.EStatus).NOT_ACTIVE}"></option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn bg-btn">Submit</button>
+                            <button type="reset" class="btn bg-btn">Reset</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

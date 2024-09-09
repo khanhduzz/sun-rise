@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
 
@@ -83,7 +83,9 @@
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="./pages/customer/index.html">Danh sách người dùng</a>
+                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="collapse-item" th:href="@{/user/admin-page}">Danh sách người dùng</a>
+                    </div>
                 </div>
             </div>
         </li>
