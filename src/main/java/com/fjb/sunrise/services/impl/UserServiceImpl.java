@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
         User user = mapper.toEntity(registerRequest);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setStatus(EStatus.ACTIVE);
 
         // check password start with create admin key -> create with role admin
         if (registerRequest.getPassword().startsWith(key)) {

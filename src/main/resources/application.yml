@@ -50,3 +50,4 @@ application:
 
 default:
   admin-create-key: ${ADMIN_CREATE_KEY}
+  encode-key: ${ENCODE_KEY}
