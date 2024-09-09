@@ -22,6 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryResponseDto createCategory(CategoryCreateDto categoryCreateDto) {
         Category category = categoryMapper.toCategory(categoryCreateDto);
+        category.setActive(true);
         category = categoryRepository.save(category);
         return categoryMapper.toCategoryResponseDto(category);
     }
@@ -38,9 +39,16 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void disableCategory(Long id) {
         categoryRepository.findById(id).ifPresent(x -> {
-            x.setActivate(false);
+            x.setActive(false);
             categoryRepository.save(x);
         });
+    }
+
+    @Override
+    public CategoryResponseDto getCategory(Long id) {
+        return categoryRepository.findById(id)
+                .map(categoryMapper::toCategoryResponseDto)
+                .orElseThrow();
     }
 
     @Override

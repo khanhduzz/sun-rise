@@ -123,3 +123,15 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64
           tags: ghcr.io/${{ github.repository_owner }}/sun-rise:latest
+
+  check:
+    runs-on: ubuntu-latest
+    name: Git-leaks check
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Gitleaks check
+        run: |
+          docker pull zricethezav/gitleaks:v8.18.4
+          docker run --rm -v ${{ github.workspace }}:/work -w /work zricethezav/gitleaks:v8.18.4 detect --source="." --config="/work/gitleaks.toml" --verbose --no-git

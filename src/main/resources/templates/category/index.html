@@ -1,10 +1,206 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+
+    <meta charset="utf-8">
+    <link rel="icon" type="image/png" href="../../img/spreadsheet_17087859.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Budgeting Service</title>
+
+    <!-- Custom fonts for this template-->
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/auth/style.css}" type="text/css">
+
 </head>
-<body>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+<!--                 Page Heading-->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Danh mục thu/chi</h1>
+                    <a  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                        data-bs-toggle="modal" data-bs-target="#createCategoryModal"><i
+                            class="fas fa-download fa-sm text-white-50"></i> Tạo danh mục</a>
+                </div>
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Danh mục Thu / Chi</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên danh mục</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Ngày cập nhật</th>
+                                    <th>Trạng thái</th>
+                                    <th>Chỉnh sửa</th>
+                                </tr>
+                                </thead>
+                                <tbody th:unless="${#lists.isEmpty(categories)}">
+                                <tr th:each="c : ${categories}">
+                                    <td th:text="${c.getId()}"></td>
+                                    <td th:text="${c.getName()}"></td>
+                                    <td th:text="${c.getCreatedDate()}"></td>
+                                    <td th:text="${c.getLastModifiedDate()}"></td>
+                                    <td th:text="${c.isActive() ? 'Active' : 'Inactive'}"></td>
+<!--                                    <td th:text="${c.isActivate()}"></td>-->
+                                    <td>
+                                        <a class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
+                                           >Edit</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                </tbody>
+                                <tbody th:if="${#lists.isEmpty(categories)}">
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        No data
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Vi Tran Nguyen Ky</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" >Bạn có muốn thoát?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                <a class="btn btn-primary" href="login.html">Đăng xuất</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Category Modal-->
+<div class="modal fade" id="createCategoryModal" tabindex="-1" role="dialog"
+     aria-labelledby="createCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Tạo danh mục thu/chi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:method="POST"
+                  th:action="@{/category/add}"
+                  th:object="${categoryCreate}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputCategory">Tên danh mục</label>
+                        <input type="text" th:field="*{name}" placeholder="NAME" class="form-control" id="inputCategory" aria-describedby="categoryHelp"/>
+                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button class="btn btn-primary" type="submit">Gửi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Category Modal-->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog"
+     aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Sửa danh mục thu/chi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:method="POST"
+                  th:action="@{/category/{id}}"
+                  th:object="${categoryUpdate}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label >Tên danh mục</label>
+                        <input type="text" th:field="*{name}" placeholder="NAME" />
+                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button class="btn btn-primary" type="submit">Gửi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
 </body>
+
 </html>

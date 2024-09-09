@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>This page only for Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin/fstyle.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css"/>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+<div>
+    <nav class="navbar bg-color p-2 border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" style="color: black;">Budget Service</a>
+            <div class="dropdown">
+                <button class="btn bg-color dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-fill text-color"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid p-0">
+        <div class="row no-gutters">
+            <div class="col-2 p-0 bg-color vh-100 border border-top-0">
+                <a class="btn btn-light text-color w-100 border-bottom" th:href="@{/user/add-user-by-admin}">
+                    <i class="bi bi-pencil-square text-color"></i>
+                    <span class="text-color">Add New User</span>
+                </a>
+            </div>
+            <div class="col-10 p-5">
+                <h1>Admin View</h1>
+                <hr>
+                <div class="card">
+                    <div class="card-header">
+                        List All Users
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col" style="width: 5%">ID</th>
+                                <th scope="col" style="width: 20%">User Name</th>
+                                <th scope="col" style="width: auto">Status</th>
+                                <th scope="col" style="width: auto">Role</th>
+                                <th scope="col" style="width: auto">Actions</th>
+                            </tr>
+                            </thead>
+
+                            <tbody th:unless="${#lists.isEmpty(users)}">
+                            <tr th:each="c : ${users}">
+                                <th scope="row" th:text="${c.getId()}"></th>
+                                <td th:text="${c.getUsername()}"></td>
+                                <td th:text="${c.getStatus()}"></td>
+                                <td th:text="${c.getRole()}"></td>
+                                <td>
+                                    <a th:href="@{/user/detail-and-edit-by-admin(id=${c.getId()})}">
+                                        <button class="btn btn-info">Detail</button>
+                                    </a>
+                                    <a th:href="@{/user/delete-user-by-admin(id=${c.getId()})}">
+                                        <button class="btn btn-danger">Delete</button>
+                                    </a>
+                                    <a th:href="@{/user/deactivate-user-by-admin(id=${c.getId()})}">
+                                        <button class="btn btn-warning">Deactivate</button>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

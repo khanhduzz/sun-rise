@@ -28,6 +28,6 @@ public class Category extends AuditEntity<String> {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "is_activate")
-    private boolean isActivate = true;
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean active = true;
 }

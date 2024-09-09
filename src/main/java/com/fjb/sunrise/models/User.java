@@ -1,6 +1,7 @@
 package com.fjb.sunrise.models;
 
 import com.fjb.sunrise.enums.ERole;
+import com.fjb.sunrise.enums.EStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -52,6 +53,7 @@ public class User extends AuditEntity<String> implements Serializable, UserDetai
 
     @Enumerated(EnumType.STRING)
     private ERole role;
+    private EStatus status;
 
     // This field holds the code for verification
     @Column(name = "code_verification")

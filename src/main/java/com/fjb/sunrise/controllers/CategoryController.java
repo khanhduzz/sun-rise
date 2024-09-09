@@ -2,6 +2,7 @@ package com.fjb.sunrise.controllers;
 
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
+import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.services.CategoryService;
 import com.fjb.sunrise.utils.Constants;
 import jakarta.validation.Valid;
@@ -25,6 +26,8 @@ public class CategoryController {
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categories", categoryService.getAllCategories());
+        modelAndView.addObject("categoryCreate", new CategoryCreateDto());
+        modelAndView.addObject("categoryUpdate", new CategoryUpdateDto());
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
@@ -55,12 +58,22 @@ public class CategoryController {
 
     //update
 
+    @GetMapping("/{id}")
+    public ModelAndView getCategory(@PathVariable("id") Long id, Category category) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("category", categoryService.getCategory(id));
+        modelAndView.addObject("categoryUpdate", new CategoryUpdateDto());
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
+        return modelAndView;
+    }
+
     @PostMapping("/{id}")
     public ModelAndView updateCategory(@PathVariable("id") Long id, @ModelAttribute("categoryUpdate")
         @Valid CategoryUpdateDto categoryUpdateDto, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
+            modelAndView.addObject("category", categoryService.getCategory(id));
             return modelAndView;
         }
         categoryService.updateCategory(id, categoryUpdateDto);
@@ -83,7 +96,7 @@ public class CategoryController {
     @GetMapping("/all")
     public ModelAndView getList() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("category", categoryService.getAllCategories());
+        modelAndView.addObject("getAllCategories", categoryService.getAllCategories());
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
