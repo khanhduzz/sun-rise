@@ -4,10 +4,11 @@ import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategorySearchDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+
 
 public interface CategoryService {
     CategoryResponseDto createCategory(CategoryCreateDto categoryCreateDto);

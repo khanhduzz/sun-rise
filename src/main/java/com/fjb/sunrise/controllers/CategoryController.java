@@ -7,6 +7,7 @@ import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.services.CategoryService;
 import com.fjb.sunrise.utils.Constants;
+import com.fjb.sunrise.utils.Constants.ApiConstant;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,10 +15,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import static com.fjb.sunrise.utils.Constants.ApiConstant.CATEGORY_INDEX;
 
 @Controller
 @RequestMapping("/category")
@@ -31,7 +35,7 @@ public class CategoryController {
         modelAndView.addObject("categories", categoryService.getAllCategories());
         modelAndView.addObject("categoryCreate", new CategoryCreateDto());
         modelAndView.addObject("categoryUpdate", new CategoryUpdateDto());
-        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -42,7 +46,7 @@ public class CategoryController {
                                     @Valid CategoryCreateDto categoryCreateDto,
                                     BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
             return modelAndView;
         }
@@ -55,7 +59,7 @@ public class CategoryController {
     public ModelAndView addCategory() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categoryCreate", new CategoryCreateDto());
-        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -66,7 +70,7 @@ public class CategoryController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("category", categoryService.getCategory(id));
         modelAndView.addObject("categoryUpdate", new CategoryUpdateDto());
-        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -74,7 +78,7 @@ public class CategoryController {
     public ModelAndView updateCategory(@PathVariable("id") Long id, @ModelAttribute("categoryUpdate")
         @Valid CategoryUpdateDto categoryUpdateDto, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
             modelAndView.addObject("category", categoryService.getCategory(id));
             return modelAndView;
@@ -100,7 +104,7 @@ public class CategoryController {
     public ModelAndView getList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("getAllCategories", categoryService.getAllCategories());
-        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -110,7 +114,7 @@ public class CategoryController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categories", categoryService.searchCategories(searchDto));
         modelAndView.addObject("categoryCreate", new CategoryCreateDto());
-        modelAndView.setViewName(CATEGORY_INDEX);
+        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -125,7 +129,7 @@ public class CategoryController {
         modelAndView.addObject("categorySearch", searchDto); // Preserve search query
         modelAndView.addObject("currentPage", pageResult.getNumber());
         modelAndView.addObject("totalPages", pageResult.getTotalPages());
-        modelAndView.setViewName(CATEGORY_INDEX);
+        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 }
