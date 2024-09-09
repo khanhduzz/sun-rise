@@ -47,6 +47,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean changePassword(String email, String password) {
+        User user = userRepository.findByEmailOrPhone(email);
+        if (user == null) {
+            return false;
+        }
+
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+
+        return true;
+    }
+
+    @Override
     public User createUserByAdmin(EditProfileByAdminDTO byAdminDTO) {
         User user = mapper.toEntityByAdmin(byAdminDTO);
         user.setUsername(byAdminDTO.getUsername());
