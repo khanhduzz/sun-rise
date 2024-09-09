@@ -1,7 +1,9 @@
 package com.fjb.sunrise.utils;
 
+import com.fjb.sunrise.dtos.requests.VerificationByEmail;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Objects;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,12 +24,14 @@ public class Encoder {
 
         byte[] encryptedData = cipher.doFinal(string.getBytes(StandardCharsets.UTF_8));
 
-        return Base64.getEncoder().encodeToString(encryptedData);
+        return Base64.getUrlEncoder().encodeToString(encryptedData);
     }
 
     public String decode(String string) throws Exception {
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec());
+
+        string = string.replace('-', '+').replace('_', '/');
 
         byte[] decodeDate = Base64.getDecoder().decode(string);
         byte[] decryptedData = cipher.doFinal(decodeDate);

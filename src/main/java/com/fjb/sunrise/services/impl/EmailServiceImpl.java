@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    @Value("${spring.application.mail.username}")
+    @Value("${spring.mail.username}")
     private String emailServer;
 
     private final UserRepository userRepository;
@@ -31,22 +31,27 @@ public class EmailServiceImpl implements EmailService {
         try {
             code = encoder.encode(verification.toString());
         } catch (Exception e) {
-            // Log the exception or handle it as needed
             return false;
         }
+
+        User user = userRepository.findByEmailOrPhone(verification.getEmail());
+        if (user == null) {
+            return false;
+        }
+        user.setCodeVerification(code);
+        userRepository.save(user);
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(emailServer);
         simpleMailMessage.setTo(verification.getEmail());
         simpleMailMessage.setSubject("Verification Email");
-        simpleMailMessage.setText("Click this link to change password: "
-            + "http://localhost:8086/sun/auth/verify/"
+        simpleMailMessage.setText("Click this link to change password: \n"
+            + "http://localhost:8086/sun/auth/verify?code="
             + code);
 
         try {
             javaMailSender.send(simpleMailMessage);
         } catch (Exception e) {
-            // Log the exception or handle it as needed
             return false;
         }
         return true;
@@ -58,7 +63,6 @@ public class EmailServiceImpl implements EmailService {
         try {
             verification = VerificationByEmail.fromString(encoder.decode(code));
         } catch (Exception e) {
-            // Log the exception or handle it as needed
             return false;
         }
 
@@ -80,5 +84,17 @@ public class EmailServiceImpl implements EmailService {
         }
 
         return true;
+    }
+
+    @Override
+    public String getEmailFromCode(String code) {
+        VerificationByEmail verification;
+        try {
+            verification = VerificationByEmail.fromString(encoder.decode(code));
+        } catch (Exception e) {
+            return null;
+        }
+
+        return verification.getEmail();
     }
 }

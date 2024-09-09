@@ -6,4 +6,6 @@ public interface EmailService {
     boolean sendEmail(VerificationByEmail verification);
 
     boolean checkCode(String code);
+
+    String getEmailFromCode(String code);
 }

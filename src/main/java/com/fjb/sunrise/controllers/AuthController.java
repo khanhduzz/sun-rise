@@ -11,12 +11,12 @@ import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.requests.VerificationByEmail;
 import com.fjb.sunrise.services.EmailService;
 import com.fjb.sunrise.services.UserService;
+import com.fjb.sunrise.utils.Encoder;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -91,17 +91,20 @@ public class AuthController {
         return modelAndView;
     }
 
-    @PostMapping("/verify/{code}")
-    public ModelAndView doVerify(@PathVariable("code") String code) {
+    @GetMapping("/verify")
+    public ModelAndView doVerify(@RequestParam("code") String code) {
         ModelAndView modelAndView = new ModelAndView();
 
         if (!emailService.checkCode(code)) {
             modelAndView.setViewName("/auth/verificationByEmail");
             modelAndView.addObject(ERROR_MESSAGE_OBJECT, "Gửi mail không thành công!");
+            return modelAndView;
         }
 
+        String email = emailService.getEmailFromCode(code);
+
         modelAndView.setViewName("/auth/changePassword");
-        modelAndView.addObject("email", "");
+        modelAndView.addObject("email", email);
         modelAndView.addObject("newPassword", "");
         return modelAndView;
     }
