@@ -1,6 +1,7 @@
 package com.fjb.sunrise.services.impl;
 
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
+import com.fjb.sunrise.dtos.requests.CategorySearchDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.mappers.CategoryMapper;
@@ -10,6 +11,8 @@ import com.fjb.sunrise.services.CategoryService;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -56,5 +59,19 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll()
             .stream().map(categoryMapper::toCategoryResponseDto)
             .toList();
+    }
+
+    @Override
+    public Page<CategoryResponseDto> searchCategories(CategorySearchDto searchDto, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public List<CategoryResponseDto> searchCategories(CategorySearchDto searchDto) {
+        String query = searchDto.getSearchQuery();
+        List<Category> categories = categoryRepository.findByNameContainingIgnoreCase(query);
+        return categories.stream()
+                .map(categoryMapper::toCategoryResponseDto)
+                .toList();
     }
 }
