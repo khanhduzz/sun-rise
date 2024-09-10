@@ -1,5 +1,6 @@
 package com.fjb.sunrise.config.security;
 
+import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,13 @@ public class CustomUserDetailService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
+
+        boolean isDisable = user.getStatus() != EStatus.ACTIVE;
+
         return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
             .password(user.getPassword())
             .roles(String.valueOf(user.getRole()))
+            .disabled(isDisable)
             .build();
     }
 }
