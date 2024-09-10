@@ -38,7 +38,7 @@ public class Constants {
         public static final String AUTH_VIEW = "/auth/loginAndRegister";
         public static final String REGISTER_ATTRIBUTE = "register";
         public static final String LOGIN_ATTRIBUTE = "login";
-        public static final String ERROR_MESSAGE = "errorMessage";
+        public static final String ERROR_MESSAGE_OBJECT = "errorMessage";
 
         public static final String ADMIN_VIEW = "/user/admin-page";
         public static final String ADMIN_ADD_NEW_USER = "/user/add-user-by-admin";

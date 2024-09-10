@@ -2,13 +2,16 @@ package com.fjb.sunrise.controllers;
 
 import static com.fjb.sunrise.utils.Constants.ApiConstant.AUTH_REDIRECT_LOGIN;
 import static com.fjb.sunrise.utils.Constants.ApiConstant.AUTH_VIEW;
-import static com.fjb.sunrise.utils.Constants.ApiConstant.ERROR_MESSAGE;
+import static com.fjb.sunrise.utils.Constants.ApiConstant.ERROR_MESSAGE_OBJECT;
 import static com.fjb.sunrise.utils.Constants.ApiConstant.LOGIN_ATTRIBUTE;
 import static com.fjb.sunrise.utils.Constants.ApiConstant.REGISTER_ATTRIBUTE;
 
 import com.fjb.sunrise.dtos.requests.LoginRequest;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
+import com.fjb.sunrise.dtos.requests.VerificationByEmail;
+import com.fjb.sunrise.services.EmailService;
 import com.fjb.sunrise.services.UserService;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,22 +25,24 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserService service;
+    private final UserService userService;
+    private final EmailService emailService;
+
 
     @GetMapping("/login")
-    public ModelAndView indexR(@RequestParam(value = "error", required = false) String error) {
+    public ModelAndView indexLogin(@RequestParam(value = "error", required = false) String error) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(AUTH_VIEW);
         modelAndView.addObject(LOGIN_ATTRIBUTE, new LoginRequest());
         modelAndView.addObject(REGISTER_ATTRIBUTE, new RegisterRequest());
         if (error != null) {
-            modelAndView.addObject(ERROR_MESSAGE, "Đăng nhập không thành công!");
+            modelAndView.addObject(ERROR_MESSAGE_OBJECT, "Đăng nhập không thành công!");
         }
         return modelAndView;
     }
 
     @GetMapping("/register")
-    public ModelAndView index() {
+    public ModelAndView indexRegister() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(AUTH_VIEW);
         modelAndView.addObject(LOGIN_ATTRIBUTE, new LoginRequest());
@@ -54,13 +59,71 @@ public class AuthController {
         modelAndView.addObject(REGISTER_ATTRIBUTE, new RegisterRequest());
 
         // implement register for user
-        if (service.checkRegister(registerRequest)) {
+        if (userService.checkRegister(registerRequest)) {
             modelAndView.setViewName(AUTH_REDIRECT_LOGIN);
         } else {
-            modelAndView.addObject(ERROR_MESSAGE, "Đăng kí không thành công");
+            modelAndView.addObject(ERROR_MESSAGE_OBJECT, "Đăng kí không thành công");
         }
 
         return modelAndView;
     }
 
+    @GetMapping("/forgotPassword")
+    public ModelAndView indexForgotPassword() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("auth/verificationByEmail");
+        modelAndView.addObject("email", "");
+        return modelAndView;
+    }
+
+    @PostMapping("/sendToEmail")
+    public ModelAndView doSendCodeToEmail(@ModelAttribute("email") String email) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        VerificationByEmail verification = new VerificationByEmail(email, LocalDateTime.now());
+
+        String message = emailService.sendEmail(verification);
+
+        modelAndView.setViewName("/auth/verificationByEmail");
+        modelAndView.addObject(ERROR_MESSAGE_OBJECT, message);
+
+        return modelAndView;
+    }
+
+    @GetMapping("/verify")
+    public ModelAndView doVerify(@RequestParam("code") String code) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        String message = emailService.checkCode(code);
+
+        if (message != null) {
+            modelAndView.setViewName("/auth/verificationByEmail");
+            modelAndView.addObject(ERROR_MESSAGE_OBJECT, message);
+            return modelAndView;
+        }
+
+        String email = emailService.getEmailFromCode(code);
+
+        modelAndView.setViewName("/auth/changePassword");
+        modelAndView.addObject("email", email);
+        modelAndView.addObject("newPassword", "");
+        return modelAndView;
+    }
+
+
+    @PostMapping("/changePassword")
+    public ModelAndView doChangePassword(@ModelAttribute("email") String email,
+                                         @ModelAttribute("newPassword") String password) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/auth/login");
+
+        String message = userService.changePassword(email, password);
+
+        if (message != null) {
+            modelAndView.setViewName("/auth/verificationByEmail");
+            modelAndView.addObject(ERROR_MESSAGE_OBJECT, message);
+        }
+
+        return modelAndView;
+    }
 }

@@ -48,6 +48,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String changePassword(String email, String password) {
+        User user = userRepository.findByEmailOrPhone(email);
+        if (user == null) {
+            return "Email chưa được đăng ký!";
+        }
+
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+
+        return null;
+    }
+
+    @Override
     public User createUserByAdmin(EditProfileByAdminDTO byAdminDTO) {
         User user = mapper.toEntityByAdmin(byAdminDTO);
         user.setUsername(byAdminDTO.getUsername());

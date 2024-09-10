@@ -71,7 +71,7 @@
                 <button id="submit-button-register" type="submit">Đăng ký</button>
             </form>
             <hr>
-            <a href="#">Quên mật khẩu?</a>
+            <a th:href="@{/auth/forgotPassword}" >Quên mật khẩu?</a>
             <a th:method="GET" th:href="@{/auth/login}">Bạn đã  có tài khoản? Đăng nhập!</a>
         </div>
 
@@ -118,7 +118,7 @@
                 <button id="submit-button-login" type="submit">Đăng nhập</button>
             </form>
             <hr>
-            <a href="#">Quên mật khẩu?</a>
+            <a th:href="@{/auth/forgotPassword}">Quên mật khẩu?</a>
             <a th:method="GET" th:href="@{/auth/register}">Tạo tài khoản!</a>
         </div>
     </div>

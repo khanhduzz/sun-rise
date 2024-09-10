@@ -27,6 +27,11 @@
     position: absolute;
     z-index: 2;
 }
+.box-custom.forgot {
+    width: 30vw;
+    display: block;
+    padding-top: 5%;
+}
 
 @media (max-width: 900px) {
     .box-custom {

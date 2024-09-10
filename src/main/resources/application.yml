@@ -1,6 +1,17 @@
 spring:
   application:
     name: sun-rise
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_SERVER}
+    password: ${PASSWORD_EMAIL_SERVER}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
   datasource:
     url: ${DB_URL}
@@ -51,3 +62,4 @@ application:
 default:
   admin-create-key: ${ADMIN_CREATE_KEY}
   encode-key: ${ENCODE_KEY}
+  type-encode: ${TYPE_ENCODE}
