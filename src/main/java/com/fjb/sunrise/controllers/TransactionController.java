@@ -75,6 +75,6 @@ public class TransactionController {
         throws ParseException {
         request.setId(id);
         transactionService.update(request);
-        return "redirect:transnsaction/create";
+        return "redirect:transaction/create";
     }
 }

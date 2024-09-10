@@ -393,7 +393,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn thoát?</h5>
+                <h5 class="modal-title" id="exampleModalLabel0">Bạn có muốn thoát?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -426,7 +426,7 @@
                                placeholder="10,000,000.00">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Loại tiền</label>
+                        <label >Loại tiền</label>
                         <div class="form-check">
                             <input th:field="*{transactionType}" class="form-check-input" type="radio"
                                    name="exampleRadios" id="exampleRadios1"
@@ -445,8 +445,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputAmount">Danh mục</label>
-                        <select class="form-control" th:field="*{category}">
+                        <label for="inputCategory">Danh mục</label>
+                        <select id="inputCategory" class="form-control" th:field="*{category}">
                             <!--<option selected>Tiền lương</option>-->
                             <!--<option>Sinh nhật</option>-->
                             <option th:each="category:${categories}" th:value="${category.id}"
@@ -454,7 +454,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="inputAmount">Chọn thời gian</label>
+                        <label for="inputDatetime">Chọn thời gian</label>
                         <input th:field="*{createdAt}" type="datetime-local" class="form-control" id="inputDatetime"
                                placeholder="dd-mm-yyyy"
                                min="1997-01-01" max="2030-12-31">
@@ -533,7 +533,7 @@
         {"data": "transactionType"},
         {"data": "amount"},
         {"data": "note"},
-        {"data": null, "defaultContent":"<button class=\"btn btn-outline-danger\">Cập nhật</button>"}
+        {"data": null, "defaultContent":"<button class=\"btn btn-outline-danger\">Edit</button>"}
     ];
 
     // var table = $('#transactionTable').DataTable({

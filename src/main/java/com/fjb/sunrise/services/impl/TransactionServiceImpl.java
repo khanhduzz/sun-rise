@@ -3,24 +3,32 @@ package com.fjb.sunrise.services.impl;
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CreateOrUpdateTransactionRequest;
 import com.fjb.sunrise.mappers.TransactionMapper;
+import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.models.Transaction;
 import com.fjb.sunrise.repositories.CategoryRepository;
 import com.fjb.sunrise.repositories.TransactionRepository;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.TransactionService;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import jakarta.transaction.Transactional;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -84,8 +92,27 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         Pageable pageable = PageRequest.of(pageNumber, payload.getLength(), sortOpt);
+        final String keyword = payload.getSearch().getOrDefault("value", "");
+        Specification<Transaction> specs = null;
+        if (Strings.isNotBlank(keyword)) {
+            // "%" + keyword + "%"
+            specs = Specification.where((
+                (root, query, builder) ->
+                    builder.like(builder.lower(root.get("transactionType")),
+                        String.format("%%%s%%",
+                            payload.getSearch().getOrDefault("value", "").toLowerCase()
+                        ))));
 
-        return transactionRepository.findAll(pageable);
+            specs = specs.or((root, query, builder) -> {
+                Join<Transaction, Category> categoryJoin = root.join("category");
+                return builder.like(builder.lower(categoryJoin.get("name")),
+                    String.format("%%%s%%",
+                        payload.getSearch().getOrDefault("value", "").toLowerCase()
+                    ));
+            });
+        }
+
+        return transactionRepository.findAll(specs, pageable);
     }
 
     @Override
