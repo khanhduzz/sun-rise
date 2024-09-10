@@ -62,12 +62,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> findAllByUser() {
-//        Specification specs = Specification.where(
-//            ((root, query, builder) -> {
-//                builder.equal(root.get("createdBy"),
-//                    "ADMIN")
-//            })
-//        );
+        //        Specification specs = Specification.where(
+        //            ((root, query, builder) -> {
+        //                builder.equal(root.get("createdBy"),
+        //                    "ADMIN")
+        //            })
+        //        );
         return List.of();
     }
 
