@@ -14,12 +14,15 @@ public class Encoder {
     @Value("${default.encode-key}")
     private String encodeKey;
 
+    @Value("${default.type-encode")
+    private String typeEncode;
+
     private SecretKeySpec secretKeySpec() {
-        return new SecretKeySpec(encodeKey.getBytes(StandardCharsets.UTF_8), "AES");
+        return new SecretKeySpec(encodeKey.getBytes(StandardCharsets.UTF_8), typeEncode);
     }
 
     public String encode(String string) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES");
+        Cipher cipher = Cipher.getInstance(typeEncode);
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec());
 
         byte[] encryptedData = cipher.doFinal(string.getBytes(StandardCharsets.UTF_8));
@@ -28,7 +31,7 @@ public class Encoder {
     }
 
     public String decode(String string) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES");
+        Cipher cipher = Cipher.getInstance(typeEncode);
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec());
 
         string = string.replace('-', '+').replace('_', '/');
