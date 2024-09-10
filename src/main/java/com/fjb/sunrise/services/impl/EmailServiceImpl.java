@@ -95,6 +95,7 @@ public class EmailServiceImpl implements EmailService {
             return null;
         }
 
+        assert verification != null;
         return verification.getEmail();
     }
 }
