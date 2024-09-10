@@ -79,14 +79,13 @@ public class AuthController {
     @PostMapping("/sendToEmail")
     public ModelAndView doSendCodeToEmail(@ModelAttribute("email") String email) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/auth/checkEmail");
 
         VerificationByEmail verification = new VerificationByEmail(email, LocalDateTime.now());
 
-        if (!emailService.sendEmail(verification)) {
-            modelAndView.setViewName("/auth/verificationByEmail");
-            modelAndView.addObject(ERROR_MESSAGE_OBJECT, "Gửi mail không thành công!");
-        }
+        String message = emailService.sendEmail(verification);
+
+        modelAndView.setViewName("/auth/verificationByEmail");
+        modelAndView.addObject(ERROR_MESSAGE_OBJECT, message);
 
         return modelAndView;
     }
@@ -95,9 +94,11 @@ public class AuthController {
     public ModelAndView doVerify(@RequestParam("code") String code) {
         ModelAndView modelAndView = new ModelAndView();
 
-        if (!emailService.checkCode(code)) {
+        String message = emailService.checkCode(code);
+
+        if (message != null) {
             modelAndView.setViewName("/auth/verificationByEmail");
-            modelAndView.addObject(ERROR_MESSAGE_OBJECT, "Gửi mail không thành công!");
+            modelAndView.addObject(ERROR_MESSAGE_OBJECT, message);
             return modelAndView;
         }
 
@@ -116,9 +117,11 @@ public class AuthController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/auth/login");
 
-        if (!userService.changePassword(email, password)) {
+        String message = userService.changePassword(email, password);
+
+        if (message != null) {
             modelAndView.setViewName("/auth/verificationByEmail");
-            modelAndView.addObject(ERROR_MESSAGE_OBJECT, "Gửi mail không thành công!");
+            modelAndView.addObject(ERROR_MESSAGE_OBJECT, message);
         }
 
         return modelAndView;

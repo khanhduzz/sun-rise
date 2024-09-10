@@ -26,17 +26,17 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
 
     @Override
-    public boolean sendEmail(VerificationByEmail verification) {
+    public String sendEmail(VerificationByEmail verification) {
         String code;
         try {
             code = encoder.encode(verification.toString());
         } catch (Exception e) {
-            return false;
+            return "Lỗi email!";
         }
 
         User user = userRepository.findByEmailOrPhone(verification.getEmail());
         if (user == null) {
-            return false;
+            return "Email không tồn tại người dùng!";
         }
         user.setCodeVerification(code);
         userRepository.save(user);
@@ -52,38 +52,38 @@ public class EmailServiceImpl implements EmailService {
         try {
             javaMailSender.send(simpleMailMessage);
         } catch (Exception e) {
-            return false;
+            return "Gửi mail không thành công!";
         }
-        return true;
+        return "Gửi mail thành công! \nVui lòng kiểm tra email của bạn!";
     }
 
     @Override
-    public boolean checkCode(String code) {
+    public String checkCode(String code) {
         VerificationByEmail verification;
         try {
             verification = VerificationByEmail.fromString(encoder.decode(code));
         } catch (Exception e) {
-            return false;
+            return "Vui lòng thử lại!";
         }
 
         if (verification == null) {
-            return false;
+            return "Vui lòng thử lại!";
         }
 
         User user = userRepository.findByEmailOrPhone(verification.getEmail());
         if (user == null) {
-            return false;
+            return "Email chưa được đăng ký!";
         }
 
         if (!Objects.equals(user.getCodeVerification(), code)) {
-            return false;
+            return "Vui lòng thử lại!";
         }
 
         if (verification.getRequestTime().plusMinutes(2).isBefore(LocalDateTime.now())) {
-            return false;
+            return "Vượt quá thời gian xác thực!";
         }
 
-        return true;
+        return null;
     }
 
     @Override

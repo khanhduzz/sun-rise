@@ -3,16 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>VERIFICATION</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/auth/style.css}" type="text/css">
+    <link rel="icon" th:href="@{/img/spreadsheet_17087859.png}" type="image/png">
 </head>
 <body>
 <th:block th:if="${errorMessage != null}">
-    <div th:text="${errorMessage}" class="modal-body"></div>
+    <div id="popup-failed-register" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">NHẮC NHỞ</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div th:text="${errorMessage}" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="button" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </th:block>
 
-<h1>Nhập email</h1>
-<form th:method="POST" th:action="@{/auth/sendToEmail}">
-    <input type="text" th:value="${email}" name="email" placeholder="Nhập email"/>
-    <button type="submit">Gửi</button>
-</form>
+<div class="background-custom">
+    <div class="box-custom forgot">
+        <h2>Điền email để xác thực tài khoản!</h2>
+        <form th:method="POST" th:action="@{/auth/sendToEmail}">
+            <input id="email" th:value="${email}" name="email" type="text" class="field-custom mb-3" placeholder="Nhập Email">
+            <button type="submit">Gửi</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/auth/action.js}"></script>
+<script type="text/javascript" th:src="@{/js/auth/valid.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

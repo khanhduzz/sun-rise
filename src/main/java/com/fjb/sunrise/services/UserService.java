@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserService {
     boolean checkRegister(RegisterRequest registerRequest);
 
-    boolean changePassword(String email, String password);
+    String changePassword(String email, String password);
 
     User createUserByAdmin(EditProfileByAdminDTO byAdminDTO);
 
