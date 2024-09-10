@@ -47,6 +47,7 @@ public class Constants {
         public static final String ADMIN_VIEW = "/user/admin-page";
         public static final String ADMIN_ADD_NEW_USER = "/user/add-user-by-admin";
         public static final String ADMIN_DETAILS_AND_EDIT = "/user/detail-and-edit-by-admin";
+        public static final String ADMIN_REDIRECT = "redirect:/user/admin-page";
 
         public static final String CODE_200 = "200";
         public static final String OK = "Ok";
