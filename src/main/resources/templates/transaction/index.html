@@ -31,9 +31,8 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <!-- Sidebar -->
+    <!-- Sidebar from fragment -->
     <div th:replace="~{tab_bar :: tab-bar}"></div>
-    <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -41,9 +40,9 @@
         <!-- Main Content -->
         <div id="content">
 
-            <!-- Topbar -->
+            <!-- Header from fragment -->
             <div th:replace="~{header :: header}"></div>
-            <!-- End of Topbar -->
+
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -267,13 +266,7 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Vi Tran Nguyen Ky</span>
-                </div>
-            </div>
-        </footer>
+        <div th:replace="~{footer :: footer}"></div>
         <!-- End of Footer -->
 
     </div>
