@@ -26,6 +26,6 @@ application:
       email: sun@sun.com
 
 default:
-  admin-create-key: ${ADMIN_CREATE_KEY}
-  encode-key: ${ENCODE_KEY}
-  type-encode: ${TYPE_ENCODE}
+  admin-create-key: dfjkNdkMAnje
+  encode-key: abcdefghabcdefgh
+  type-encode: AES
