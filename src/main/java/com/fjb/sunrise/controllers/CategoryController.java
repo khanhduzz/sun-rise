@@ -35,7 +35,7 @@ public class CategoryController {
         modelAndView.addObject("categories", categoryService.getAllCategories());
         modelAndView.addObject("categoryCreate", new CategoryCreateDto());
         modelAndView.addObject("categoryUpdate", new CategoryUpdateDto());
-        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -46,7 +46,7 @@ public class CategoryController {
                                     @Valid CategoryCreateDto categoryCreateDto,
                                     BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
             return modelAndView;
         }
@@ -59,7 +59,7 @@ public class CategoryController {
     public ModelAndView addCategory() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categoryCreate", new CategoryCreateDto());
-        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -70,7 +70,7 @@ public class CategoryController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("category", categoryService.getCategory(id));
         modelAndView.addObject("categoryUpdate", new CategoryUpdateDto());
-        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -78,7 +78,7 @@ public class CategoryController {
     public ModelAndView updateCategory(@PathVariable("id") Long id, @ModelAttribute("categoryUpdate")
         @Valid CategoryUpdateDto categoryUpdateDto, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
             modelAndView.addObject("category", categoryService.getCategory(id));
             return modelAndView;
@@ -104,7 +104,7 @@ public class CategoryController {
     public ModelAndView getList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("getAllCategories", categoryService.getAllCategories());
-        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -114,7 +114,7 @@ public class CategoryController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categories", categoryService.searchCategories(searchDto));
         modelAndView.addObject("categoryCreate", new CategoryCreateDto());
-        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 
@@ -129,7 +129,7 @@ public class CategoryController {
         modelAndView.addObject("categorySearch", searchDto); // Preserve search query
         modelAndView.addObject("currentPage", pageResult.getNumber());
         modelAndView.addObject("totalPages", pageResult.getTotalPages());
-        modelAndView.setViewName(ApiConstant.CATEGORY_INDEX);
+        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
 }
