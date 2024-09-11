@@ -1,7 +1,7 @@
 const boxRegister = document.getElementById("box-register");
 const boxLogin = document.getElementById("box-login");
 
-var CaptchaCallback = function() {
+let CaptchaCallback = function() {
     grecaptcha.render('recaptcha-register', {'sitekey' : '6LfblD0qAAAAAC1k-Zd8GfiyXmKjNWBV4xMC1BNP'});
     grecaptcha.render('recaptcha-login', {'sitekey' : '6LfblD0qAAAAAC1k-Zd8GfiyXmKjNWBV4xMC1BNP'});
 };
