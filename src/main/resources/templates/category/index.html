@@ -238,7 +238,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputCategory">Tên danh mục</label>
-                        <input type="text" class="form-control" id="inputCategory" aria-describedby="categoryHelp">
+                        <input type="text" class="form-control" id="inputCategory" th:field="*{name}" aria-describedby="categoryHelp">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -265,7 +265,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputNewCategoryName">Tên danh mục</label>
-                        <input type="text" class="form-control" id="inputNewCategoryName" aria-describedby="categoryHelp">
+                        <input type="text" class="form-control" id="inputNewCategoryName" th:field="*{name}" aria-describedby="categoryHelp">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -288,11 +288,11 @@
 <script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
 
 <!-- Page level plugins -->
-<script th:src="@{/vendor/chart.js/Chart.min.js}" type="application/javascript"></script>
+<!--<script th:src="@{/vendor/chart.js/Chart.min.js}" type="application/javascript"></script>-->
 
 <!-- Page level custom scripts -->
-<script th:src="@{/js/demo/chart-area-demo.js}" type="application/javascript"></script>
-<script th:src="@{/js/demo/chart-pie-demo.js}" type="application/javascript"></script>
+<!--<script th:src="@{/js/demo/chart-area-demo.js}" type="application/javascript"></script>-->
+<!--<script th:src="@{/js/demo/chart-pie-demo.js}" type="application/javascript"></script>-->
 
 <!-- Page level plugins -->
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
@@ -343,13 +343,16 @@
         }
     ];
 
-    const tableCategory = installTable('dataTableCategory', '/sun/category/page', cols)
-
+    const table = installTable('dataTableCategory', '/sun/category/page', cols)
     $('#dataTableCategory tbody').on('click', 'tr', function () {
-        console.log(table.row(this).data());
+
         const data = table.row(this).data();
-        // const name = $(`#inputCategory`).val(data.name);
-        // const newName = $(`#inputNewCategoryName`).val(data.newName);
+        const name = data.name
+
+        $(`#inputCategory`).val(name);
+
+        $(`#inputNewCategoryName`).val(name);
+
 
         $('#createCategoryModal').modal('show');
         $('#addCategory').attr('action', `/sun/category/add/`);
