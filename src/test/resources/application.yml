@@ -7,8 +7,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${EMAIL_SERVER}
-    password: ${PASSWORD_EMAIL_SERVER}
+    username: tranquangg.1108@gmail.com
+    password: qsnt yxbi yjud fcpf
     properties:
       mail:
         smtp:
@@ -27,3 +27,5 @@ application:
 
 default:
   admin-create-key: dfjkNdkMAnje
+  encode-key: 1g2h3j4k5g6h7o8z
+  type-encode: AES
