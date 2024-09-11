@@ -106,7 +106,8 @@ public class CategoryController {
     //change-status
 
     @PostMapping("/delete/{id}")
-    public ModelAndView changeStatusCategory(@PathVariable("id") Long id, @ModelAttribute @Valid CategoryStatusDto active) {
+    public ModelAndView changeStatusCategory(@PathVariable("id") Long id,
+                                             @ModelAttribute @Valid CategoryStatusDto active) {
         ModelAndView modelAndView = new ModelAndView();
         if (active.isActive()) {
             categoryService.enableCategory(id);

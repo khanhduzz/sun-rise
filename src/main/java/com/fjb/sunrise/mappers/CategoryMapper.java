@@ -4,10 +4,11 @@ import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.models.Category;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-import java.util.List;
+
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {

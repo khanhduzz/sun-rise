@@ -5,9 +5,9 @@ import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.models.Category;
+import java.util.List;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
 
 public interface CategoryService {
     CategoryResponseDto createCategory(CategoryCreateDto categoryCreateDto);
