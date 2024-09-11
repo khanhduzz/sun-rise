@@ -1,10 +1,10 @@
 const boxRegister = document.getElementById("box-register");
 const boxLogin = document.getElementById("box-login");
 
-const codeLogin = document.getElementById("code-login");
-const codeRegister = document.getElementById("code-register");
-const rollLogin = document.getElementById("roll-login");
-const rollRegister = document.getElementById("roll-register");
+var CaptchaCallback = function() {
+    grecaptcha.render('recaptcha-register', {'sitekey' : '6LfblD0qAAAAAC1k-Zd8GfiyXmKjNWBV4xMC1BNP'});
+    grecaptcha.render('recaptcha-login', {'sitekey' : '6LfblD0qAAAAAC1k-Zd8GfiyXmKjNWBV4xMC1BNP'});
+};
 
 window.onload = function() {
     let page = window.location.href.split("/").pop();
@@ -16,9 +16,6 @@ window.onload = function() {
         boxLogin.style.visibility = "visible";
         boxLogin.style.opacity = "1";
     }
-
-    codeLogin.textContent = getSecureRandomString(3);
-    codeRegister.textContent = getSecureRandomString(3);
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -38,23 +35,3 @@ document.addEventListener("DOMContentLoaded", function() {
         myModal.show();
     }
 });
-
-rollLogin.addEventListener("click", function() {
-    codeLogin.textContent = getSecureRandomString(3);
-});
-
-rollRegister.addEventListener("click", function() {
-    codeRegister.textContent = getSecureRandomString(3);
-});
-
-function getSecureRandomString(length) {
-    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    const buffer = new Uint8Array(length);
-    window.crypto.getRandomValues(buffer);
-
-    for (let i = 0; i < length; i++) {
-        result += charset.charAt(buffer[i] % charset.length);
-    }
-    return result;
-}
