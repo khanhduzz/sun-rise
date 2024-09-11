@@ -4,6 +4,17 @@ spring:
     url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
     username: sa
     password: sa
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tranquangg.1108@gmail.com
+    password: qsnt yxbi yjud fcpf
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 application:
   admin:
@@ -16,3 +27,5 @@ application:
 
 default:
   admin-create-key: dfjkNdkMAnje
+  encode-key: 1g2h3j4k5g6h7o8z
+  type-encode: AES

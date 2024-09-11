@@ -36,9 +36,13 @@ public class Constants {
 
         public static final String AUTH_REDIRECT_LOGIN = "redirect:/auth/login";
         public static final String AUTH_VIEW = "/auth/loginAndRegister";
-        public static final String REGISTER_ATTRIBUTE = "register";
-        public static final String LOGIN_ATTRIBUTE = "login";
-        public static final String ERROR_MESSAGE = "errorMessage";
+        public static final String REGISTER_OBJECT = "register";
+        public static final String LOGIN_OBJECT = "login";
+        public static final String ERROR_MESSAGE_OBJECT = "errorMessage";
+        public static final String EMAIL_OBJECT = "email";
+        public static final String NEW_PASSWORD_OBJECT = "newPassword";
+        public static final String VERIFICATION_BY_EMAIL_VIEW = "auth/verificationByEmail";
+        public static final String CHANGE_PASSWORD_VIEW = "auth/changePassword";
 
         public static final String ADMIN_VIEW = "/user/admin-page";
         public static final String ADMIN_ADD_NEW_USER = "/user/add-user-by-admin";

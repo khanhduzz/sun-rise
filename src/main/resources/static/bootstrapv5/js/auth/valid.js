@@ -75,7 +75,8 @@ function containsSpecialCharacter(input) {
 }
 
 function isVietnameseCapitalized(input) {
-    const capitalizedVietnameseRegex = /^[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÇàáâãèéêìíòóôõùúăđĩũơưçÝỲỴỶỸýỳỵỷỹ][a-zàáâãèéêìíòóôõùúăđĩũơưç]+$/u;
+    const capitalizedVietnameseRegex = /^[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÇÝỲỴỶỸAàáâãèéêìíòóôõùúăđĩũơưçýỳỵỷỹ][a-zàáâãèéêìíòóôõùúăđĩũơưç]*$/u;
+
     return capitalizedVietnameseRegex.test(input);
 }
 
@@ -96,7 +97,7 @@ function validEmail(input) {
     const [name, domainPart] = input.split("@");
     if (!name || !domainPart) return false;
 
-    if (containsSpecialCharacter(name)) return false;
+    if (containsSpecialCharacter(name) && !name.includes(".")) return false;
 
     const domain = domainPart.split(".");
     return !domain.some(ele => ele === "" || containsSpecialCharacter(ele));
