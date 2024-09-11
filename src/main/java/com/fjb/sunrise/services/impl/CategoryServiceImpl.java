@@ -1,5 +1,6 @@
 package com.fjb.sunrise.services.impl;
 
+import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
@@ -10,6 +11,10 @@ import com.fjb.sunrise.services.CategoryService;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,10 +50,36 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponseDto getCategory(Long id) {
+    public void enableCategory(Long id) {
+        categoryRepository.findById(id).ifPresent(x -> {
+            x.setActive(true);
+            categoryRepository.save(x);
+        });
+    }
+
+    @Override
+    public CategoryResponseDto getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .map(categoryMapper::toCategoryResponseDto)
                 .orElseThrow();
+    }
+
+    @Override
+    public Page<Category> getCategoryList(DataTableInputDTO payload) {
+        Sort sortOpt = Sort.by(Sort.Direction.ASC, "id");
+        if (!payload.getOrder().isEmpty()) {
+            sortOpt = Sort.by(
+                    Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
+                    payload.getOrder().get(0).get("colName"));
+        }
+        int pageNumber = payload.getStart() / 10;
+        if (payload.getStart() % 10 != 0) {
+            pageNumber = pageNumber - 1;
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber, payload.getLength(), sortOpt);
+
+        return categoryRepository.findAll(pageable);
     }
 
     @Override
