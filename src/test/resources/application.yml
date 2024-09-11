@@ -27,5 +27,5 @@ application:
 
 default:
   admin-create-key: dfjkNdkMAnje
-  encode-key: ${ENCODE_KEY}
+  encode-key: 1g2h3j4k5g6h7o8z
   type-encode: ${TYPE_ENCODE}
