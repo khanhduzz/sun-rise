@@ -41,17 +41,17 @@
         </a>
 
         <!-- Divider -->
-        </hr class="sidebar-divider my-0">
+        <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" th:href="../../index.html">
+            <a class="nav-link" th:href="@{/index.html}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Tổng quan</span></a>
         </li>
 
         <!-- Divider -->
-        </hr class="sidebar-divider">
+        <hr class="sidebar-divider">
 
         <!-- Heading -->
         <div class="sidebar-heading">
@@ -82,13 +82,13 @@
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" th:href="../customer/index.html">Danh sách người dùng</a>
+                    <a class="collapse-item" th:href="@{/customer/index.html}">Danh sách người dùng</a>
                 </div>
             </div>
         </li>
 
         <!-- Divider -->
-        </hr class="sidebar-divider">
+        <hr class="sidebar-divider">
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
@@ -217,7 +217,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
-                <a class="btn btn-primary" th:href="login.html">Đăng xuất</a>
+                <a class="btn btn-primary" th:href="@{login.html}">Đăng xuất</a>
             </div>
         </div>
     </div>
@@ -261,7 +261,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form id="updateCategory" th:object="${categoryUpdate}" th:action="@{/category/update/{id}(id=${category.getId()})}" method="POST">
+            <form id="updateCategory" th:object="${categoryUpdate}" th:action="@{/category/update/{id}}" method="POST">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputNewCategoryName">Tên danh mục</label>
