@@ -6,7 +6,7 @@ import com.fjb.sunrise.models.User;
 import java.util.List;
 
 public interface UserService {
-    boolean checkRegister(RegisterRequest registerRequest);
+    String checkRegister(RegisterRequest registerRequest);
 
     String changePassword(String email, String password);
 

@@ -57,17 +57,19 @@
     "field-custom field-custom"
     "field-custom field-custom"
     "field-custom field-custom"
-    "captcha captcha"
+    "g-recaptcha g-recaptcha"
     "button button";
     gap: 16px;
 }
-
+.g-recaptcha.area {
+    grid-area: g-recaptcha;
+}
 .login-form {
     display: grid;
     grid-template-areas:
     "field-custom"
     "field-custom"
-    "captcha"
+    "g-recaptcha"
     "remember-me"
     "button";
     gap: 16px;

@@ -25,10 +25,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public boolean checkRegister(RegisterRequest registerRequest) {
+    public String checkRegister(RegisterRequest registerRequest) {
         //check already exist email or phone
         if (userRepository.existsUserByEmailOrPhone(registerRequest.getEmail(), registerRequest.getPhone())) {
-            return false;
+            return "Email hoặc số điện thoại đã được đăng ký!";
         }
 
         User user = mapper.toEntity(registerRequest);
@@ -42,9 +42,9 @@ public class UserServiceImpl implements UserService {
             user.setRole(ERole.USER);
         }
 
-        user = userRepository.save(user);
+        userRepository.save(user);
 
-        return true;
+        return null;
     }
 
     @Override
