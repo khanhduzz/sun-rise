@@ -1,15 +1,14 @@
 package com.fjb.sunrise.dtos.requests;
 
-import java.io.Serializable;
+import com.fjb.sunrise.enums.EStatus;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-
-
 @Getter
 @Setter
 @ToString
-public class CategoryStatusDto implements Serializable {
-    private boolean active;
+public class CategoryStatusDto {
+    private Long id;
+    private EStatus status;
 }

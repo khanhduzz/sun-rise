@@ -2,8 +2,10 @@ package com.fjb.sunrise.services.impl;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
+import com.fjb.sunrise.dtos.requests.CategoryStatusDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
+import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.repositories.CategoryRepository;
@@ -27,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryResponseDto createCategory(CategoryCreateDto categoryCreateDto) {
         Category category = categoryMapper.toCategory(categoryCreateDto);
-        category.setActive(true);
+        category.setStatus(EStatus.ACTIVE);
         category = categoryRepository.save(category);
         return categoryMapper.toCategoryResponseDto(category);
     }
@@ -42,9 +44,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
+    public CategoryResponseDto saveStatusCategory(Long id, CategoryStatusDto categoryStatusDto) {
+        Category category = categoryRepository.findById(id).orElseThrow();
+        category = categoryMapper.statusCategory(category, categoryStatusDto);
+        category = categoryRepository.save(category);
+        return categoryMapper.toCategoryResponseDto(category);
+    }
+
+    @Override
     public void disableCategory(Long id) {
         categoryRepository.findById(id).ifPresent(x -> {
-            x.setActive(false);
+            x.setStatus(EStatus.NOT_ACTIVE);
             categoryRepository.save(x);
         });
     }
@@ -52,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void enableCategory(Long id) {
         categoryRepository.findById(id).ifPresent(x -> {
-            x.setActive(true);
+            x.setStatus(EStatus.ACTIVE);
             categoryRepository.save(x);
         });
     }

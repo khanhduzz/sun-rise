@@ -229,7 +229,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel1">Tạo danh mục thu/chi</h5>
+                <h5 class="modal-title" id="exampleModalLabel1">Tạo tên danh mục</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -256,7 +256,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel2">Sửa danh mục thu/chi</h5>
+                <h5 class="modal-title" id="exampleModalLabel2">Sửa tên danh mục</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -276,6 +276,44 @@
         </div>
     </div>
 </div>
+
+<!-- Status Category Modal-->
+<div class="modal fade" id="statusCategoryModal" tabindex="-1" role="dialog"
+     aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel3">Trạng thái danh mục</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!-- Form để gửi yêu cầu POST -->
+<!--            <form id="statusCategory" th:object="${categoryStatus}" th:action="@{/category/delete/{id}}" method="POST">-->
+<!--                &lt;!&ndash; Truyền ID danh mục qua tham số hidden &ndash;&gt;-->
+<!--&lt;!&ndash;                <input type="hidden" name="id" th:value="${category.id}">&ndash;&gt;-->
+
+<!--                &lt;!&ndash; Hiển thị nút bật/tắt trạng thái &ndash;&gt;-->
+<!--                <button type="submit" name="status" th:value="${category.status == 'ACTIVE' ? 'NOT_ACTIVE' : 'ACTIVE'}">-->
+<!--                    <span th:text="${category.status == 'ACTIVE' ? 'Deactivate' : 'Activate'}"></span>-->
+<!--                </button>-->
+<!--            </form>-->
+<!--            <form id="" th:object="${categoryUpdate}" th:action="@{/category/update/{id}}" method="POST">-->
+<!--                <div class="modal-body">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="inputNewCategoryName">Tên danh mục</label>-->
+<!--                        <input type="text" class="form-control" id="inputNewCategoryStatus" th:field="*{name}" aria-describedby="categoryHelp">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button class="btn btn-secondary" type="reset" data-dismiss="modal">Hủy</button>-->
+<!--                    <button class="btn btn-primary" type="submit">Gửi</button>-->
+<!--                </div>-->
+<!--            </form>-->
+        </div>
+    </div>
+</div>
+
 
 <!-- Bootstrap core JavaScript-->
 <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
@@ -334,11 +372,11 @@
         {"data": "name"},
         {"data": "createdDate"},
         {"data": "lastModifiedDate"},
-        {"data": "active"},
+        {"data": "status"},
         {"data": null, "defaultContent":"" +
                 "<div>" +
                 "<button data-toggle=\"modal\" data-target=\"#editCategoryModal\" class=\"btn btn-outline-danger\">Edit</button>" +
-                "<button class=\"btn btn-outline-primary\">Status</button>" +
+                "<button data-toggle=\"modal\" data-target=\"#statusCategoryModal\" class=\"btn btn-outline-primary\">Status</button>" +
                 "</div>"
         }
     ];

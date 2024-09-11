@@ -1,5 +1,6 @@
 package com.fjb.sunrise.models;
 
+import com.fjb.sunrise.enums.EStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +29,5 @@ public class Category extends AuditEntity<String> {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, columnDefinition = "boolean default true")
-    private boolean active = true;
+    private EStatus status;
 }
