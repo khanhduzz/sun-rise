@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="utf-8">
-    <link rel="icon" type="image/png" href="../../img/spreadsheet_17087859.png">
+    <link rel="icon" type="image/png" th:href="@{/img/spreadsheet_17087859.png}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -33,7 +33,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../../index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" >
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -45,7 +45,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" th:href="../../index.html">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Tổng quan</span></a>
         </li>
@@ -82,7 +82,7 @@
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="../customer/index.html">Danh sách người dùng</a>
+                    <a class="collapse-item" th:href="../customer/index.html">Danh sách người dùng</a>
                 </div>
             </div>
         </li>
@@ -120,7 +120,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">Vi Tran Nguyen Ky</span>
-                            <img class="img-profile rounded-circle" src="../../img/undraw_profile.svg">
+                            <img class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -217,7 +217,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
-                <a class="btn btn-primary" href="login.html">Đăng xuất</a>
+                <a class="btn btn-primary" th:href="login.html">Đăng xuất</a>
             </div>
         </div>
     </div>

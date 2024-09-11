@@ -6,7 +6,6 @@ import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
-import com.fjb.sunrise.models.Transaction;
 import com.fjb.sunrise.repositories.CategoryRepository;
 import com.fjb.sunrise.services.CategoryService;
 import jakarta.transaction.Transactional;
