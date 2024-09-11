@@ -4,10 +4,12 @@ import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.user.EditProfileByAdminDTO;
 import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.enums.EStatus;
+import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.mappers.UserMapper;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.UserService;
+import com.fjb.sunrise.utils.Constants;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +44,7 @@ public class UserServiceImpl implements UserService {
             user.setRole(ERole.USER);
         }
 
-        user = userRepository.save(user);
+        userRepository.save(user);
 
         return true;
     }
@@ -118,7 +120,7 @@ public class UserServiceImpl implements UserService {
             user.setStatus(EStatus.NOT_ACTIVE);
             userRepository.save(user);
         } else {
-            throw new RuntimeException("User not found");
+            throw new NotFoundException(Constants.ErrorCode.USER_NOT_FOUND);
         }
     }
 }

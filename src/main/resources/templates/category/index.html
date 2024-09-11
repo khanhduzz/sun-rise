@@ -58,7 +58,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered w-100" id="dataTable" cellspacing="0">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -76,7 +76,6 @@
                                     <td th:text="${c.getCreatedDate()}"></td>
                                     <td th:text="${c.getLastModifiedDate()}"></td>
                                     <td th:text="${c.isActive() ? 'Active' : 'Inactive'}"></td>
-<!--                                    <td th:text="${c.isActivate()}"></td>-->
                                     <td>
                                         <a class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
                                            >Edit</a>
@@ -184,8 +183,8 @@
                   th:object="${categoryUpdate}">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label >Tên danh mục</label>
-                        <input type="text" th:field="*{name}" placeholder="NAME" />
+                        <label for="name">Tên danh mục</label>
+                        <input type="text" th:field="*{name}" placeholder="NAME" id="name"/>
                         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                     </div>
 
