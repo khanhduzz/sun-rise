@@ -10,14 +10,14 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ReCaptchaServiceImpl implements ReCaptchaService {
     @Value("${default.recaptcha-secret-key}")
-    private String RECAPTCHA_SECRET_KEY;
+    private String recaptchaSecretKey;
 
-    private static final String RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
+    private static final String URL = "https://www.google.com/recaptcha/api/siteverify";
 
     @Override
     public boolean validateRecaptcha(String recaptchaResponse) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = RECAPTCHA_VERIFY_URL + "?secret=" + RECAPTCHA_SECRET_KEY + "&response=" + recaptchaResponse;
+        String url = URL + "?secret=" + recaptchaSecretKey + "&response=" + recaptchaResponse;
         String response = restTemplate.postForObject(url, null, String.class);
         assert response != null;
         JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
