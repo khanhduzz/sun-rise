@@ -29,7 +29,7 @@
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                    onkeydown="">
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small" sec:authentication="name"></span>
-                    <img alt="profile-image" class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}">
+                    <img alt="profile" class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}">
                 </a>
                 <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -63,7 +63,7 @@
 <!-- Logout Modal-->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <dialog class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn thoát?</h5>
@@ -76,7 +76,7 @@
                 <a class="btn btn-primary" href="login.html">Đăng xuất</a>
             </div>
         </div>
-    </div>
+    </dialog>
 </div>
 
 <!-- Bootstrap core JavaScript-->
