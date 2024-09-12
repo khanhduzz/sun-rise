@@ -1,6 +1,8 @@
 package com.fjb.sunrise.services.impl;
 
+import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
+import com.fjb.sunrise.dtos.responses.UserResponseDTO;
 import com.fjb.sunrise.dtos.user.EditProfileByAdminDTO;
 import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.enums.EStatus;
@@ -14,12 +16,19 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final UserMapper userMapper;
     @Value("${default.admin-create-key}")
     private String key;
     private final UserMapper mapper;
@@ -122,5 +131,55 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new NotFoundException(Constants.ErrorCode.USER_NOT_FOUND);
         }
+    }
+
+    @Override
+    public void activateUserById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setStatus(EStatus.ACTIVE);
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
+
+    @Override
+    public Page<User> getUserList(DataTableInputDTO payload) {
+        Sort sortOpt = Sort.by(Sort.Direction.ASC, "id");
+        if (!payload.getOrder().isEmpty()) {
+            sortOpt = Sort.by(
+                Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
+                payload.getOrder().get(0).get("colName"));
+        }
+        int pageNumber = payload.getStart() / 10;
+        if (payload.getStart() % 10 != 0) {
+            pageNumber = pageNumber - 1;
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber, payload.getLength(), sortOpt);
+
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public UserResponseDTO getInfor() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmailOrPhone(name);
+        return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public boolean editUser(UserResponseDTO userResponseDTO) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmailOrPhone(name);
+        user.setUsername(userResponseDTO.getUsername());
+        user.setFirstname(userResponseDTO.getFirstname());
+        user.setLastname(userResponseDTO.getLastname());
+        user.setPhone(userResponseDTO.getPhone());
+        user.setEmail(userResponseDTO.getEmail());
+        userRepository.save(user);
+        return true;
     }
 }
