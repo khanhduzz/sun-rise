@@ -49,14 +49,17 @@
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
-            <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <div sec:authorize="hasRole('ROLE_ADMIN')" >
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" th:href="@{/user/admin-page}">Danh sách người dùng</a>
+                    <a class="collapse-item" th:href="@{/user/admin-page}">Quản lý người dùng</a>
+                </div>
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" th:href="@{/user/add-user-by-admin}">Thêm người dùng mới</a>
                 </div>
             </div>
             <div sec:authorize="hasRole('ROLE_USER')">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" th:href="@{/user/user-page}">Thông tin cá nhân</a>
+                    <a class="collapse-item" th:href="@{/user/edit-infor}">Thông tin cá nhân</a>
                 </div>
             </div>
         </div>
