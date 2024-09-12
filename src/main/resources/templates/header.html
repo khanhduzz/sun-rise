@@ -26,9 +26,10 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow" sec:authorize="isAuthenticated()">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline text-gray-600 small" sec:authentication="name"></span>
-                        <img class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}">
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                   onkeydown="">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small" sec:authentication="name"></span>
+                    <img alt="profile" class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}">
                 </a>
                 <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -53,8 +54,50 @@
     </nav>
 </header>
 <!-- Content Section -->
-<div class="container mt-4">
-    <!-- Content goes here -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <dialog class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn thoát?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                <a class="btn btn-primary" href="login.html">Đăng xuất</a>
+            </div>
+        </div>
+    </dialog>
 </div>
+
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
+
+<!-- Core plugin JavaScript-->
+<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}" type="application/javascript"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
+
+<!-- Page level plugins -->
+<script th:src="@{/vendor/chart.js/Chart.min.js}" type="application/javascript"></script>
+
+<!-- Page level custom scripts -->
+<script th:src="@{/js/demo/chart-area-demo.js}" type="application/javascript"></script>
+<script th:src="@{/js/demo/chart-pie-demo.js}" type="application/javascript"></script>
+
+<!-- Page level plugins -->
+<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
+<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
 </body>
 </html>

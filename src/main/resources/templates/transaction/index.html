@@ -4,7 +4,6 @@
 <head>
 
     <meta charset="utf-8">
-    <!--    <link rel="icon" type="image/png" th:href="@{/img/spreadsheet_17087859.png}">-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -155,7 +154,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Biểu đồ thu nhập (Tháng này)</h6>
                                 <div class="dropdown no-arrow">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onkeydown="">
                                         <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
@@ -187,7 +186,7 @@
                                 </h6>
                                 <div class="dropdown no-arrow">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onkeydown="">
                                         <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
@@ -275,30 +274,6 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn thoát?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
-                <a class="btn btn-primary" href="login.html">Đăng xuất</a>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Income and expenses Modal-->
 <div class="modal fade" id="createIncomeAndExpensesModal" tabindex="-1" role="dialog"
      aria-labelledby="createIncomeAndExpensesModalLabel" aria-hidden="true">
@@ -319,7 +294,7 @@
                                placeholder="10,000,000.00">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Loại tiền</label>
+                        <label for="exampleInputPassword">Loại tiền</label>
                         <div class="form-check">
                             <input th:field="*{transactionType}" class="form-check-input" type="radio"
                                    name="exampleRadios" id="exampleRadios1"
@@ -340,8 +315,6 @@
                     <div class="form-group">
                         <label for="inputAmount">Danh mục</label>
                         <select class="form-control" th:field="*{category}">
-                            <!--<option selected>Tiền lương</option>-->
-                            <!--<option>Sinh nhật</option>-->
                             <option th:each="category:${categories}" th:value="${category.id}"
                                     th:text="${category.name}"></option>
                         </select>
@@ -362,7 +335,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Bootstrap core JavaScript-->
 <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
@@ -386,7 +358,6 @@
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
 
 <!-- Page level custom scripts -->
-<!--<script th:src="@{/js/demo/datatables-demo.js}" type="application/javascript"></script>-->
 <script type="text/javascript">
     const installTable = (id, url, cols) => {
         return $(`#${id}`).DataTable({
@@ -429,49 +400,11 @@
         {"data": null, "defaultContent":"<button class=\"btn btn-outline-danger\">Cập nhật</button>"}
     ];
 
-    // var table = $('#transactionTable').DataTable({
-    //     "processing": true,
-    //     "serverSide": true,
-    //     "order": [1, "asc"],
-    //     "ajax": {
-    //         "url": "/sun/transaction/page",
-    //         "type": "POST",
-    //         "contentType": "application/json",
-    //         "data": function(d){
-    //             console.log(d);
-    //             return d;
-    //         }
-    //         // "dataSrc": "",
-    //         // dataSrc: function (data) {
-    //         //     data.raw = 1;
-    //         //     data.recordsTotal = 10;
-    //         //     data.recordsFiltered = 10;
-    //         //     return data.data;
-    //         // },
-    //         // data: function (data) {
-    //         //     console.log("Data: ");
-    //         //     data.recordsTotal = 10;
-    //         //     data.recordsFiltered = 10;
-    //         //     console.log(data);
-    //         // }
-    //     },
-    //     "columns": [
-    //         {"data": `createdAt`},
-    //         {"data": `id`},
-    //         {"data": `category`},
-    //         {"data": `transactionType`},
-    //         {"data": `amount`},
-    //         {"data": `note`},
-    //         {"data": null, "defaultContent":"<button class=\"btn btn-outline-danger\">Cập nhật</button>"}
-    //     ]
-    // });
-
      const table = installTable('transactionTable', '/sun/transaction/page', cols)
 
     $('#transactionTable tbody').on('click', 'tr', function () {
         console.log(table.row(this).data());
         const data = table.row(this).data();
-        const amount = $(`#inputAmount`).val(data.amount);
 
         if(data.transactionType===`IN`) {
             $(`#exampleRadios1`).prop("checked",true);
@@ -484,8 +417,6 @@
                 obj.selected = true;
             }
         })
-
-        const createdAt = $(`#inputDatetime`).val(data.createdAt);
 
         $('#createIncomeAndExpensesModal').modal('show');
         $('#addOrUpdateTransaction').attr('action', `/sun/transaction/update/${data.id}`);

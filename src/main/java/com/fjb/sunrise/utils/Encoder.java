@@ -1,8 +1,13 @@
 package com.fjb.sunrise.utils;
 
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,7 +24,9 @@ public class Encoder {
         return new SecretKeySpec(encodeKey.getBytes(StandardCharsets.UTF_8), typeEncode);
     }
 
-    public String encode(String string) throws Exception {
+    public String encode(String string)
+        throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException,
+        BadPaddingException {
         Cipher cipher = Cipher.getInstance(typeEncode);
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec());
 
@@ -28,7 +35,9 @@ public class Encoder {
         return Base64.getUrlEncoder().encodeToString(encryptedData);
     }
 
-    public String decode(String string) throws Exception {
+    public String decode(String string)
+        throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException,
+        BadPaddingException {
         Cipher cipher = Cipher.getInstance(typeEncode);
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec());
 

@@ -130,10 +130,10 @@ public class UserController {
             if (updated) {
                 modelAndView.setViewName(Constants.ApiConstant.ADMIN_REDIRECT);
             } else {
-                modelAndView.addObject("error", "Failed to update user");
+                modelAndView.addObject(Constants.ErrorCode.ERROR, "Failed to update user");
             }
         } catch (Exception e) {
-            modelAndView.addObject("error", "An error occurred: " + e.getMessage());
+            modelAndView.addObject(Constants.ErrorCode.ERROR, "An error occurred: " + e.getMessage());
         }
 
         return modelAndView;
@@ -146,7 +146,7 @@ public class UserController {
             userService.deleteUserById(id);
             redirectAttributes.addFlashAttribute("message", "User deleted successfully");
         } catch (EntityNotFoundException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute(Constants.ErrorCode.ERROR, e.getMessage());
         }
         return Constants.ApiConstant.ADMIN_REDIRECT;
     }
@@ -158,7 +158,7 @@ public class UserController {
             userService.deactivateUserById(id);
             redirectAttributes.addFlashAttribute("message", "User deactivated successfully");
         } catch (EntityNotFoundException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute(Constants.ErrorCode.ERROR, e.getMessage());
         }
         return Constants.ApiConstant.ADMIN_REDIRECT;
     }

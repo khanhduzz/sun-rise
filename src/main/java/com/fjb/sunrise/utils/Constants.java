@@ -8,6 +8,7 @@ public class Constants {
 
         private ErrorCode() {}
 
+        public static final String ERROR = "error";
         public static final String USER_NOT_FOUND = "USER_NOT_FOUND";
         public static final String USER_ALREADY_EXISTED = "USER_ALREADY_EXISTED";
         public static final String CATEGORY_NOT_FOUND = "CATEGORY_NOT_FOUND";

@@ -75,7 +75,7 @@ function containsSpecialCharacter(input) {
 }
 
 function isVietnameseCapitalized(input) {
-    const capitalizedVietnameseRegex = /^[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÇÝỲỴỶỸAàáâãèéêìíòóôõùúăđĩũơưçýỳỵỷỹ][a-zàáâãèéêìíòóôõùúăđĩũơưç]*$/u;
+    const capitalizedVietnameseRegex = /^[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÇÝỲỴỶỸàáâãèéêìíòóôõùúăđĩũơưçýỳỵỷỹ][a-zàáâãèéêìíòóôõùúăđĩũơưç]*$/u;
 
     return capitalizedVietnameseRegex.test(input);
 }
