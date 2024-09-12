@@ -17,5 +17,6 @@ useDefault = true
 [allowlist]
 description = "global allow list"
 paths = [
-  '''target'''
+  '''target''',
+  '''test/application.yml'''
 ]
