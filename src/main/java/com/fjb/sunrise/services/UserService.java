@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 public interface UserService {
-    boolean checkRegister(RegisterRequest registerRequest);
+    String checkRegister(RegisterRequest registerRequest);
 
     String changePassword(String email, String password);
 

@@ -4,6 +4,7 @@ import com.fjb.sunrise.dtos.requests.LoginRequest;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.requests.VerificationByEmail;
 import com.fjb.sunrise.services.EmailService;
+import com.fjb.sunrise.services.ReCaptchaService;
 import com.fjb.sunrise.services.UserService;
 import com.fjb.sunrise.utils.Constants;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class AuthController {
     private final UserService userService;
     private final EmailService emailService;
+    private final ReCaptchaService reCaptchaService;
 
 
     @GetMapping("/login")
@@ -47,18 +49,27 @@ public class AuthController {
 
     @PostMapping("/register")
     public ModelAndView doRegister(@ModelAttribute(Constants.ApiConstant.REGISTER_OBJECT)
-                                       RegisterRequest registerRequest) {
+                                       RegisterRequest registerRequest,
+                                   @RequestParam("g-recaptcha-response") String recaptchaResponse) {
         //setup object for view
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
         modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
         modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
 
+        //valid reCaptcha
+        boolean success = reCaptchaService.validateRecaptcha(recaptchaResponse);
+        if (!success) {
+            modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, "Captcha không đúng!");
+            return modelAndView;
+        }
+
         // implement register for user
-        if (userService.checkRegister(registerRequest)) {
+        String message = userService.checkRegister(registerRequest);
+        if (message == null) {
             modelAndView.setViewName(Constants.ApiConstant.AUTH_REDIRECT_LOGIN);
         } else {
-            modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, "Đăng kí không thành công");
+            modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, message);
         }
 
         return modelAndView;

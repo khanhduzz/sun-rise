@@ -27,5 +27,6 @@ application:
 
 default:
   admin-create-key: dfjkNdkMAnje
+  recaptcha-secret-key: 6LfblD0qAAAAAO2lT_e5JwmxUFJ55uCpxPrdwk0T
   encode-key: abcdefghabcdefgh
   type-encode: AES
