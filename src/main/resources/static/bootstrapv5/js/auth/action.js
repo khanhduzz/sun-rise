@@ -1,13 +1,6 @@
 const boxRegister = document.getElementById("box-register");
 const boxLogin = document.getElementById("box-login");
 
-//let CaptchaCallback = function() {
-//    console.log("it run")
-//    grecaptcha.render('recaptcha-register', {'sitekey' : '6LfblD0qAAAAAC1k-Zd8GfiyXmKjNWBV4xMC1BNP'});
-//    grecaptcha.render('recaptcha-login', {'sitekey' : '6LfblD0qAAAAAC1k-Zd8GfiyXmKjNWBV4xMC1BNP'});
-//};
-
-
 window.onload = function() {
     let page = window.location.href.split("/").pop();
 
