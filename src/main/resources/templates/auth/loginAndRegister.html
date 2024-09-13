@@ -26,7 +26,8 @@
     };
 
     function validReCaptcha(id) {
-        if ('[[${captchaEnable}]]' == 'false') {
+        console.log('[[${captchaEnable}]]');
+        if ('[[${captchaEnable}]]' === 'false') {
             return true;
         }
         const response = grecaptcha.getResponse(id);

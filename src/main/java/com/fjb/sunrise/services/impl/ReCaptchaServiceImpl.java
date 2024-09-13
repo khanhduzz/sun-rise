@@ -12,7 +12,7 @@ public class ReCaptchaServiceImpl implements ReCaptchaService {
     @Value("${default.recaptcha-secret-key}")
     private String recaptchaSecretKey;
 
-    @Value("$default.captcha-enable")
+    @Value("${default.captcha-enable}")
     private String captchaEnable;
 
     private static final String URL = "https://www.google.com/recaptcha/api/siteverify";
