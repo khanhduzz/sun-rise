@@ -11,6 +11,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CategoryUpdateDto implements Serializable {
+    private Long id;
+
     @NotBlank(message = "Vui lòng nhâp tên danh mục")
     @Size(max = 50, message = "Không vượt quá 50 ký tự")
     private String name;

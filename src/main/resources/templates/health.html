@@ -6,22 +6,70 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Health</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
+    <script th:src="@{/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
-<body>
-    <h2>Server is up and running</h2>
-    <h2>Welcome</h2>
-    <p>This for checking authentication</p>
-    <div sec:authorize="hasRole('ROLE_USER')">Text visible to user.</div>
-    <div sec:authorize="hasRole('ROLE_ADMIN')">Text visible to admin.</div>
-    <div sec:authorize="isAuthenticated()">Text visible only to authenticated users.</div>
-    <div sec:authorize="isAuthenticated()">
-        Username: <span sec:authentication="name"></span>
+<body id="page-top">
+<div id="wrapper">
+    <div th:replace="~{tab_bar :: tab-bar}"></div>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <div th:replace="~{header :: header}"></div>
+            <div class="container border" style="min-height: 68vh">
+                <h2>Server is up and running</h2>
+                <h2>Welcome</h2>
+                <p>This for checking authentication</p>
+                <div sec:authorize="hasRole('ROLE_USER')">Text visible to user.</div>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">Text visible to admin.</div>
+                <div sec:authorize="isAuthenticated()">Text visible only to authenticated users.</div>
+                <div sec:authorize="isAuthenticated()">
+                    Username: <span sec:authentication="name"></span>
+                </div>
+                <div sec:authorize="isAuthenticated()">
+                    Roles: <span sec:authentication="principal.authorities"></span>
+                </div>
+                <div class="nav-item me-3" sec:authorize="isAuthenticated()">
+                    <a class="btn btn-outline-danger" style="width: 300px" th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+            <div th:replace="~{footer :: footer}"></div>
+        </div>
     </div>
-    <div sec:authorize="isAuthenticated()">
-        Roles: <span sec:authentication="principal.authorities"></span>
-    </div>
-    <div class="nav-item me-3" sec:authorize="isAuthenticated()">
-        <a class="btn btn-outline-danger w-100" th:href="@{/logout}">Logout</a>
-    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/chart-area-demo.js"></script>
+<script src="js/demo/chart-pie-demo.js"></script>
+
+<!-- Page level plugins -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/datatables-demo.js"></script>
 </body>
 </html>
