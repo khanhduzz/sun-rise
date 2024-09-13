@@ -18,5 +18,6 @@ useDefault = true
 description = "global allow list"
 paths = [
   '''target''',
-  '''test/application.yml'''
+  '''test\.application.yml''',
+  '''\.env.sample'''
 ]
