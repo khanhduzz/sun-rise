@@ -45,8 +45,7 @@ Budgeting Service System is a project provides features for tracking and managin
 - Able to run in local and with docker
 
 # Architecture
-![sunrise](https://github.com/user-attachments/assets/7ecf9ec2-d82d-4d75-925f-240eb103a1e9)
-
+<img width="1307" alt="Screenshot 2024-09-13 at 21 21 04" src="https://github.com/user-attachments/assets/34f1230e-e4f6-41b6-b9b4-c8cc1e7d7634">
 
 
 # Database Modeling
