@@ -274,6 +274,30 @@
 </div>
 <!-- End of Page Wrapper -->
 
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel0">Bạn có muốn thoát?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                <a class="btn btn-primary" href="login.html">Đăng xuất</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Income and expenses Modal-->
 <div class="modal fade" id="createIncomeAndExpensesModal" tabindex="-1" role="dialog"
      aria-labelledby="createIncomeAndExpensesModalLabel" aria-hidden="true">
@@ -294,7 +318,10 @@
                                placeholder="10,000,000.00">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword">Loại tiền</label>
+
+                        <label >Loại tiền</label>
+
+                        <label>Loại tiền</label>
                         <div class="form-check">
                             <input th:field="*{transactionType}" class="form-check-input" type="radio"
                                    name="exampleRadios" id="exampleRadios1"
@@ -313,14 +340,16 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputAmount">Danh mục</label>
-                        <select class="form-control" th:field="*{category}">
+                        <label for="inputCategory">Danh mục</label>
+                        <select id="inputCategory" class="form-control" th:field="*{category}">
+                            <!--<option selected>Tiền lương</option>-->
+                            <!--<option>Sinh nhật</option>-->
                             <option th:each="category:${categories}" th:value="${category.id}"
                                     th:text="${category.name}"></option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="inputAmount">Chọn thời gian</label>
+                        <label for="inputDatetime">Chọn thời gian</label>
                         <input th:field="*{createdAt}" type="datetime-local" class="form-control" id="inputDatetime"
                                placeholder="dd-mm-yyyy"
                                min="1997-01-01" max="2030-12-31">
@@ -380,7 +409,7 @@
                 "type": "POST",
                 "contentType": "application/json",
                 "data": function (d) {
-                    d['order'].forEach(function(items, index) {
+                    d['order'].forEach(function (items, index) {
                         d['order'][index]['colName'] = d['columns'][items.column]['data'];
                     });
                     return JSON.stringify(d);
@@ -397,14 +426,17 @@
         {"data": "transactionType"},
         {"data": "amount"},
         {"data": "note"},
-        {"data": null, "defaultContent":"<button class=\"btn btn-outline-danger\">Cập nhật</button>"}
+        {"data": null, "defaultContent": "<button class=\"btn btn-outline-danger\">Edit</button>"}
     ];
 
      const table = installTable('transactionTable', '/sun/transaction/page', cols)
 
+    const table = installTable('transactionTable', '/sun/transaction/page', cols)
+
     $('#transactionTable tbody').on('click', 'tr', function () {
         console.log(table.row(this).data());
         const data = table.row(this).data();
+        const amount = $(`#inputAmount`).val(data.amount);
 
         if(data.transactionType===`IN`) {
             $(`#exampleRadios1`).prop("checked",true);
@@ -420,6 +452,24 @@
 
         $('#createIncomeAndExpensesModal').modal('show');
         $('#addOrUpdateTransaction').attr('action', `/sun/transaction/update/${data.id}`);
+    });
+
+    $('#inputAmount').on('input', function () {
+        let input = $(this).val();
+        let ignoreComma = input.replaceAll(',', '');
+        let convertToNumber = ignoreComma.includes('.') ? ignoreComma.substring(0, ignoreComma.indexOf('.')) : ignoreComma;
+        let afterDecimalPoint = input.includes('.') ? input.substring(input.indexOf('.'), input.length) : '';
+        console.log(afterDecimalPoint)
+        let curCursor = this.selectionStart;
+        $(this).val(Number(convertToNumber).toLocaleString() + afterDecimalPoint);
+        this.selectionStart = curCursor;
+        this.selectionEnd = curCursor;
+        console.log(this.selectionStart + "," + this.selectionEnd)
+    })
+
+    const dataChart = $.get('/sun/transaction/statistic', function (dataChart) {
+        console.log("datachart")
+        console.log(dataChart);
     });
 
 </script>

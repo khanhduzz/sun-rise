@@ -88,4 +88,17 @@ public class CategoryServiceImpl implements CategoryService {
             .stream().map(categoryMapper::toCategoryResponseDto)
             .toList();
     }
+
+    @Override
+    public List<Category> findAllByUser() {
+        //        Specification specs = Specification.where(
+        //            ((root, query, builder) -> {
+        //                builder.equal(root.get("createdBy"),
+        //                    "ADMIN")
+        //            })
+        //        );
+        return List.of();
+    }
+
+
 }
