@@ -31,3 +31,4 @@ default:
   recaptcha-site-key: efgh #gitleaks:allow
   encode-key: abcdefghabcdefgh #gitleaks:allow
   type-encode: AES #gitleaks:allow
+  captcha-enable: false

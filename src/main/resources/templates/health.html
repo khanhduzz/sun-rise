@@ -40,7 +40,7 @@
                     Roles: <span sec:authentication="principal.authorities"></span>
                 </div>
                 <div class="nav-item me-3" sec:authorize="isAuthenticated()">
-                    <a class="btn btn-outline-danger w-100" th:href="@{/logout}">Logout</a>
+                    <a class="btn btn-outline-danger" style="width: 300px" th:href="@{/logout}">Logout</a>
                 </div>
             </div>
             <div th:replace="~{footer :: footer}"></div>

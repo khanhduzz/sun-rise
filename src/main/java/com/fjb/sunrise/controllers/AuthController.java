@@ -26,6 +26,9 @@ public class AuthController {
     @Value("${default.recaptcha-site-key}")
     private String recaptchaSiteKey;
 
+    @Value("${default.captcha-enable}")
+    private String captchaEnable;
+
     private final UserService userService;
     private final EmailService emailService;
     private final ReCaptchaService reCaptchaService;
@@ -38,6 +41,7 @@ public class AuthController {
         modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
         modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
         modelAndView.addObject("recaptchaSiteKey", recaptchaSiteKey);
+        modelAndView.addObject("captchaEnable", captchaEnable);
         if (error != null) {
             modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, "Đăng nhập không thành công!");
         }
@@ -51,6 +55,7 @@ public class AuthController {
         modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
         modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
         modelAndView.addObject("recaptchaSiteKey", recaptchaSiteKey);
+        modelAndView.addObject("captchaEnable", captchaEnable);
         return modelAndView;
     }
 
