@@ -114,8 +114,3 @@ function validRePassword(password, rePassword) {
     return rePassword !== "" && password === rePassword;
 }
 
-function validReCaptcha(id) {
-    const response = grecaptcha.getResponse(id);
-    return response.length !== 0;
-}
-

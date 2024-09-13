@@ -25,7 +25,16 @@
         }
     };
 
+    function validReCaptcha(id) {
+        if ('[[${captchaEnable}]]' == 'false') {
+            return true;
+        }
+        const response = grecaptcha.getResponse(id);
+        return response.length !== 0;
+    }
+
     window.CaptchaCallback = CaptchaCallback;
+    window.validateCaptcha = validateCaptcha;
 </script>
 <th:block th:if="${errorMessage != null}">
     <div id="popup-failed-register" class="modal fade" tabindex="-1">
