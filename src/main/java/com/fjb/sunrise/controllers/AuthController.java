@@ -9,6 +9,7 @@ import com.fjb.sunrise.services.UserService;
 import com.fjb.sunrise.utils.Constants;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +22,10 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
+
+    @Value("${default.recaptcha-site-key}")
+    private String recaptchaSiteKey;
+
     private final UserService userService;
     private final EmailService emailService;
     private final ReCaptchaService reCaptchaService;
@@ -32,6 +37,7 @@ public class AuthController {
         modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
         modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
         modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
+        modelAndView.addObject("recaptchaSiteKey", recaptchaSiteKey);
         if (error != null) {
             modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, "Đăng nhập không thành công!");
         }
@@ -44,6 +50,7 @@ public class AuthController {
         modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
         modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
         modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
+        modelAndView.addObject("recaptchaSiteKey", recaptchaSiteKey);
         return modelAndView;
     }
 

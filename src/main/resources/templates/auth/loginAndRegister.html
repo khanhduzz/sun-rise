@@ -10,7 +10,23 @@
     <link rel="icon" th:href="@{/img/spreadsheet_17087859.png}" type="image/png">
 </head>
 <body>
-<script type="text/javascript" th:src="@{/js/auth/captcha.js}"></script>
+<script type="text/javascript">
+    let CaptchaCallback = function() {
+        console.log("CaptchaCallback executed");
+        try {
+            if (document.getElementById('recaptcha-register')) {
+                grecaptcha.render('recaptcha-register', {'sitekey': '[[${recaptchaSiteKey}]]'});
+            }
+            if (document.getElementById('recaptcha-login')) {
+                grecaptcha.render('recaptcha-login', {'sitekey': '[[${recaptchaSiteKey}]]'});
+            }
+        } catch (error) {
+            console.error("Error rendering reCAPTCHA: ", error);
+        }
+    };
+
+    window.CaptchaCallback = CaptchaCallback;
+</script>
 <th:block th:if="${errorMessage != null}">
     <div id="popup-failed-register" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
