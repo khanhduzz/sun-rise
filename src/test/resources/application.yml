@@ -27,6 +27,7 @@ application:
 
 default:
   admin-create-key: dfjkNdkMAnje #gitleaks:allow
-  recaptcha-secret-key: 6LfblD0qAAAAAO2lT_e5JwmxUFJ55uCpxPrdwk0T #gitleaks:allow
+  recaptcha-secret-key: abcdT #gitleaks:allow
+  recaptcha-site-key: efgh #gitleaks:allow
   encode-key: abcdefghabcdefgh #gitleaks:allow
   type-encode: AES #gitleaks:allow
