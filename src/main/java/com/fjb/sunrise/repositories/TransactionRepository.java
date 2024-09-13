@@ -22,7 +22,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     Double sumAmountInRange(LocalDateTime start, LocalDateTime end);
 
     @Query("select new com.fjb.sunrise.dtos.base.DayAndTotalAmountPerDay(t.updatedAt,sum(t.amount)) from Transaction t"
-        + "where t.updatedAt between ?1 and ?2 group by t.updatedAt")
+        + " where t.updatedAt between ?1 and ?2 group by t.updatedAt")
     List<DayAndTotalAmountPerDay> sumAmountPerDayIn3Month(LocalDateTime start, LocalDateTime endOf3Month);
 
     @Query("select sum(t.amount) from Transaction t "
