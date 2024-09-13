@@ -154,8 +154,7 @@ public class TransactionServiceImpl implements TransactionService {
                 LocalDateTime.now());
         List<DayAndTotalAmountPerDayForChart> dayAndTotalAmountPerDays = sumAmountPerDayIn3Month
             .stream()
-            .map(item ->
-            {
+            .map(item -> {
                 try {
                     return new DayAndTotalAmountPerDayForChart(changeFormatFromFullDateToMonthDate(item.getDay()),
                         convertDoubleWithScientificNotationToDouble(item.getAmountPerDay()));
@@ -238,7 +237,9 @@ public class TransactionServiceImpl implements TransactionService {
         final int year = now.getYear();
         Month month = LocalDateTime.MIN.getMonth();
         int dayOfMonth = 1;
-        int hour = 0, minute = 0, second = 0;
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
         if (isLast) {
             month = now.getMonth();
             dayOfMonth = now.getDayOfMonth();
