@@ -426,7 +426,7 @@
                                placeholder="10,000,000.00">
                     </div>
                     <div class="form-group">
-                        <label >Loại tiền</label>
+                        <label>Loại tiền</label>
                         <div class="form-check">
                             <input th:field="*{transactionType}" class="form-check-input" type="radio"
                                    name="exampleRadios" id="exampleRadios1"
@@ -516,7 +516,7 @@
                 "type": "POST",
                 "contentType": "application/json",
                 "data": function (d) {
-                    d['order'].forEach(function(items, index) {
+                    d['order'].forEach(function (items, index) {
                         d['order'][index]['colName'] = d['columns'][items.column]['data'];
                     });
                     return JSON.stringify(d);
@@ -533,61 +533,25 @@
         {"data": "transactionType"},
         {"data": "amount"},
         {"data": "note"},
-        {"data": null, "defaultContent":"<button class=\"btn btn-outline-danger\">Edit</button>"}
+        {"data": null, "defaultContent": "<button class=\"btn btn-outline-danger\">Edit</button>"}
     ];
 
-    // var table = $('#transactionTable').DataTable({
-    //     "processing": true,
-    //     "serverSide": true,
-    //     "order": [1, "asc"],
-    //     "ajax": {
-    //         "url": "/sun/transaction/page",
-    //         "type": "POST",
-    //         "contentType": "application/json",
-    //         "data": function(d){
-    //             console.log(d);
-    //             return d;
-    //         }
-    //         // "dataSrc": "",
-    //         // dataSrc: function (data) {
-    //         //     data.raw = 1;
-    //         //     data.recordsTotal = 10;
-    //         //     data.recordsFiltered = 10;
-    //         //     return data.data;
-    //         // },
-    //         // data: function (data) {
-    //         //     console.log("Data: ");
-    //         //     data.recordsTotal = 10;
-    //         //     data.recordsFiltered = 10;
-    //         //     console.log(data);
-    //         // }
-    //     },
-    //     "columns": [
-    //         {"data": `createdAt`},
-    //         {"data": `id`},
-    //         {"data": `category`},
-    //         {"data": `transactionType`},
-    //         {"data": `amount`},
-    //         {"data": `note`},
-    //         {"data": null, "defaultContent":"<button class=\"btn btn-outline-danger\">Cập nhật</button>"}
-    //     ]
-    // });
 
-     const table = installTable('transactionTable', '/sun/transaction/page', cols)
+    const table = installTable('transactionTable', '/sun/transaction/page', cols)
 
     $('#transactionTable tbody').on('click', 'tr', function () {
         console.log(table.row(this).data());
         const data = table.row(this).data();
         const amount = $(`#inputAmount`).val(data.amount);
 
-        if(data.transactionType===`IN`) {
-            $(`#exampleRadios1`).prop("checked",true);
+        if (data.transactionType === `IN`) {
+            $(`#exampleRadios1`).prop("checked", true);
         } else {
-            $(`#exampleRadios2`).prop("checked",true);
+            $(`#exampleRadios2`).prop("checked", true);
         }
 
         $(`#category option`).each(function (i, obj) {
-            if(obj.text === data.category) {
+            if (obj.text === data.category) {
                 obj.selected = true;
             }
         })
@@ -596,6 +560,24 @@
 
         $('#createIncomeAndExpensesModal').modal('show');
         $('#addOrUpdateTransaction').attr('action', `/sun/transaction/update/${data.id}`);
+    });
+
+    $('#inputAmount').on('input', function () {
+        let input = $(this).val();
+        let ignoreComma = input.replaceAll(',', '');
+        let convertToNumber = ignoreComma.includes('.') ? ignoreComma.substring(0, ignoreComma.indexOf('.')) : ignoreComma;
+        let afterDecimalPoint = input.includes('.') ? input.substring(input.indexOf('.'), input.length) : '';
+        console.log(afterDecimalPoint)
+        let curCursor = this.selectionStart;
+        $(this).val(Number(convertToNumber).toLocaleString() + afterDecimalPoint);
+        this.selectionStart = curCursor;
+        this.selectionEnd = curCursor;
+        console.log(this.selectionStart + "," + this.selectionEnd)
+    })
+
+    const dataChart = $.get('/sun/transaction/statistic', function (dataChart) {
+        console.log("datachart")
+        console.log(dataChart);
     });
 
 </script>
