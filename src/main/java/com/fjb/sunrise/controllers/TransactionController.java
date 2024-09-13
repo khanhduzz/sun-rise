@@ -5,6 +5,7 @@ import static com.fjb.sunrise.utils.Constants.ApiConstant.TRANSACTION_INDEX;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CreateOrUpdateTransactionRequest;
+import com.fjb.sunrise.dtos.responses.StatisticResponse;
 import com.fjb.sunrise.dtos.responses.TransactionFullPageResponse;
 import com.fjb.sunrise.mappers.TransactionMapper;
 import com.fjb.sunrise.models.Transaction;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-//@RestController
 @Controller
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
@@ -75,6 +75,12 @@ public class TransactionController {
         throws ParseException {
         request.setId(id);
         transactionService.update(request);
-        return "redirect:transnsaction/create";
+        return "redirect:/transaction/create";
+    }
+
+    @GetMapping("/statistic")
+    @ResponseBody
+    public StatisticResponse getStatistic() {
+        return transactionService.statistic();
     }
 }

@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="utf-8">
-    <link rel="icon" type="image/png" href="../../img/spreadsheet_17087859.png">
+    <link rel="icon" type="image/png" th:href="@{/img/spreadsheet_17087859.png}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -13,21 +13,24 @@
     <title>Budgeting Service</title>
 
     <!-- Custom fonts for this template-->
+    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
-    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
-    <link rel="stylesheet" th:href="@{/css/auth/style.css}" type="text/css">
+
+    <!-- Custom styles for this template-->
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
 
 </head>
 
 <body id="page-top">
-
 <!-- Page Wrapper -->
 <div id="wrapper">
 
     <!-- Sidebar -->
+    <div th:replace="~{tab_bar :: tab-bar}"></div>
 
     <!-- End of Sidebar -->
 
@@ -38,19 +41,21 @@
         <div id="content">
 
             <!-- Topbar -->
-
+            <div th:replace="~{header :: header}"></div>
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-<!--                 Page Heading-->
+                <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Danh mục thu/chi</h1>
-                    <a  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                        data-bs-toggle="modal" data-bs-target="#createCategoryModal"><i
+
+                    <a  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" href="#"
+                       data-toggle="modal" data-target="#createCategoryModal"><i
                             class="fas fa-download fa-sm text-white-50"></i> Tạo danh mục</a>
                 </div>
+
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
@@ -58,7 +63,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="dataTableCategory" >
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -69,28 +74,6 @@
                                     <th>Chỉnh sửa</th>
                                 </tr>
                                 </thead>
-                                <tbody th:unless="${#lists.isEmpty(categories)}">
-                                <tr th:each="c : ${categories}">
-                                    <td th:text="${c.getId()}"></td>
-                                    <td th:text="${c.getName()}"></td>
-                                    <td th:text="${c.getCreatedDate()}"></td>
-                                    <td th:text="${c.getLastModifiedDate()}"></td>
-                                    <td th:text="${c.isActive() ? 'Active' : 'Inactive'}"></td>
-<!--                                    <td th:text="${c.isActivate()}"></td>-->
-                                    <td>
-                                        <a class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                                           >Edit</a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                                </tbody>
-                                <tbody th:if="${#lists.isEmpty(categories)}">
-                                <tr>
-                                    <td colspan="6" class="text-center">
-                                        No data
-                                    </td>
-                                </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -103,13 +86,7 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Vi Tran Nguyen Ky</span>
-                </div>
-            </div>
-        </footer>
+        <div th:replace="~{footer :: footer}"></div>
         <!-- End of Footer -->
 
     </div>
@@ -123,25 +100,6 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" >Bạn có muốn thoát?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
-                <a class="btn btn-primary" href="login.html">Đăng xuất</a>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Create Category Modal-->
 <div class="modal fade" id="createCategoryModal" tabindex="-1" role="dialog"
      aria-labelledby="createCategoryModalLabel" aria-hidden="true">
@@ -149,20 +107,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel1">Tạo danh mục thu/chi</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
-            <form th:method="POST"
-                  th:action="@{/category/add}"
-                  th:object="${categoryCreate}">
+            <form id="addCategory" th:object="${categoryCreate}" th:action="@{/category/add}" method="POST">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputCategory">Tên danh mục</label>
-                        <input type="text" th:field="*{name}" placeholder="NAME" class="form-control" id="inputCategory" aria-describedby="categoryHelp"/>
-                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                        <input type="text" class="form-control" id="inputCategory" aria-describedby="categoryHelp">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button class="btn btn-secondary" type="reset" data-dismiss="modal">Hủy</button>
                     <button class="btn btn-primary" type="submit">Gửi</button>
                 </div>
             </form>
@@ -177,21 +134,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel2">Sửa danh mục thu/chi</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
-            <form th:method="POST"
-                  th:action="@{/category/{id}}"
-                  th:object="${categoryUpdate}">
+            <form id="updateCategory" th:object="${categoryUpdate}" th:action="@{/category/update/{id}}" method="POST">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label >Tên danh mục</label>
-                        <input type="text" th:field="*{name}" placeholder="NAME" />
-                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                        <label for="inputNewCategoryName">Tên danh mục</label>
+                        <input type="text" class="form-control" id="inputNewCategoryName" aria-describedby="categoryHelp">
                     </div>
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button class="btn btn-secondary" type="reset" data-dismiss="modal">Hủy</button>
                     <button class="btn btn-primary" type="submit">Gửi</button>
                 </div>
             </form>
@@ -199,6 +154,87 @@
     </div>
 </div>
 
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
+
+<!-- Core plugin JavaScript-->
+<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}" type="application/javascript"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
+
+<!-- Page level plugins -->
+<script th:src="@{/vendor/chart.js/Chart.min.js}" type="application/javascript"></script>
+
+<!-- Page level custom scripts -->
+<script th:src="@{/js/demo/chart-area-demo.js}" type="application/javascript"></script>
+<script th:src="@{/js/demo/chart-pie-demo.js}" type="application/javascript"></script>
+
+<!-- Page level plugins -->
+<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
+<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
+
+<script type="text/javascript">
+    const installTable = (id, url, cols) => {
+        return $(`#${id}`).DataTable({
+            "language": {
+                "search": "Tìm kiếm:",
+                "sLengthMenu": "Hiển thị _MENU_ bản ghi",
+                "sInfo": "Hiển thị từ _START_ đến _END_ trên _TOTAL_ bản ghi",
+                "emptyTable": "Không có bản ghi nào có sẵn",
+                "paginate": {
+                    "previous": "<",
+                    "first": "<<",
+                    "next": ">",
+                    "last": ">>"
+                }
+            },
+            "serverSide": true,
+            "order": [1, "desc"],
+            "ajax": {
+                "url": url,
+                "type": "POST",
+                "contentType": "application/json",
+                "data": function (d) {
+                    d['order'].forEach(function(items, index) {
+                        d['order'][index]['colName'] = d['columns'][items.column]['data'];
+                    });
+                    return JSON.stringify(d);
+                }
+            },
+            columns: cols
+        });
+    };
+    const cols = [
+        {"data": "id"},
+        {"data": "name"},
+        {"data": "createdDate"},
+        {"data": "lastModifiedDate"},
+        {"data": "active"},
+        {"data": null, "defaultContent":"" +
+                "<div>" +
+                "<button data-toggle=\"modal\" data-target=\"#editCategoryModal\" class=\"btn btn-outline-danger\">Edit</button>" +
+                "<button class=\"btn btn-outline-primary\">Status</button>" +
+                "</div>"
+        }
+    ];
+
+    const tableCategory = installTable('dataTableCategory', '/sun/category/page', cols)
+
+    $('#dataTableCategory tbody').on('click', 'tr', function () {
+        console.log(table.row(this).data());
+        const data = table.row(this).data();
+        // const name = $(`#inputCategory`).val(data.name);
+        // const newName = $(`#inputNewCategoryName`).val(data.newName);
+
+        $('#createCategoryModal').modal('show');
+        $('#addCategory').attr('action', `/sun/category/add/`);
+
+        $('#editCategoryModal').modal('show');
+        $('#updateCategory').attr('action', `/sun/category/update/${data.id}`);
+    });
+</script>
 <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
 </body>

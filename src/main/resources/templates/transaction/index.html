@@ -4,7 +4,6 @@
 <head>
 
     <meta charset="utf-8">
-    <!--    <link rel="icon" type="image/png" th:href="@{/img/spreadsheet_17087859.png}">-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -22,6 +21,7 @@
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet" type="text/css">
     <!-- Custom styles for this page -->
     <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
+    <script th:src="@{/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
 
 </head>
 
@@ -30,76 +30,8 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-            <div class="sidebar-brand-icon rotate-n-15">
-                <i class="fas fa-laugh-wink"></i>
-            </div>
-            <div class="sidebar-brand-text mx-3">Budgeting Service</div>
-        </a>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Tổng quan</span></a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Quản trị
-        </div>
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-               aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>Danh mục</span>
-            </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="./pages/category/index.html">Danh sách danh mục</a>
-                </div>
-            </div>
-        </li>
-
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-               aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-user"></i>
-                <span>Người dùng</span>
-            </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <div sec:authorize="hasRole('ROLE_ADMIN')">
-                        <a class="collapse-item" th:href="@{/user/admin-page}">Danh sách người dùng</a>
-                    </div>
-                </div>
-            </div>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
-
-    </ul>
-    <!-- End of Sidebar -->
+    <!-- Sidebar from fragment -->
+    <div th:replace="~{tab_bar :: tab-bar}"></div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -107,43 +39,9 @@
         <!-- Main Content -->
         <div id="content">
 
-            <!-- Topbar -->
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+            <!-- Header from fragment -->
+            <div th:replace="~{header :: header}"></div>
 
-                <!-- Sidebar Toggle (Topbar) -->
-                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                    <i class="fa fa-bars"></i>
-                </button>
-
-                <!-- Topbar Navbar -->
-                <ul class="navbar-nav ml-auto">
-
-                    <!-- Nav Item - User Information -->
-                    <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Vi Tran Nguyen Ky</span>
-                            <img class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}">
-                        </a>
-                        <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                             aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Tài khoản
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Đăng xuất
-                            </a>
-                        </div>
-                    </li>
-
-                </ul>
-
-            </nav>
-            <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -256,7 +154,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Biểu đồ thu nhập (Tháng này)</h6>
                                 <div class="dropdown no-arrow">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onkeydown="">
                                         <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
@@ -288,7 +186,7 @@
                                 </h6>
                                 <div class="dropdown no-arrow">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onkeydown="">
                                         <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
@@ -367,13 +265,7 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Vi Tran Nguyen Ky</span>
-                </div>
-            </div>
-        </footer>
+        <div th:replace="~{footer :: footer}"></div>
         <!-- End of Footer -->
 
     </div>
@@ -393,7 +285,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn thoát?</h5>
+                <h5 class="modal-title" id="exampleModalLabel0">Bạn có muốn thoát?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -426,7 +318,10 @@
                                placeholder="10,000,000.00">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Loại tiền</label>
+
+                        <label >Loại tiền</label>
+
+                        <label>Loại tiền</label>
                         <div class="form-check">
                             <input th:field="*{transactionType}" class="form-check-input" type="radio"
                                    name="exampleRadios" id="exampleRadios1"
@@ -445,8 +340,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputAmount">Danh mục</label>
-                        <select class="form-control" th:field="*{category}">
+                        <label for="inputCategory">Danh mục</label>
+                        <select id="inputCategory" class="form-control" th:field="*{category}">
                             <!--<option selected>Tiền lương</option>-->
                             <!--<option>Sinh nhật</option>-->
                             <option th:each="category:${categories}" th:value="${category.id}"
@@ -454,7 +349,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="inputAmount">Chọn thời gian</label>
+                        <label for="inputDatetime">Chọn thời gian</label>
                         <input th:field="*{createdAt}" type="datetime-local" class="form-control" id="inputDatetime"
                                placeholder="dd-mm-yyyy"
                                min="1997-01-01" max="2030-12-31">
@@ -469,7 +364,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Bootstrap core JavaScript-->
 <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
@@ -493,7 +387,6 @@
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
 
 <!-- Page level custom scripts -->
-<!--<script th:src="@{/js/demo/datatables-demo.js}" type="application/javascript"></script>-->
 <script type="text/javascript">
     const installTable = (id, url, cols) => {
         return $(`#${id}`).DataTable({
@@ -516,7 +409,7 @@
                 "type": "POST",
                 "contentType": "application/json",
                 "data": function (d) {
-                    d['order'].forEach(function(items, index) {
+                    d['order'].forEach(function (items, index) {
                         d['order'][index]['colName'] = d['columns'][items.column]['data'];
                     });
                     return JSON.stringify(d);
@@ -533,47 +426,12 @@
         {"data": "transactionType"},
         {"data": "amount"},
         {"data": "note"},
-        {"data": null, "defaultContent":"<button class=\"btn btn-outline-danger\">Cập nhật</button>"}
+        {"data": null, "defaultContent": "<button class=\"btn btn-outline-danger\">Edit</button>"}
     ];
 
-    // var table = $('#transactionTable').DataTable({
-    //     "processing": true,
-    //     "serverSide": true,
-    //     "order": [1, "asc"],
-    //     "ajax": {
-    //         "url": "/sun/transaction/page",
-    //         "type": "POST",
-    //         "contentType": "application/json",
-    //         "data": function(d){
-    //             console.log(d);
-    //             return d;
-    //         }
-    //         // "dataSrc": "",
-    //         // dataSrc: function (data) {
-    //         //     data.raw = 1;
-    //         //     data.recordsTotal = 10;
-    //         //     data.recordsFiltered = 10;
-    //         //     return data.data;
-    //         // },
-    //         // data: function (data) {
-    //         //     console.log("Data: ");
-    //         //     data.recordsTotal = 10;
-    //         //     data.recordsFiltered = 10;
-    //         //     console.log(data);
-    //         // }
-    //     },
-    //     "columns": [
-    //         {"data": `createdAt`},
-    //         {"data": `id`},
-    //         {"data": `category`},
-    //         {"data": `transactionType`},
-    //         {"data": `amount`},
-    //         {"data": `note`},
-    //         {"data": null, "defaultContent":"<button class=\"btn btn-outline-danger\">Cập nhật</button>"}
-    //     ]
-    // });
-
      const table = installTable('transactionTable', '/sun/transaction/page', cols)
+
+    const table = installTable('transactionTable', '/sun/transaction/page', cols)
 
     $('#transactionTable tbody').on('click', 'tr', function () {
         console.log(table.row(this).data());
@@ -592,10 +450,26 @@
             }
         })
 
-        const createdAt = $(`#inputDatetime`).val(data.createdAt);
-
         $('#createIncomeAndExpensesModal').modal('show');
         $('#addOrUpdateTransaction').attr('action', `/sun/transaction/update/${data.id}`);
+    });
+
+    $('#inputAmount').on('input', function () {
+        let input = $(this).val();
+        let ignoreComma = input.replaceAll(',', '');
+        let convertToNumber = ignoreComma.includes('.') ? ignoreComma.substring(0, ignoreComma.indexOf('.')) : ignoreComma;
+        let afterDecimalPoint = input.includes('.') ? input.substring(input.indexOf('.'), input.length) : '';
+        console.log(afterDecimalPoint)
+        let curCursor = this.selectionStart;
+        $(this).val(Number(convertToNumber).toLocaleString() + afterDecimalPoint);
+        this.selectionStart = curCursor;
+        this.selectionEnd = curCursor;
+        console.log(this.selectionStart + "," + this.selectionEnd)
+    })
+
+    const dataChart = $.get('/sun/transaction/statistic', function (dataChart) {
+        console.log("datachart")
+        console.log(dataChart);
     });
 
 </script>

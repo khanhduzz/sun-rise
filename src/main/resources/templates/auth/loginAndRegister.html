@@ -10,6 +10,32 @@
     <link rel="icon" th:href="@{/img/spreadsheet_17087859.png}" type="image/png">
 </head>
 <body>
+<script type="text/javascript">
+    let CaptchaCallback = function() {
+        console.log("CaptchaCallback executed");
+        try {
+            if (document.getElementById('recaptcha-register')) {
+                grecaptcha.render('recaptcha-register', {'sitekey': '[[${recaptchaSiteKey}]]'});
+            }
+            if (document.getElementById('recaptcha-login')) {
+                grecaptcha.render('recaptcha-login', {'sitekey': '[[${recaptchaSiteKey}]]'});
+            }
+        } catch (error) {
+            console.error("Error rendering reCAPTCHA: ", error);
+        }
+    };
+
+    function validReCaptcha(id) {
+        if ('[[${captchaEnable}]]' == 'false') {
+            return true;
+        }
+        const response = grecaptcha.getResponse(id);
+        return response.length !== 0;
+    }
+
+    window.CaptchaCallback = CaptchaCallback;
+    window.validateCaptcha = validateCaptcha;
+</script>
 <th:block th:if="${errorMessage != null}">
     <div id="popup-failed-register" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
@@ -48,30 +74,18 @@
     <div id="box-register" class="box-custom register hidden">
         <div id="form-register" class="col-custom">
             <h2>ĐĂNG KÝ</h2>
-            <form th:method="POST" th:object="${register}" th:href="@{/auth/register}" class="register-form">
+            <form id="formm-register" th:method="POST" th:object="${register}" th:action="@{/auth/register}" class="register-form">
                 <input th:field="*{firstname}" id="firstname" type="text" class="field-custom" placeholder="Vui lòng nhập tên">
                 <input th:field="*{lastname}" id="lastname" type="text" class="field-custom" placeholder="Vui lòng nhập họ">
                 <input th:field="*{email}" id="email" type="email" class="field-custom" placeholder="Địa chỉ Email">
                 <input th:field="*{phone}" id="phone" type="tel" class="field-custom" placeholder="Số điện thoại">
                 <input th:field="*{password}" id="password-register" type="password" class="field-custom" placeholder="Nhập mật khẩu">
                 <input id="re-password-register" type="password" class="field-custom" placeholder="Nhập lại mật khẩu">
-
-                <div class="captcha">
-                    <input type="text" id="input-code-register" class="field-custom field-captcha" placeholder="Nhập mã xác nhận"/>
-
-                    <div id="roll-register" class="roll" type="button">
-                        <i class="bi bi-arrow-clockwise"></i>
-                    </div>
-
-                    <div class="box-code">
-                        <div id="code-register"></div>
-                    </div>
-                </div>
-
+                <div id="recaptcha-register" class="areaCaptcha  w-100 d-flex justify-content-center"></div>
                 <button id="submit-button-register" type="submit">Đăng ký</button>
             </form>
             <hr>
-            <a href="#">Quên mật khẩu?</a>
+            <a th:href="@{/auth/forgotPassword}" >Quên mật khẩu?</a>
             <a th:method="GET" th:href="@{/auth/login}">Bạn đã  có tài khoản? Đăng nhập!</a>
         </div>
 
@@ -95,21 +109,11 @@
 
         <div id="form-login" class="col-custom">
             <h2>ĐĂNG NHẬP</h2>
-            <form th:method="POST" th:object="${login}" th:href="@{/auth/login}" class="login-form">
+            <form id="formm-login" th:method="POST" th:object="${login}" th:action="@{/auth/login}" class="login-form">
                 <input th:field="*{username}" id="username" type="text" class="field-custom" placeholder="Nhập email hoặc số điện thoại">
                 <input th:field="*{password}" id="password-login" type="password" class="field-custom" placeholder="Nhập mật khẩu">
 
-                <div class="captcha">
-                    <input type="text" id="input-code-login" class="field-custom field-captcha" placeholder="Nhập mã xác nhận"/>
-
-                    <div id="roll-login" class="roll" type="button">
-                        <i class="bi bi-arrow-clockwise"></i>
-                    </div>
-
-                    <div class="box-code">
-                        <div id="code-login"></div>
-                    </div>
-                </div>
+                <div id="recaptcha-login" class="areaCaptcha w-100 d-flex justify-content-center"></div>
 
                 <div class="form-check">
                     <input name="remember-me" type="checkbox" class="form-check-input" id="remember-me">
@@ -118,7 +122,7 @@
                 <button id="submit-button-login" type="submit">Đăng nhập</button>
             </form>
             <hr>
-            <a href="#">Quên mật khẩu?</a>
+            <a th:href="@{/auth/forgotPassword}">Quên mật khẩu?</a>
             <a th:method="GET" th:href="@{/auth/register}">Tạo tài khoản!</a>
         </div>
     </div>
@@ -127,5 +131,6 @@
 <script type="text/javascript" th:src="@{/js/auth/action.js}"></script>
 <script type="text/javascript" th:src="@{/js/auth/valid.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit" async defer></script>
 </body>
 </html>
