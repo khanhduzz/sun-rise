@@ -26,7 +26,7 @@ application:
       email: sun@sun.com
 
 default:
-  admin-create-key: dfjkNdkMAnje
-  recaptcha-secret-key: 6LfblD0qAAAAAO2lT_e5JwmxUFJ55uCpxPrdwk0T
-  encode-key: abcdefghabcdefgh
-  type-encode: AES
+  admin-create-key: dfjkNdkMAnje #gitleaks:allow
+  recaptcha-secret-key: 6LfblD0qAAAAAO2lT_e5JwmxUFJ55uCpxPrdwk0T #gitleaks:allow
+  encode-key: abcdefghabcdefgh #gitleaks:allow
+  type-encode: AES #gitleaks:allow
