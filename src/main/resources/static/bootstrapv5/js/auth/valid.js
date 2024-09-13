@@ -16,8 +16,6 @@ const buttonSubmitRegister = document.getElementById("submit-button-register");
 const username = document.getElementById("username");
 const passwordLogin = document.getElementById("password-login");
 const buttonSubmitLogin = document.getElementById("submit-button-login");
-const inputCodeLogin = document.getElementById("input-code-login");
-const inputCodeRegister = document.getElementById("input-code-register")
 
 function addValidationListeners(inputElement, validationFunction) {
     inputElement.addEventListener("focus", () => changeStyle(inputElement, validationFunction(inputElement.value)));
@@ -33,21 +31,20 @@ addValidationListeners(passwordRegister, validPassword);
 addValidationListeners(rePasswordRegister, (val) => validRePassword(passwordRegister.value, val));
 addValidationListeners(username, (val) => validEmail(val) || validPhone(val));
 addValidationListeners(passwordLogin, validPassword);
-addValidationListeners(inputCodeLogin, () => validCaptcha("login"));
-addValidationListeners(inputCodeRegister, () => validCaptcha("register"));
 
 buttonSubmitRegister.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitRegister,
     validName(firstname.value) && validName(lastname.value) && validEmail(email.value)
     && validPhone(phone.value) && validPassword(passwordRegister.value)
-    && validRePassword(passwordRegister.value, rePasswordRegister.value)
-    && validCaptcha("register")));
+    && validRePassword(passwordRegister.value, rePasswordRegister.value) && validReCaptcha(0)));
 
 buttonSubmitLogin.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitLogin,
-    (validEmail(username.value) || validPhone(username.value)) && validPassword(passwordLogin.value) && validCaptcha("login")));
+    (validEmail(username.value) || validPhone(username.value)) && validPassword(passwordLogin.value) && validReCaptcha(1)));
 
 function changeTypeSubmit(element, isValid) {
     if(isValid) {
         element.type = "submit";
+        element.removeAttribute("data-bs-toggle");
+        element.removeAttribute("data-bs-target");
     } else {
         element.type = "button";
         element.setAttribute('data-bs-toggle', 'modal');
@@ -75,7 +72,8 @@ function containsSpecialCharacter(input) {
 }
 
 function isVietnameseCapitalized(input) {
-    const capitalizedVietnameseRegex = /^[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÇàáâãèéêìíòóôõùúăđĩũơưçÝỲỴỶỸýỳỵỷỹ][a-zàáâãèéêìíòóôõùúăđĩũơưç]+$/u;
+    const capitalizedVietnameseRegex = /^[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÇÝỲỴỶỸàáâãèéêìíòóôõùúăđĩũơưçýỳỵỷỹ][a-zàáâãèéêìíòóôõùúăđĩũơưç]*$/u;
+
     return capitalizedVietnameseRegex.test(input);
 }
 
@@ -96,7 +94,7 @@ function validEmail(input) {
     const [name, domainPart] = input.split("@");
     if (!name || !domainPart) return false;
 
-    if (containsSpecialCharacter(name)) return false;
+    if (containsSpecialCharacter(name) && !name.includes(".")) return false;
 
     const domain = domainPart.split(".");
     return !domain.some(ele => ele === "" || containsSpecialCharacter(ele));
@@ -114,12 +112,5 @@ function validPassword(input) {
 
 function validRePassword(password, rePassword) {
     return rePassword !== "" && password === rePassword;
-}
-
-function validCaptcha(input) {
-    // let inputCode = document.getElementById(`input-code-${input}`).value;
-    // let code = document.getElementById(`code-${input}`).textContent;
-    // return inputCode === code;
-    return true;
 }
 

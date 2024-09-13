@@ -1,6 +1,7 @@
 package com.fjb.sunrise.config;
 
 import static com.fjb.sunrise.utils.Constants.ApiConstant.AUTH_VIEW;
+import static com.fjb.sunrise.utils.Constants.ApiConstant.TRANSACTION_INDEX;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

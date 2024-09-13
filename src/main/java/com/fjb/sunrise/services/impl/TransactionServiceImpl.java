@@ -55,7 +55,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
-    private final TransactionMapper transactionMapper;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
 
@@ -86,12 +85,7 @@ public class TransactionServiceImpl implements TransactionService {
         orders.add(Sort.Order.asc("id"));
         Sort sortOpt = Sort.by(orders);
 
-        if (isAscending) {
-            pageable = PageRequest.of(page - 1, pageSize, sortOpt); //Sort.by(sort)
-        } else {
-            pageable = PageRequest.of(page - 1, pageSize, sortOpt);
-        }
-
+        pageable = PageRequest.of(page - 1, pageSize, sortOpt); //Sort.by(sort)
 
         return transactionRepository.findAll(pageable);
     }
