@@ -75,7 +75,8 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add-user-by-admin")
-    public ModelAndView doAddUserByAdmin(@ModelAttribute("newUser") EditProfileByAdminDTO newUser, RedirectAttributes redirect) {
+    public ModelAndView doAddUserByAdmin(@ModelAttribute("newUser") EditProfileByAdminDTO newUser,
+                                         RedirectAttributes redirect) {
         ModelAndView modelAndView = new ModelAndView();
         userService.createUserByAdmin(newUser);
         redirect.addFlashAttribute("message", "User added successfully");
