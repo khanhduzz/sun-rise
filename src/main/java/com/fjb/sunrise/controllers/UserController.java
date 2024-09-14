@@ -14,15 +14,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
     private final UserService userService;
 
+    // Display user information for editing
     @GetMapping("/edit-infor")
     public ModelAndView getUserInfo() {
         ModelAndView modelAndView = new ModelAndView();
@@ -40,11 +38,11 @@ public class UserController {
         return modelAndView;
     }
 
+    // Handle editing user information
     @PostMapping("/edit-infor")
     public ModelAndView editUserInfo(@ModelAttribute("userInfor") UserResponseDTO userResponseDTO) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.USER_INFORMATION);
-        userService.getInfor();
         boolean editInfor = userService.editUser(userResponseDTO);
         if (editInfor) {
             modelAndView.setViewName(Constants.ApiConstant.TRANSACTION_INDEX);
@@ -53,6 +51,32 @@ public class UserController {
         }
         return modelAndView;
     }
+
+    // Handle avatar upload and update
+    @PostMapping("/edit-avatar")
+    public ModelAndView changeAvatar(@RequestParam("avatar") MultipartFile avatarFile, RedirectAttributes redirectAttributes) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(Constants.ApiConstant.USER_INFORMATION);
+
+        try {
+            // Call the service to update the avatar
+            boolean isUpdated = userService.updateAvatar(avatarFile);
+
+            if (isUpdated) {
+                redirectAttributes.addFlashAttribute("message", "Avatar updated successfully");
+                modelAndView.setViewName("redirect:/user/edit-infor");
+            } else {
+                modelAndView.addObject("error", "Failed to update avatar");
+            }
+
+        } catch (IOException e) {
+            modelAndView.addObject("error", "An error occurred while processing the file: " + e.getMessage());
+        }
+
+        return modelAndView;
+    }
+
+    // Additional admin features
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin-page")

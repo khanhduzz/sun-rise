@@ -2,25 +2,15 @@ package com.fjb.sunrise.models;
 
 import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.enums.EStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -53,10 +43,14 @@ public class User extends AuditEntity<String> implements Serializable, UserDetai
 
     @Enumerated(EnumType.STRING)
     private ERole role;
+
     private EStatus status;
 
     @Column(name = "verification_code")
     private String verificationCode;
+
+    @Column(name = "avatar_path")  // Added avatarPath column to store avatar file path
+    private String avatarPath;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

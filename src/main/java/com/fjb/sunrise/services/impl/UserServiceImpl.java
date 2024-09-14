@@ -12,18 +12,23 @@ import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.UserService;
 import com.fjb.sunrise.utils.Constants;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,22 +36,25 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     @Value("${default.admin-create-key}")
     private String key;
-    private final UserMapper mapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // Directory where avatar images are stored
+    @Value("${user.avatar.directory}")
+    private String avatarDirectory;
+
     @Override
     public String checkRegister(RegisterRequest registerRequest) {
-        //check already exist email or phone
+        // Check if email or phone already exists
         if (userRepository.existsUserByEmailOrPhone(registerRequest.getEmail(), registerRequest.getPhone())) {
             return "Email hoặc số điện thoại đã được đăng ký!";
         }
 
-        User user = mapper.toEntity(registerRequest);
+        User user = userMapper.toEntity(registerRequest);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setStatus(EStatus.ACTIVE);
 
-        // check password start with create admin key -> create with role admin
+        // Check if password starts with create admin key -> create with role admin
         if (registerRequest.getPassword().startsWith(key)) {
             user.setRole(ERole.ADMIN);
         } else {
@@ -73,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUserByAdmin(EditProfileByAdminDTO byAdminDTO) {
-        User user = mapper.toEntityByAdmin(byAdminDTO);
+        User user = userMapper.toEntityByAdmin(byAdminDTO);
         user.setUsername(byAdminDTO.getUsername());
         user.setPassword(passwordEncoder.encode(byAdminDTO.getPassword()));
         user.setRole(ERole.valueOf(byAdminDTO.getRole()));
@@ -84,7 +92,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUserByAdmin(EditProfileByAdminDTO byAdminDTO) {
         User user = userRepository.findById(byAdminDTO.getId())
-            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setUsername(byAdminDTO.getUsername());
         if (!passwordEncoder.matches(byAdminDTO.getPassword(), user.getPassword())) {
@@ -150,8 +158,8 @@ public class UserServiceImpl implements UserService {
         Sort sortOpt = Sort.by(Sort.Direction.ASC, "id");
         if (!payload.getOrder().isEmpty()) {
             sortOpt = Sort.by(
-                Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
-                payload.getOrder().get(0).get("colName"));
+                    Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
+                    payload.getOrder().get(0).get("colName"));
         }
         int pageNumber = payload.getStart() / 10;
         if (payload.getStart() % 10 != 0) {
@@ -180,6 +188,26 @@ public class UserServiceImpl implements UserService {
         user.setPhone(userResponseDTO.getPhone());
         user.setEmail(userResponseDTO.getEmail());
         userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public boolean updateAvatar(MultipartFile avatarFile) throws IOException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmailOrPhone(username);
+
+        if (user == null) {
+            throw new NotFoundException(Constants.ErrorCode.USER_NOT_FOUND);
+        }
+
+        // Save the avatar file to the specified directory
+        Path avatarPath = Paths.get(avatarDirectory, user.getId() + "_avatar.png");
+        Files.write(avatarPath, avatarFile.getBytes());
+
+        // Update the user's avatar field in the database
+        user.setAvatarPath(avatarPath.toString()); // Save the path to the database
+        userRepository.save(user);
+
         return true;
     }
 }

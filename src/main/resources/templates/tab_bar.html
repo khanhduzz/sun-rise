@@ -3,7 +3,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/transaction/create}">
         <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
+            <i class="bi bi-emoji-wink"></i> <!-- Bootstrap wink emoji icon -->
         </div>
         <div class="sidebar-brand-text mx-3">Budgeting Service</div>
     </a>
@@ -14,7 +14,7 @@
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
         <a class="nav-link" th:href="@{/transaction/create}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="bi bi-speedometer2"></i> <!-- Bootstrap speedometer icon -->
             <span>Tổng quan</span></a>
     </li>
 
@@ -30,7 +30,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
            aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-folder"></i>
+            <i class="bi bi-folder2-open"></i> <!-- Bootstrap folder open icon -->
             <span>Danh mục</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -44,7 +44,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
            aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-user"></i>
+            <i class="bi bi-people"></i> <!-- Bootstrap people icon -->
             <span>Người dùng</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
@@ -65,9 +65,10 @@
         </div>
     </li>
 
+    <!-- Nav Item - Health Controller -->
     <li class="nav-item">
         <a class="nav-link collapsed" th:href="@{/health}">
-            <i class="fas fa-fw fa-user"></i>
+            <i class="bi bi-heart-pulse"></i> <!-- Bootstrap heart pulse icon -->
             <span>Health controller</span>
         </a>
     </li>

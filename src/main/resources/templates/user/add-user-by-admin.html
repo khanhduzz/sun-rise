@@ -13,7 +13,8 @@
     <!-- Custom fonts for this template-->
     <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
-
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet" type="text/css">
     <!-- Bootstrap 5 -->
@@ -77,10 +78,10 @@
                                 <label for="role" class="form-label font-weight-bold">Vai Trò</label>
                                 <select class="form-select border-primary" th:field="*{role}" id="role">
                                     <option th:value="${T(com.fjb.sunrise.enums.ERole).ADMIN}">
-                                        Quản trị viên
+                                        <i class="bi bi-person-badge"></i> Quản trị viên
                                     </option>
                                     <option th:value="${T(com.fjb.sunrise.enums.ERole).USER}">
-                                        Người dùng
+                                        <i class="bi bi-person"></i> Người dùng
                                     </option>
                                 </select>
                             </div>
@@ -88,16 +89,20 @@
                                 <label for="status" class="form-label font-weight-bold">Trạng Thái</label>
                                 <select class="form-select border-primary" th:field="*{status}" id="status">
                                     <option th:value="${T(com.fjb.sunrise.enums.EStatus).ACTIVE}">
-                                        Hoạt động
+                                        <i class="bi bi-toggle-on"></i> Hoạt động
                                     </option>
                                     <option th:value="${T(com.fjb.sunrise.enums.EStatus).NOT_ACTIVE}">
-                                        Không hoạt động
+                                        <i class="bi bi-toggle-off"></i> Không hoạt động
                                     </option>
                                 </select>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                <button type="reset" class="btn btn-secondary">Reset</button>
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="bi bi-check-circle"></i> Submit
+                                </button>
+                                <button type="reset" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-counterclockwise"></i> Reset
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -125,5 +130,4 @@
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
 
 </body>
-
 </html>

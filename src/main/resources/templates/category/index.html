@@ -18,6 +18,9 @@
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
+    <!-- Bootstrap icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <!-- Custom styles for this template-->
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
     <!-- Custom styles for this page -->
@@ -31,7 +34,6 @@
 
     <!-- Sidebar -->
     <div th:replace="~{tab_bar :: tab-bar}"></div>
-
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -51,11 +53,11 @@
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Danh mục thu/chi</h1>
 
-                    <a  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" href="#"
-                       data-toggle="modal" data-target="#createCategoryModal"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Tạo danh mục</a>
+                    <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" href="#"
+                       data-toggle="modal" data-target="#createCategoryModal">
+                        <i class="bi bi-plus-lg text-white-50"></i> Tạo danh mục
+                    </a>
                 </div>
-
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
@@ -214,28 +216,24 @@
         {"data": "active"},
         {"data": null, "defaultContent":"" +
                 "<div>" +
-                "<button data-toggle=\"modal\" data-target=\"#editCategoryModal\" class=\"btn btn-outline-danger\">Edit</button>" +
-                "<button class=\"btn btn-outline-primary\">Status</button>" +
+                "<button data-toggle=\"modal\" data-target=\"#editCategoryModal\" class=\"btn btn-outline-danger\">" +
+                "<i class=\"bi bi-pencil\"></i></button>" +
+                "<button class=\"btn btn-outline-primary\">" +
+                "<i class=\"bi bi-toggle-on\"></i></button>" +
                 "</div>"
         }
     ];
 
-    const tableCategory = installTable('dataTableCategory', '/sun/category/page', cols)
+    const tableCategory = installTable('dataTableCategory', '/sun/category/page', cols);
 
     $('#dataTableCategory tbody').on('click', 'tr', function () {
-        console.log(table.row(this).data());
-        const data = table.row(this).data();
-        // const name = $(`#inputCategory`).val(data.name);
-        // const newName = $(`#inputNewCategoryName`).val(data.newName);
+        $(this).toggleClass('selected');
+    });
 
-        $('#createCategoryModal').modal('show');
-        $('#addCategory').attr('action', `/sun/category/add/`);
-
-        $('#editCategoryModal').modal('show');
-        $('#updateCategory').attr('action', `/sun/category/update/${data.id}`);
+    $('#button').click(function () {
+        table.rows('.selected').remove().draw(false);
     });
 </script>
-<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
 </body>
 

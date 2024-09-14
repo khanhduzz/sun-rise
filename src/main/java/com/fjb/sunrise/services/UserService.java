@@ -5,8 +5,11 @@ import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.responses.UserResponseDTO;
 import com.fjb.sunrise.dtos.user.EditProfileByAdminDTO;
 import com.fjb.sunrise.models.User;
-import java.util.List;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 public interface UserService {
     String checkRegister(RegisterRequest registerRequest);
@@ -32,4 +35,7 @@ public interface UserService {
     UserResponseDTO getInfor();
 
     boolean editUser(UserResponseDTO userResponseDTO);
+
+    // New method to update avatar
+    boolean updateAvatar(MultipartFile avatarFile) throws IOException;
 }

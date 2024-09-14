@@ -50,6 +50,10 @@ logging:
       springframework:
         security: INFO
 
+user:
+  avatar:
+    direction: /path/to/avatars
+
 application:
   admin:
     default:

@@ -18,6 +18,9 @@
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet" type="text/css">
     <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
 
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
         /* Add background colors for different columns */
         table thead th:nth-child(1), table tbody td:nth-child(1) { /* ID Column */
@@ -102,7 +105,7 @@
 
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
+    <i class="bi bi-arrow-up-circle"></i>
 </a>
 
 <!-- Logout Modal-->
@@ -194,14 +197,14 @@
                 return `
                     <div class="btn-group" role="group" aria-label="User Actions">
                         <button class="btn btn-outline-info" onclick="viewUserDetail(${row.id})">
-                            <i class="fas fa-info-circle"></i>
+                            <i class="bi bi-info-circle"></i> <!-- Bootstrap icon -->
                         </button>
                         <button class="btn btn-outline-danger" onclick="deleteUser(${row.id})">
-                            <i class="fas fa-trash-alt"></i>
+                            <i class="bi bi-trash"></i> <!-- Bootstrap icon -->
                         </button>
                         <button class="btn ${row.status === 'ACTIVE' ? 'btn-outline-warning' : 'btn-outline-success'}"
                             onclick="changeUserStatus(${row.id}, '${row.status === 'ACTIVE' ? 'deactivate' : 'activate'}')">
-                            <i class="fas ${row.status === 'ACTIVE' ? 'fa-ban' : 'fa-check-circle'}"></i>
+                            <i class="bi ${row.status === 'ACTIVE' ? 'bi-x-circle' : 'bi-check-circle'}"></i> <!-- Bootstrap icon -->
                         </button>
                     </div>`;
             }

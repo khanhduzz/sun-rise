@@ -10,4 +10,5 @@ public class UserResponseDTO {
     private String lastname;
     private String email;
     private String phone;
+    private String avatarPath;  // Added field to store avatar path
 }
