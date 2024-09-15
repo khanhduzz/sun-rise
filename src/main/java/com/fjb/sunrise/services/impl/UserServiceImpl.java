@@ -20,10 +20,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContext;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -159,8 +160,19 @@ public class UserServiceImpl implements UserService {
         }
 
         Pageable pageable = PageRequest.of(pageNumber, payload.getLength(), sortOpt);
+        final String keyword = payload.getSearch().getOrDefault("value", "");
+        Specification<User> specs = null;
 
-        return userRepository.findAll(pageable);
+        if (StringUtils.hasText(keyword)) {
+            String likePattern = "%" + keyword.toLowerCase() + "%";
+            specs = (root, query, builder) ->
+                builder.or(
+                    builder.like(builder.lower(root.get("username")), likePattern),
+                    builder.like(builder.lower(root.get("phone")), likePattern),
+                    builder.like(builder.lower(root.get("email")), likePattern)
+                );
+        }
+        return userRepository.findAll(specs, pageable);
     }
 
     @Override
