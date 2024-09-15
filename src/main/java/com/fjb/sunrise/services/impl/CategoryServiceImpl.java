@@ -104,17 +104,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> findCategoryByAdminAndUser() {
+        List<Sort.Order> orders = new ArrayList<>();
+        orders.add(Sort.Order.asc("owner.role"));
+        Sort sortOpt = Sort.by(orders);
         Specification<Category> specs = findAllByUser();
-        return categoryRepository.findAll(specs);
+        return categoryRepository.findAll(specs,sortOpt);
     }
     private Specification<Category> findAllByUser() {
-
-//        specs = specs.or((root, query, builder) -> {
-//                Join<Category, User> userJoin = root.join("owner");
-//                return builder.equal(userJoin.get("id"), getCurrentUserId());
-//            }
-//        );
-
         return Specification.where((root, query, builder) -> {
                 Join<Category, User> userJoin = root.join("owner");
                 Predicate hasRoleAdmin = builder.equal(userJoin.get("role"), "ADMIN");
