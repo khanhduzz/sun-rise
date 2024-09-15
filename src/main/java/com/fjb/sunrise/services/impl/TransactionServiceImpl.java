@@ -64,11 +64,10 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setAmount(convertMoneyStringWithCommaToDouble(request.getAmount()));
         transaction.setTransactionType(request.getTransactionType());
         transaction.setCategory(categoryRepository.findById(request.getCategory()).orElse(null));
-        transaction.setUser(userRepository.findByUsername(getCurrentUserName()));
-        transaction.setCreatedAt(request.getCreatedAt() == null
-            ? LocalDateTime.now() : request.getCreatedAt());
-        transaction.setUpdatedAt(request.getCreatedAt() == null
-            ? LocalDateTime.now() : request.getCreatedAt());
+        transaction.setUser(userRepository.findByEmailOrPhone(getCurrentUserName()));
+        LocalDateTime now = request.getCreatedAt() == null ? LocalDateTime.now() : request.getCreatedAt();
+        transaction.setCreatedAt(now);
+        transaction.setUpdatedAt(now);
         return transactionRepository.save(transaction);
     }
 
@@ -106,9 +105,13 @@ public class TransactionServiceImpl implements TransactionService {
         Pageable pageable = PageRequest.of(pageNumber, payload.getLength(), sortOpt);
         final String keyword = payload.getSearch().getOrDefault("value", "");
         Specification<Transaction> specs = null;
+        specs = Specification.where((root, query, builder) -> {
+            com.fjb.sunrise.models.User dbUser = userRepository.findByEmailOrPhone(getCurrentUserName());
+            return builder.equal(root.get("user"), dbUser);
+        });
         if (Strings.isNotBlank(keyword)) {
             // "%" + keyword + "%"
-            specs = Specification.where((
+            specs = specs.and((
                 (root, query, builder) ->
                     builder.like(builder.lower(root.get("transactionType")),
                         String.format("%%%s%%",
@@ -122,8 +125,9 @@ public class TransactionServiceImpl implements TransactionService {
                         payload.getSearch().getOrDefault("value", "").toLowerCase()
                     ));
             });
-        }
 
+
+        }
         return transactionRepository.findAll(specs, pageable);
     }
 

@@ -6,15 +6,23 @@ import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
+import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
+import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.CategoryService;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +30,7 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
@@ -60,18 +69,21 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponseDto getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .map(categoryMapper::toCategoryResponseDto)
-                .orElseThrow();
+            .map(categoryMapper::toCategoryResponseDto)
+            .orElseThrow();
     }
 
     @Override
     public Page<Category> getCategoryList(DataTableInputDTO payload) {
-        Sort sortOpt = Sort.by(Sort.Direction.ASC, "id");
+        List<Sort.Order> orders = new ArrayList<>();
+        orders.add(Sort.Order.desc("owner.role"));
+
         if (!payload.getOrder().isEmpty()) {
-            sortOpt = Sort.by(
-                    Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
-                    payload.getOrder().get(0).get("colName"));
+            orders.add(new Sort.Order(Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
+                payload.getOrder().get(0).get("colName")));
         }
+
+        Sort sortOpt = Sort.by(orders);
         int pageNumber = payload.getStart() / 10;
         if (payload.getStart() % 10 != 0) {
             pageNumber = pageNumber - 1;
@@ -79,7 +91,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         Pageable pageable = PageRequest.of(pageNumber, payload.getLength(), sortOpt);
 
-        return categoryRepository.findAll(pageable);
+        Specification<Category> specs = findAllByUser();
+        return categoryRepository.findAll(specs, pageable);
     }
 
     @Override
@@ -90,15 +103,34 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> findAllByUser() {
-        //        Specification specs = Specification.where(
-        //            ((root, query, builder) -> {
-        //                builder.equal(root.get("createdBy"),
-        //                    "ADMIN")
-        //            })
-        //        );
-        return List.of();
+    public List<Category> findCategoryByAdminAndUser() {
+        Specification<Category> specs = findAllByUser();
+        return categoryRepository.findAll(specs);
+    }
+    private Specification<Category> findAllByUser() {
+
+//        specs = specs.or((root, query, builder) -> {
+//                Join<Category, User> userJoin = root.join("owner");
+//                return builder.equal(userJoin.get("id"), getCurrentUserId());
+//            }
+//        );
+
+        return Specification.where((root, query, builder) -> {
+                Join<Category, User> userJoin = root.join("owner");
+                Predicate hasRoleAdmin = builder.equal(userJoin.get("role"), "ADMIN");
+                Predicate isOwner = builder.equal(userJoin.get("id"), getCurrentUserId());
+
+                return builder.or(hasRoleAdmin, isOwner);
+            }
+        );
     }
 
+    private Long getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User user =
+            (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+        User dbUser = userRepository.findByEmailOrPhone(user.getUsername());
+        return dbUser.getId();
+    }
 
 }

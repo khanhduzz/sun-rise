@@ -22,8 +22,7 @@ public interface CategoryService {
 
     List<CategoryResponseDto> getAllCategories();
 
-
-    List<Category> findAllByUser();
+    List<Category> findCategoryByAdminAndUser();
 
     Page<Category> getCategoryList(DataTableInputDTO payload);
 
