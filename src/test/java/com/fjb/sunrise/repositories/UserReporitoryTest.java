@@ -13,23 +13,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-public class UserReporitoryTest {
+class UserReporitoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private static final String emailTest = "test@test.com";
-    private static final String phoneTest = "0123456789";
+    private static final String EMAIL_TEST = "test@test.com";
+    private static final String PHONE_TEST = "0123456789";
 
     User user = new User();
     @BeforeEach
     void setup() {
         user.setFirstname("He");
         user.setLastname("Ha");
-        user.setEmail(emailTest);
+        user.setEmail(EMAIL_TEST);
         user.setPassword("12345");
         user.setRole(ERole.USER);
         user.setStatus(EStatus.ACTIVE);
-        user.setPhone(phoneTest);
+        user.setPhone(PHONE_TEST);
         userRepository.save(user);
     }
 
@@ -40,12 +40,12 @@ public class UserReporitoryTest {
 
     @Test
     void AlreadyExsistUser() {
-        User emailUser = userRepository.findByEmailOrPhone(emailTest);
+        User emailUser = userRepository.findByEmailOrPhone(EMAIL_TEST);
         assertNotNull(emailUser);
-        assertEquals(emailTest, emailUser.getEmail());
+        assertEquals(EMAIL_TEST, emailUser.getEmail());
 
-        User phoneUser = userRepository.findByEmailOrPhone(phoneTest);
+        User phoneUser = userRepository.findByEmailOrPhone(PHONE_TEST);
         assertNotNull(phoneUser);
-        assertEquals(phoneTest, phoneUser.getPhone());
+        assertEquals(PHONE_TEST, phoneUser.getPhone());
     }
 }
