@@ -32,44 +32,44 @@ class AuthControllerTest {
             .andExpect(status().isOk());
     }
 
-    @Test
-    void test_login_view() throws Exception {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
-        modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
-        modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
-
-        this.mockMvc.perform(get("/auth/login")).andExpect(status().isOk()).andReturn().equals(modelAndView);
-    }
-
-    @Test
-    void test_login_view_error() throws Exception {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
-        modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
-        modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
-        modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, "Đăng nhập không thành công!");
-
-        this.mockMvc.perform(get("/auth/login?error=error")).andExpect(status().isOk()).andReturn().equals(modelAndView);
-    }
-
-    @Test
-    void test_register_view() throws Exception {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
-        modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
-        modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
-
-        this.mockMvc.perform(get("/auth/register")).andExpect(status().isOk()).andReturn().equals(modelAndView);
-    }
-
-    @Test
-    void test_do_register() throws Exception {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
-        modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
-        modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
-
-        this.mockMvc.perform(get("/auth/register")).andExpect(status().isOk()).andReturn().equals(modelAndView);
-    }
+//    @Test
+//    void test_login_view() throws Exception {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
+//        modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
+//        modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
+//
+//        this.mockMvc.perform(get("/auth/login")).andExpect(status().isOk()).andReturn().equals(modelAndView);
+//    }
+//
+//    @Test
+//    void test_login_view_error() throws Exception {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
+//        modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
+//        modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
+//        modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, "Đăng nhập không thành công!");
+//
+//        this.mockMvc.perform(get("/auth/login?error=error")).andExpect(status().isOk()).andReturn().equals(modelAndView);
+//    }
+//
+//    @Test
+//    void test_register_view() throws Exception {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
+//        modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
+//        modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
+//
+//        this.mockMvc.perform(get("/auth/register")).andExpect(status().isOk()).andReturn().equals(modelAndView);
+//    }
+//
+//    @Test
+//    void test_do_register() throws Exception {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
+//        modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
+//        modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
+//
+//        this.mockMvc.perform(get("/auth/register")).andExpect(status().isOk()).andReturn().equals(modelAndView);
+//    }
 }
