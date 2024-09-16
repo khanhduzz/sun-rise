@@ -5,10 +5,12 @@ import static com.fjb.sunrise.utils.Constants.ApiConstant.TRANSACTION_INDEX;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CreateOrUpdateTransactionRequest;
+import com.fjb.sunrise.dtos.responses.StatisticResponse;
 import com.fjb.sunrise.dtos.responses.TransactionFullPageResponse;
 import com.fjb.sunrise.mappers.TransactionMapper;
 import com.fjb.sunrise.models.Transaction;
 import com.fjb.sunrise.repositories.CategoryRepository;
+import com.fjb.sunrise.services.CategoryService;
 import com.fjb.sunrise.services.TransactionService;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
@@ -24,32 +26,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-//@RestController
 @Controller
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
 @Slf4j
 public class TransactionController {
     private final TransactionService transactionService;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
     private final TransactionMapper transactionMapper;
-
-    @GetMapping("/index")
-    public String index(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
-        model.addAttribute(CATEGORIES, categoryRepository.findAll());
-        return TRANSACTION_INDEX;
-    }
 
     @GetMapping("/create")
     public String getCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
-        model.addAttribute(CATEGORIES, categoryRepository.findAll());
+        model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
         return TRANSACTION_INDEX;
     }
 
     @PostMapping("/create")
     public String postCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model)
         throws ParseException {
-        model.addAttribute(CATEGORIES, categoryRepository.findAll());
+        model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
         Transaction transaction = transactionService.create(request);
         return TRANSACTION_INDEX;
     }
@@ -75,6 +70,12 @@ public class TransactionController {
         throws ParseException {
         request.setId(id);
         transactionService.update(request);
-        return "redirect:transnsaction/create";
+        return "redirect:/transaction/create";
+    }
+
+    @GetMapping("/statistic")
+    @ResponseBody
+    public StatisticResponse getStatistic() {
+        return transactionService.statistic();
     }
 }

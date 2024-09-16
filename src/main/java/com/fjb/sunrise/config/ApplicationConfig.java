@@ -1,6 +1,7 @@
 package com.fjb.sunrise.config;
 
 import com.fjb.sunrise.enums.ERole;
+import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +64,7 @@ public class ApplicationConfig {
                     .email(adminEmail)
                     .password(passwordEncoder().encode(adminPassword))
                     .role(ERole.ADMIN)
+                    .status(EStatus.ACTIVE)
                     .build();
                 userRepository.save(user);
                 log.warn("Create: admin user has been created: email = {}, password = {} ",

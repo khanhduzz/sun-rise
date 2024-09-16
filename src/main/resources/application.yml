@@ -50,3 +50,8 @@ application:
 
 default:
   admin-create-key: ${ADMIN_CREATE_KEY}
+  encode-key: ${ENCODE_KEY}
+  type-encode: ${TYPE_ENCODE}
+  recaptcha-secret-key: ${RECAPTCHA_SECRET_KEY}
+  recaptcha-site-key: ${RECAPTCHA_SITE_KEY}
+  captcha-enable: ${CAPTCHA_ENABLE}

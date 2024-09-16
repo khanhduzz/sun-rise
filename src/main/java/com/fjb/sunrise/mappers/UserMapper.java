@@ -1,6 +1,7 @@
 package com.fjb.sunrise.mappers;
 
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
+import com.fjb.sunrise.dtos.responses.UserResponseDTO;
 import com.fjb.sunrise.dtos.user.EditProfileByAdminDTO;
 import com.fjb.sunrise.models.User;
 import org.mapstruct.Mapper;
@@ -11,5 +12,5 @@ public interface UserMapper {
 
     User toEntityByAdmin(EditProfileByAdminDTO byAdminDTO);
 
-    EditProfileByAdminDTO toUserByAdmin(User user);
+    UserResponseDTO toUserResponse(User user);
 }

@@ -27,6 +27,11 @@
     position: absolute;
     z-index: 2;
 }
+.box-custom.forgot {
+    width: 30vw;
+    display: block;
+    padding-top: 5%;
+}
 
 @media (max-width: 900px) {
     .box-custom {
@@ -52,17 +57,19 @@
     "field-custom field-custom"
     "field-custom field-custom"
     "field-custom field-custom"
-    "captcha captcha"
+    "g-recaptcha g-recaptcha"
     "button button";
     gap: 16px;
 }
-
+.areaCaptcha {
+    grid-area: g-recaptcha;
+}
 .login-form {
     display: grid;
     grid-template-areas:
     "field-custom"
     "field-custom"
-    "captcha"
+    "g-recaptcha"
     "remember-me"
     "button";
     gap: 16px;
@@ -135,54 +142,4 @@ h2 {
     padding-top: 100px;
     border-top-right-radius: 200px 200px;
     border-bottom-right-radius: 200px 200px;
-}
-
-.box-code {
-    border: 2px solid black;
-    box-shadow: 0 0 5px grey;
-    width: 150px;
-    height: 50px;
-    box-sizing: border-box;
-    color: black;
-    text-decoration:line-through;
-    font-style: italic;
-    font-size: x-large;
-    user-select: none;
-    display: grid;
-    place-items: center;
-}
-
-.captcha {
-    grid-area: captcha;
-    width: 85%;
-    height: 70px;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-evenly;
-    justify-items: center;
-    align-items: center;
-}
-
-.field-custom.field-captcha {
-    width: 200px;
-    height: 40px;
-}
-
-.roll {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 35px;
-    color: black;
-    transition: transform 0.5s ease, color 0.3s ease;
-}
-
-.roll:hover {
-    transform: rotate(360deg);
-}
-
-.roll:active {
-    transform: rotate(360deg) scale(1.5);
 }
