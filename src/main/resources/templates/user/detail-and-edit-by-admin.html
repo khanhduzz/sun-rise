@@ -52,38 +52,38 @@
                         <form th:action="@{/user/detail-and-edit/{id}(id=${userDetail.id})}" th:object="${userDetail}" method="POST" class="row g-3">
                             <input type="hidden" th:field="*{id}">
                             <div class="col-md-6">
-                                <label class="form-label font-weight-bold">Username</label>
+                                <label for="username" class="form-label font-weight-bold">Username</label>
                                 <input type="text" class="form-control border-primary" th:field="*{username}" placeholder="Nhập tên người dùng">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label font-weight-bold">Password</label>
+                                <label for="password" class="form-label font-weight-bold">Password</label>
                                 <input type="password" class="form-control border-primary" th:field="*{password}" placeholder="Nhập mật khẩu">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label font-weight-bold">First Name</label>
+                                <label for="firstname" class="form-label font-weight-bold">First Name</label>
                                 <input type="text" class="form-control border-primary" th:field="*{firstname}" placeholder="Nhập họ của bạn">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label font-weight-bold">Last Name</label>
+                                <label for="lastname" class="form-label font-weight-bold">Last Name</label>
                                 <input type="text" class="form-control border-primary" th:field="*{lastname}" placeholder="Nhập tên của bạn">
                             </div>
                             <div class="col-md-6">
-                                <label  class="form-label font-weight-bold">Email</label>
+                                <label for="email" class="form-label font-weight-bold">Email</label>
                                 <input type="email" class="form-control border-primary" th:field="*{email}" placeholder="Nhập địa chỉ email">
                             </div>
                             <div class="col-md-6">
-                                <label  class="form-label font-weight-bold">Phone</label>
+                                <label for="phone" class="form-label font-weight-bold">Phone</label>
                                 <input type="text" class="form-control border-primary" th:field="*{phone}" placeholder="Nhập số điện thoại">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label font-weight-bold">Vai trò</label>
+                                <label for="role" class="form-label font-weight-bold">Vai trò</label>
                                 <select class="form-select border-primary" th:field="*{role}">
                                     <option value="ADMIN" th:selected="${userDetail.role == 'ROLE_ADMIN'}">Quản trị viên</option>
                                     <option value="USER" th:selected="${userDetail.role == 'ROLE_USER'}">Người dùng</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label font-weight-bold">Trạng thái tài khoản</label>
+                                <label for="status" class="form-label font-weight-bold">Trạng thái tài khoản</label>
                                 <select class="form-select border-primary" th:field="*{status}">
                                     <option value="ACTIVE" th:selected="${userDetail.status == 'ACTIVE'}">Hoạt động</option>
                                     <option value="NOT_ACTIVE" th:selected="${userDetail.status == 'NOT_ACTIVE'}">Không hoạt động</option>
@@ -91,7 +91,7 @@
                             </div>
                             <div class="d-flex justify-content-center mt-3">
                                 <button type="submit" class="btn btn-success me-2">Lưu thay đổi</button>
-                                <button type="reset" class="btn btn-secondary">Hủy bỏ</button>
+                                <button type="reset" class="btn btn-secondary">Reset</button>
                             </div>
                         </form>
                     </div>

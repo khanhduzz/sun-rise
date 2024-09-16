@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,14 +10,130 @@
 
     <title>Budgeting Service</title>
 
-    <!-- Custom fonts for this template-->
+    <!-- Custom fonts for this template -->
     <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template -->
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet" type="text/css">
     <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
 
+    <style>
+        /* Custom form styles */
+        .form-control {
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Styling card header */
+        .card-header {
+            background-color: #4e73df;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            padding: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        /* Form layout and button styles */
+        .card {
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #375a7f;
+        }
+
+        /* Avatar upload styles */
+        .avatar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            width: 100%;
+        }
+
+        .avatar-container img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .btn-change-avatar {
+            position: absolute;
+            top: 85px; /* Adjust based on image size */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            background-color: #4e73df;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 35px;
+        }
+
+        .btn-change-avatar:hover {
+            background-color: #375a7f;
+        }
+
+        .avatar-container input[type="file"] {
+            display: none;
+        }
+
+        /* Form field and button styles */
+        .mb-3 {
+            margin-bottom: 1rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Custom icon styling */
+        .modal-header .close span {
+            font-size: 1.5rem;
+            color: #fff;
+            line-height: 1;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .card {
+                margin-top: 30px;
+            }
+
+            .btn-primary {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .avatar-container img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -45,10 +160,20 @@
                 <div class="row justify-content-center">
                     <div class="col-md-6">
                         <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary text-center">Chỉnh sửa thông tin</h6>
+                            <div class="card-header">
+                                Chỉnh sửa thông tin
                             </div>
                             <div class="card-body">
+                                <!-- Avatar Section -->
+                                <div class="avatar-container">
+                                    <!-- Using th:src to dynamically load the avatar image from Base64 string -->
+                                    <img th:src="'data:image/png;base64,' + ${userInfor.avatarImage}" alt="Current Avatar" id="avatarPreview">
+                                    <label for="avatarUpload" class="btn-change-avatar">
+                                        <i class="fas fa-camera"></i> Change Avatar
+                                    </label>
+                                    <input type="file" id="avatarUpload" name="avatar" accept="image/*" onchange="previewAvatar(event)">
+                                </div>
+
                                 <form th:action="@{/user/edit-infor}" th:object="${userInfor}" method="POST">
                                     <input type="hidden" th:field="*{id}">
 
@@ -83,7 +208,9 @@
                                     </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> Lưu thay đổi
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -106,37 +233,43 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
+<!-- Scroll to Top Button -->
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
 
-<!-- Logout Modal-->
+<!-- Logout Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn thoát?</h5>
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="exampleModalLabel">
+                    <i class="fas fa-sign-out-alt"></i> Bạn có muốn thoát?
+                </h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
-                <a class="btn btn-primary" href="login.html">Đăng xuất</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+                <a class="btn btn-primary" href="login.html">
+                    <i class="fas fa-sign-in-alt"></i> Đăng xuất
+                </a>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Bootstrap core JavaScript-->
+<!-- Bootstrap core JavaScript -->
 <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
 
-<!-- Core plugin JavaScript-->
+<!-- Core plugin JavaScript -->
 <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}" type="application/javascript"></script>
 
-<!-- Custom scripts for all pages-->
+<!-- Custom scripts for all pages -->
 <script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
 
 <!-- Page level plugins -->
@@ -147,6 +280,19 @@
 <!-- Page level plugins -->
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
+
+<!-- JavaScript for previewing the avatar -->
+<script>
+    function previewAvatar(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('avatarPreview').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+</script>
+
 </body>
 
 </html>

@@ -1,8 +1,11 @@
 package com.fjb.sunrise.dtos.user;
 
-import java.time.LocalDateTime;
+import com.fjb.sunrise.enums.ERole;
+import com.fjb.sunrise.enums.EStatus;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,10 +17,11 @@ public class EditProfileByAdminDTO {
     private String lastname;
     private String email;
     private String phone;
-    private String role;
-    private String status;
+    private ERole role;  // Updated from String to ERole
+    private EStatus status;  // Updated from String to EStatus
     private String createdBy;
     private LocalDateTime createdDate;
     private String lastModifiedBy;
     private LocalDateTime lastModifiedDate;
+    private String avatarPath;  // Added to store avatar path
 }
