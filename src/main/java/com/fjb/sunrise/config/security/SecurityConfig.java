@@ -41,7 +41,6 @@ public class SecurityConfig {
             }))
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-//                .requestMatchers("/user/delete/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
