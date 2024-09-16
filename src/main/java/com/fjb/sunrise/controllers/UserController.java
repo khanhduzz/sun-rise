@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
     private final UserService userService;
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/edit-infor")
     public ModelAndView getUserInfo() {
         ModelAndView modelAndView = new ModelAndView();
@@ -40,6 +41,7 @@ public class UserController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/edit-infor")
     public ModelAndView editUserInfo(@ModelAttribute("userInfor") UserResponseDTO userResponseDTO) {
         ModelAndView modelAndView = new ModelAndView();
@@ -51,6 +53,7 @@ public class UserController {
         } else {
             modelAndView.addObject("error", "Failed to update user");
         }
+        modelAndView.setViewName(Constants.ApiConstant.ADMIN_REDIRECT);
         return modelAndView;
     }
 
@@ -74,10 +77,12 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add-user-by-admin")
-    public ModelAndView doAddUserByAdmin(@ModelAttribute("newUser") EditProfileByAdminDTO newUser) {
+    public ModelAndView doAddUserByAdmin(@ModelAttribute("newUser") EditProfileByAdminDTO newUser,
+                                         RedirectAttributes redirect) {
         ModelAndView modelAndView = new ModelAndView();
         userService.createUserByAdmin(newUser);
-        modelAndView.setViewName(Constants.ApiConstant.ADMIN_ADD_NEW_USER);
+        redirect.addFlashAttribute("message", "User added successfully");
+        modelAndView.setViewName(Constants.ApiConstant.ADMIN_REDIRECT);
         return modelAndView;
     }
 
@@ -135,7 +140,7 @@ public class UserController {
         } catch (Exception e) {
             modelAndView.addObject(Constants.ErrorCode.ERROR, "An error occurred: " + e.getMessage());
         }
-
+        modelAndView.setViewName(Constants.ApiConstant.ADMIN_REDIRECT);
         return modelAndView;
     }
 

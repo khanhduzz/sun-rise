@@ -14,6 +14,13 @@ services:
       - ADMIN_DEFAULT_LAST=bond
       - ADMIN_CREATE_KEY=dfjkNdkMAnje
       - ADMIN_DEFAULT_EMAIL=sun@sun.com
+      - ENCODE_KEY
+      - TYPE_ENCODE
+      - EMAIL_SERVER
+      - PASSWORD_EMAIL_SERVER
+      - RECAPTCHA_SECRET_KEY
+      - RECAPTCHA_SITE_KEY
+      - CAPTCHA_ENABLE=true
     ports:
       - ${SERVER_LOCAL_PORT}:${SERVER_LOCAL_PORT}
     volumes:
