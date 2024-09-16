@@ -5,11 +5,13 @@ import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryStatusDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryFullPageResponse;
+import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.services.CategoryService;
 import com.fjb.sunrise.utils.Constants;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -45,9 +47,10 @@ public class CategoryController {
     public CategoryFullPageResponse getPage(@RequestBody DataTableInputDTO payload) {
         Page<Category> categoryPage = categoryService.getCategoryList(payload);
         CategoryFullPageResponse response = new CategoryFullPageResponse();
-        response.setData(categoryMapper.listCategoryToListCategoryPageResponse(
-                categoryPage.stream().toList()
-        ));
+        List<CategoryResponseDto> category = categoryMapper.listCategoryToListCategoryPageResponse(
+            categoryPage.stream().toList()
+        );
+        response.setData(categoryService.addIsAdminToCategory(category));
         response.setDraw(payload.getDraw());
         response.setRecordsFiltered(categoryPage.getTotalElements());
         response.setRecordsTotal(categoryPage.getTotalElements());

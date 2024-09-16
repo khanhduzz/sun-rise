@@ -10,6 +10,7 @@ import com.fjb.sunrise.dtos.responses.TransactionFullPageResponse;
 import com.fjb.sunrise.mappers.TransactionMapper;
 import com.fjb.sunrise.models.Transaction;
 import com.fjb.sunrise.repositories.CategoryRepository;
+import com.fjb.sunrise.services.CategoryService;
 import com.fjb.sunrise.services.TransactionService;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
@@ -31,25 +32,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 public class TransactionController {
     private final TransactionService transactionService;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
     private final TransactionMapper transactionMapper;
-
-    @GetMapping("/index")
-    public String index(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
-        model.addAttribute(CATEGORIES, categoryRepository.findAll());
-        return TRANSACTION_INDEX;
-    }
 
     @GetMapping("/create")
     public String getCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
-        model.addAttribute(CATEGORIES, categoryRepository.findAll());
+        model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
         return TRANSACTION_INDEX;
     }
 
     @PostMapping("/create")
     public String postCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model)
         throws ParseException {
-        model.addAttribute(CATEGORIES, categoryRepository.findAll());
+        model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
         Transaction transaction = transactionService.create(request);
         return TRANSACTION_INDEX;
     }

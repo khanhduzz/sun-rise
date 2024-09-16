@@ -4,10 +4,12 @@ import com.fjb.sunrise.dtos.base.CategoryAndTotalAmountPerCategory;
 import com.fjb.sunrise.dtos.base.DayAndTotalAmountPerDay;
 import com.fjb.sunrise.enums.ETrans;
 import com.fjb.sunrise.models.Transaction;
+import com.fjb.sunrise.models.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +18,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     JpaSpecificationExecutor<Transaction> {
 
     Page<Transaction> findAll(Pageable pageable);
+
+    Page<Transaction> findAllByUser(User user, Specification<Transaction> specification, Pageable pageable);
 
     @Query("select sum(t.amount) from Transaction t "
         + "where t.updatedAt between ?1 and ?2")

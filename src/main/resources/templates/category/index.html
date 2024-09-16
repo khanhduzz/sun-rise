@@ -212,11 +212,15 @@
         {"data": "createdDate"},
         {"data": "lastModifiedDate"},
         {"data": "active"},
-        {"data": null, "defaultContent":"" +
+        {"data": "admin", "defaultContent":"" +
                 "<div>" +
                 "<button data-toggle=\"modal\" data-target=\"#editCategoryModal\" class=\"btn btn-outline-danger\">Edit</button>" +
                 "<button class=\"btn btn-outline-primary\">Status</button>" +
-                "</div>"
+                "</div>",
+            "render": function (data, type, row, meta) {
+                return row.admin ? "":"<button data-toggle=\"modal\" data-target=\"#editCategoryModal\" class=\"btn btn-outline-danger\">Edit</button>" +
+                    "<button class=\"btn btn-outline-primary\">Status</button>"
+            }
         }
     ];
 
