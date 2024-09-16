@@ -8,15 +8,23 @@ import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
+import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
+import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.CategoryService;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +32,7 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
@@ -98,5 +107,33 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll()
             .stream().map(categoryMapper::toCategoryResponseDto)
             .toList();
+    }
+
+    @Override
+    public List<Category> findCategoryByAdminAndUser() {
+        List<Sort.Order> orders = new ArrayList<>();
+        orders.add(Sort.Order.asc("owner.role"));
+        Sort sortOpt = Sort.by(orders);
+        Specification<Category> specs = findAllByUser();
+        return categoryRepository.findAll(specs, sortOpt);
+    }
+
+    private Specification<Category> findAllByUser() {
+        return Specification.where((root, query, builder) -> {
+                Join<Category, User> userJoin = root.join("owner");
+                Predicate hasRoleAdmin = builder.equal(userJoin.get("role"), "ADMIN");
+                Predicate isOwner = builder.equal(userJoin.get("id"), getCurrentUserId());
+
+                return builder.or(hasRoleAdmin, isOwner);
+            }
+        );
+    }
+
+    private Long getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User user =
+            (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+        User dbUser = userRepository.findByEmailOrPhone(user.getUsername());
+        return dbUser.getId();
     }
 }
