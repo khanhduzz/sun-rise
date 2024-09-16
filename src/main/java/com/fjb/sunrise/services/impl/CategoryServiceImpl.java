@@ -113,9 +113,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResponseDto> addIsAdminToCategory(List<CategoryResponseDto> list) {
         List<User> admins = userRepository.findAllByRole(ERole.ADMIN);
-        list.forEach(item->
-            admins.forEach(admin->{
-                if(admin.getId() == item.getOwner().getId()) {
+        list.forEach(item ->
+            admins.forEach(admin -> {
+                if (admin.getId() == item.getOwner().getId()) {
                     item.setAdmin(true);
                 }
             })

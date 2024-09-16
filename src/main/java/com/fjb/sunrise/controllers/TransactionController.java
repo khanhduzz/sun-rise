@@ -35,11 +35,11 @@ public class TransactionController {
     private final CategoryService categoryService;
     private final TransactionMapper transactionMapper;
 
-//    @GetMapping("/index")
-//    public String index(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
-//        model.addAttribute(CATEGORIES, categoryRepository.findAll());
-//        return TRANSACTION_INDEX;
-//    }
+    //    @GetMapping("/index")
+    //    public String index(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
+    //        model.addAttribute(CATEGORIES, categoryRepository.findAll());
+    //        return TRANSACTION_INDEX;
+    //    }
 
     @GetMapping("/create")
     public String getCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
