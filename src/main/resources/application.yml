@@ -1,22 +1,13 @@
+# application.yml
+
 spring:
   application:
     name: sun-rise
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${EMAIL_SERVER}
-    password: ${PASSWORD_EMAIL_SERVER}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
 
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://ep-orange-lake-a504982s.us-east-2.aws.neon.tech/thanh-binh
+    username: sun
+    password: ameHN4MXxVQ5
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -30,6 +21,18 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tranquangg.1108@gmail.com
+    password: qsnt yxbi yjud fcpf
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   logging:
     level:
       org:
@@ -38,35 +41,29 @@ spring:
           aop: DEBUG
 
 server:
-  port: ${SERVER_LOCAL_PORT}
+  port: 8086
   servlet:
     context-path: /sun
     session:
       timeout: 30s
 
-logging:
-  level:
-    org:
-      springframework:
-        security: INFO
-
-user:
-  avatar:
-    direction: /path/to/avatars
-
 application:
   admin:
     default:
-      username: ${ADMIN_DEFAULT_USERNAME}
-      password: ${ADMIN_DEFAULT_PASSWORD}
-      firstname: ${ADMIN_DEFAULT_FIRST}
-      lastname: ${ADMIN_DEFAULT_LAST}
-      email: ${ADMIN_DEFAULT_EMAIL}
+      username: sunrise
+      password: test1234
+      firstname: james
+      lastname: bonds
+      email: sun@sun.com
+
+user:
+  avatar:
+    directory: /path/to/avatars
 
 default:
-  admin-create-key: ${ADMIN_CREATE_KEY}
-  encode-key: ${ENCODE_KEY}
-  type-encode: ${TYPE_ENCODE}
-  recaptcha-secret-key: ${RECAPTCHA_SECRET_KEY}
-  recaptcha-site-key: ${RECAPTCHA_SITE_KEY}
-  captcha-enable: ${CAPTCHA_ENABLE}
+  admin-create-key: dfjkNdkMAnje
+  encode-key: abcdefghabcdefgh
+  type-encode: AES
+  recaptcha-site-key: 6LfblD0qAAAAAC1k-Zd8GfiyXmKjNWBV4xMC1BNP
+  captcha-enable: true
+  recaptcha-secret-key: 6LfblD0qAAAAAO2lT_e5JwmxUFJ55uCpxPrdwk0T

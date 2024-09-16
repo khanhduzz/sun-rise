@@ -30,7 +30,7 @@ public interface UserService {
 
     void activateUserById(Long id);
 
-    Page<User> getUserList(DataTableInputDTO payload);
+    Page<UserResponseDTO> getUserList(DataTableInputDTO payload);
 
     UserResponseDTO getInfor();
 

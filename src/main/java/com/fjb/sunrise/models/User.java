@@ -49,8 +49,9 @@ public class User extends AuditEntity<String> implements Serializable, UserDetai
     @Column(name = "verification_code")
     private String verificationCode;
 
-    @Column(name = "avatar_path")  // Added avatarPath column to store avatar file path
-    private String avatarPath;
+    @Lob
+    @Column(name = "avatar_image")  // Changed to store image data
+    private byte[] avatarImage; // Changed to byte array to store image data
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

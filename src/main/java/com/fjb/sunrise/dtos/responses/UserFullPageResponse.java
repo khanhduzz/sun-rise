@@ -13,4 +13,7 @@ public class UserFullPageResponse implements Serializable {
     private Long recordsTotal;
     private Long recordsFiltered;
     private Integer draw;
+
+    public void setData(List<UserResponseDTO> list) {
+    }
 }

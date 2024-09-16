@@ -95,7 +95,6 @@
 
         .btn-change-avatar:hover {
             background-color: #375a7f;
-
         }
 
         .avatar-container input[type="file"] {
@@ -167,7 +166,8 @@
                             <div class="card-body">
                                 <!-- Avatar Section -->
                                 <div class="avatar-container">
-                                    <img src="/path/to/current-avatar.jpg" alt="Current Avatar" id="avatarPreview">
+                                    <!-- Using th:src to dynamically load the avatar image from Base64 string -->
+                                    <img th:src="'data:image/png;base64,' + ${userInfor.avatarImage}" alt="Current Avatar" id="avatarPreview">
                                     <label for="avatarUpload" class="btn-change-avatar">
                                         <i class="fas fa-camera"></i> Change Avatar
                                     </label>

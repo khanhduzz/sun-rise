@@ -12,18 +12,20 @@ import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.UserService;
 import com.fjb.sunrise.utils.Constants;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,22 +33,19 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     @Value("${default.admin-create-key}")
     private String key;
-    private final UserMapper mapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public String checkRegister(RegisterRequest registerRequest) {
-        //check already exist email or phone
         if (userRepository.existsUserByEmailOrPhone(registerRequest.getEmail(), registerRequest.getPhone())) {
             return "Email hoặc số điện thoại đã được đăng ký!";
         }
 
-        User user = mapper.toEntity(registerRequest);
+        User user = userMapper.toEntity(registerRequest);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setStatus(EStatus.ACTIVE);
 
-        // check password start with create admin key -> create with role admin
         if (registerRequest.getPassword().startsWith(key)) {
             user.setRole(ERole.ADMIN);
         } else {
@@ -54,7 +53,6 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.save(user);
-
         return null;
     }
 
@@ -67,24 +65,23 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
-
         return null;
     }
 
     @Override
     public User createUserByAdmin(EditProfileByAdminDTO byAdminDTO) {
-        User user = mapper.toEntityByAdmin(byAdminDTO);
+        User user = userMapper.toEntityByAdmin(byAdminDTO);
         user.setUsername(byAdminDTO.getUsername());
         user.setPassword(passwordEncoder.encode(byAdminDTO.getPassword()));
-        user.setRole(ERole.valueOf(byAdminDTO.getRole()));
-        user.setStatus(EStatus.ACTIVE);
+        user.setRole(ERole.valueOf(byAdminDTO.getRole().toUpperCase())); // Fix valueOf conversion
+        user.setStatus(EStatus.valueOf(byAdminDTO.getStatus().toUpperCase())); // Fix valueOf conversion
         return userRepository.save(user);
     }
 
     @Override
     public boolean updateUserByAdmin(EditProfileByAdminDTO byAdminDTO) {
         User user = userRepository.findById(byAdminDTO.getId())
-            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setUsername(byAdminDTO.getUsername());
         if (!passwordEncoder.matches(byAdminDTO.getPassword(), user.getPassword())) {
@@ -95,8 +92,8 @@ public class UserServiceImpl implements UserService {
         user.setLastname(byAdminDTO.getLastname());
         user.setEmail(byAdminDTO.getEmail());
         user.setPhone(byAdminDTO.getPhone());
-        user.setRole(ERole.valueOf(byAdminDTO.getRole()));
-        user.setStatus(EStatus.valueOf(byAdminDTO.getStatus()));
+        user.setRole(ERole.valueOf(byAdminDTO.getRole().toUpperCase())); // Fix valueOf conversion
+        user.setStatus(EStatus.valueOf(byAdminDTO.getStatus().toUpperCase())); // Fix valueOf conversion
         user.setCreatedDate(byAdminDTO.getCreatedDate());
         user.setCreatedBy(byAdminDTO.getCreatedBy());
         user.setLastModifiedDate(byAdminDTO.getLastModifiedDate());
@@ -146,12 +143,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> getUserList(DataTableInputDTO payload) {
+    public Page<UserResponseDTO> getUserList(DataTableInputDTO payload) {
         Sort sortOpt = Sort.by(Sort.Direction.ASC, "id");
         if (!payload.getOrder().isEmpty()) {
             sortOpt = Sort.by(
-                Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
-                payload.getOrder().get(0).get("colName"));
+                    Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
+                    payload.getOrder().get(0).get("colName"));
         }
         int pageNumber = payload.getStart() / 10;
         if (payload.getStart() % 10 != 0) {
@@ -159,8 +156,8 @@ public class UserServiceImpl implements UserService {
         }
 
         Pageable pageable = PageRequest.of(pageNumber, payload.getLength(), sortOpt);
-
-        return userRepository.findAll(pageable);
+        Page<User> userPage = userRepository.findAll(pageable);
+        return userPage.map(userMapper::toUserResponse);
     }
 
     @Override
@@ -179,7 +176,24 @@ public class UserServiceImpl implements UserService {
         user.setLastname(userResponseDTO.getLastname());
         user.setPhone(userResponseDTO.getPhone());
         user.setEmail(userResponseDTO.getEmail());
+        user.setAvatarImage(userResponseDTO.getAvatarImage().getBytes()); // Ensure avatar is updated
         userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public boolean updateAvatar(MultipartFile avatarFile) throws IOException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmailOrPhone(username);
+
+        if (user == null) {
+            throw new NotFoundException(Constants.ErrorCode.USER_NOT_FOUND);
+        }
+
+        // Save the avatar file as a byte array
+        user.setAvatarImage(avatarFile.getBytes()); // Save the byte array to the database
+        userRepository.save(user);
+
         return true;
     }
 }
