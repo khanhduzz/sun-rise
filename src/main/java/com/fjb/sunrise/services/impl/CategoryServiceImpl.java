@@ -4,8 +4,10 @@ import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
+import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
+import com.fjb.sunrise.models.Transaction;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
 import com.fjb.sunrise.repositories.UserRepository;
@@ -16,6 +18,7 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -76,7 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Page<Category> getCategoryList(DataTableInputDTO payload) {
         List<Sort.Order> orders = new ArrayList<>();
-        orders.add(Sort.Order.desc("owner.role"));
+        orders.add(Sort.Order.asc("owner.role"));
 
         if (!payload.getOrder().isEmpty()) {
             orders.add(new Sort.Order(Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
@@ -92,7 +95,32 @@ public class CategoryServiceImpl implements CategoryService {
         Pageable pageable = PageRequest.of(pageNumber, payload.getLength(), sortOpt);
 
         Specification<Category> specs = findAllByUser();
+
+        final String keyword = payload.getSearch().getOrDefault("value", "");
+        if (Strings.isNotBlank(keyword)) {
+            // "%" + keyword + "%"
+            specs = specs.and((
+                (root, query, builder) ->
+                    builder.like(builder.lower(root.get("name")),
+                        String.format("%%%s%%",
+                            payload.getSearch().getOrDefault("value", "").toLowerCase()
+                        ))));
+        }
+
         return categoryRepository.findAll(specs, pageable);
+    }
+
+    @Override
+    public List<CategoryResponseDto> addIsAdminToCategory(List<CategoryResponseDto> list) {
+        List<User> admins = userRepository.findAllByRole(ERole.ADMIN);
+        list.forEach(item->
+            admins.forEach(admin->{
+                if(admin.getId() == item.getOwner().getId()) {
+                    item.setAdmin(true);
+                }
+            })
+        );
+        return list;
     }
 
     @Override
@@ -108,8 +136,9 @@ public class CategoryServiceImpl implements CategoryService {
         orders.add(Sort.Order.asc("owner.role"));
         Sort sortOpt = Sort.by(orders);
         Specification<Category> specs = findAllByUser();
-        return categoryRepository.findAll(specs,sortOpt);
+        return categoryRepository.findAll(specs, sortOpt);
     }
+
     private Specification<Category> findAllByUser() {
         return Specification.where((root, query, builder) -> {
                 Join<Category, User> userJoin = root.join("owner");

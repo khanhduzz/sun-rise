@@ -1,6 +1,8 @@
 package com.fjb.sunrise.repositories;
 
+import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.models.User;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsUserByEmailOrPhone(String email, String phone);
 
     Page<User> findAll(Pageable pageable);
+
+    List<User> findAllByRole(ERole role);
 }

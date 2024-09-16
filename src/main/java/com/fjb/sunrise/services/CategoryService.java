@@ -26,4 +26,5 @@ public interface CategoryService {
 
     Page<Category> getCategoryList(DataTableInputDTO payload);
 
+    List<CategoryResponseDto> addIsAdminToCategory(List<CategoryResponseDto> categoryResponseDtoList);
 }

@@ -125,8 +125,6 @@ public class TransactionServiceImpl implements TransactionService {
                         payload.getSearch().getOrDefault("value", "").toLowerCase()
                     ));
             });
-
-
         }
         return transactionRepository.findAll(specs, pageable);
     }
