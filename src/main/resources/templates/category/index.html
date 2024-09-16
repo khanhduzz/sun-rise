@@ -30,8 +30,72 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <div th:replace="~{tab_bar :: tab-bar}"></div>
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{transaction/index.html}">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">Budgeting Service</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/index.html}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Tổng quan</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Quản trị
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item active">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+               aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Danh mục</span>
+            </a>
+            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item active" href="../category/index.html">Danh sách danh mục</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+               aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Người dùng</span>
+            </a>
+            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" th:href="@{/customer/index.html}">Danh sách người dùng</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+    </ul>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -41,7 +105,41 @@
         <div id="content">
 
             <!-- Topbar -->
-            <div th:replace="~{header :: header}"></div>
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Vi Tran Nguyen Ky</span>
+                            <img class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}">
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Tài khoản
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Đăng xuất
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </nav>
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
@@ -86,7 +184,13 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <div th:replace="~{footer :: footer}"></div>
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Vi Tran Nguyen Ky</span>
+                </div>
+            </div>
+        </footer>
         <!-- End of Footer -->
 
     </div>
@@ -100,13 +204,32 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn thoát?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                <a class="btn btn-primary" th:href="@{login.html}">Đăng xuất</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Create Category Modal-->
 <div class="modal fade" id="createCategoryModal" tabindex="-1" role="dialog"
      aria-labelledby="createCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel1">Tạo danh mục thu/chi</h5>
+                <h5 class="modal-title" id="exampleModalLabel1">Tạo tên danh mục</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -115,7 +238,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputCategory">Tên danh mục</label>
-                        <input type="text" class="form-control" id="inputCategory" aria-describedby="categoryHelp">
+                        <input type="text" class="form-control" id="inputCategory" th:field="*{name}" aria-describedby="categoryHelp">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -133,7 +256,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel2">Sửa danh mục thu/chi</h5>
+                <h5 class="modal-title" id="exampleModalLabel2">Sửa tên danh mục</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -142,7 +265,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputNewCategoryName">Tên danh mục</label>
-                        <input type="text" class="form-control" id="inputNewCategoryName" aria-describedby="categoryHelp">
+                        <input type="text" class="form-control" id="inputNewCategoryName" th:field="*{name}" aria-describedby="categoryHelp">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -153,6 +276,44 @@
         </div>
     </div>
 </div>
+
+<!-- Status Category Modal-->
+<div class="modal fade" id="statusCategoryModal" tabindex="-1" role="dialog"
+     aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel3">Trạng thái danh mục</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!-- Form để gửi yêu cầu POST -->
+<!--            <form id="statusCategory" th:object="${categoryStatus}" th:action="@{/category/delete/{id}}" method="POST">-->
+<!--                &lt;!&ndash; Truyền ID danh mục qua tham số hidden &ndash;&gt;-->
+<!--&lt;!&ndash;                <input type="hidden" name="id" th:value="${category.id}">&ndash;&gt;-->
+
+<!--                &lt;!&ndash; Hiển thị nút bật/tắt trạng thái &ndash;&gt;-->
+<!--                <button type="submit" name="status" th:value="${category.status == 'ACTIVE' ? 'NOT_ACTIVE' : 'ACTIVE'}">-->
+<!--                    <span th:text="${category.status == 'ACTIVE' ? 'Deactivate' : 'Activate'}"></span>-->
+<!--                </button>-->
+<!--            </form>-->
+<!--            <form id="" th:object="${categoryUpdate}" th:action="@{/category/update/{id}}" method="POST">-->
+<!--                <div class="modal-body">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="inputNewCategoryName">Tên danh mục</label>-->
+<!--                        <input type="text" class="form-control" id="inputNewCategoryStatus" th:field="*{name}" aria-describedby="categoryHelp">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button class="btn btn-secondary" type="reset" data-dismiss="modal">Hủy</button>-->
+<!--                    <button class="btn btn-primary" type="submit">Gửi</button>-->
+<!--                </div>-->
+<!--            </form>-->
+        </div>
+    </div>
+</div>
+
 
 <!-- Bootstrap core JavaScript-->
 <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
@@ -165,11 +326,11 @@
 <script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
 
 <!-- Page level plugins -->
-<script th:src="@{/vendor/chart.js/Chart.min.js}" type="application/javascript"></script>
+<!--<script th:src="@{/vendor/chart.js/Chart.min.js}" type="application/javascript"></script>-->
 
 <!-- Page level custom scripts -->
-<script th:src="@{/js/demo/chart-area-demo.js}" type="application/javascript"></script>
-<script th:src="@{/js/demo/chart-pie-demo.js}" type="application/javascript"></script>
+<!--<script th:src="@{/js/demo/chart-area-demo.js}" type="application/javascript"></script>-->
+<!--<script th:src="@{/js/demo/chart-pie-demo.js}" type="application/javascript"></script>-->
 
 <!-- Page level plugins -->
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
@@ -211,26 +372,25 @@
         {"data": "name"},
         {"data": "createdDate"},
         {"data": "lastModifiedDate"},
-        {"data": "active"},
-        {"data": "admin", "defaultContent":"" +
+        {"data": "status"},
+        {"data": null, "defaultContent":"" +
                 "<div>" +
                 "<button data-toggle=\"modal\" data-target=\"#editCategoryModal\" class=\"btn btn-outline-danger\">Edit</button>" +
-                "<button class=\"btn btn-outline-primary\">Status</button>" +
-                "</div>",
-            "render": function (data, type, row, meta) {
-                return row.admin ? "":"<button data-toggle=\"modal\" data-target=\"#editCategoryModal\" class=\"btn btn-outline-danger\">Edit</button>" +
-                    "<button class=\"btn btn-outline-primary\">Status</button>"
-            }
+                "<button data-toggle=\"modal\" data-target=\"#statusCategoryModal\" class=\"btn btn-outline-primary\">Status</button>" +
+                "</div>"
         }
     ];
 
-    const tableCategory = installTable('dataTableCategory', '/sun/category/page', cols)
-
+    const table = installTable('dataTableCategory', '/sun/category/page', cols)
     $('#dataTableCategory tbody').on('click', 'tr', function () {
-        console.log(table.row(this).data());
+
         const data = table.row(this).data();
-        // const name = $(`#inputCategory`).val(data.name);
-        // const newName = $(`#inputNewCategoryName`).val(data.newName);
+        const name = data.name
+
+        $(`#inputCategory`).val(name);
+
+        $(`#inputNewCategoryName`).val(name);
+
 
         $('#createCategoryModal').modal('show');
         $('#addCategory').attr('action', `/sun/category/add/`);
