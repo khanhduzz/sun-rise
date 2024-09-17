@@ -21,9 +21,44 @@
 
     <style>
         .form-container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
         }
+
+        .form-section {
+            margin-bottom: 20px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .form-section h6 {
+            text-align: center;
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+        }
+
+        .label-custom {
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+            border: 1px solid #007bff;
+            color: #007bff;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .form-control, .form-select {
+            height: calc(2.75rem + 2px);
+        }
+
+        .card-body .row .col-md-4,
+        .card-body .row .col-md-6 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
     </style>
 </head>
 
@@ -43,87 +78,134 @@
             <div class="container-fluid form-container">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 text-center">
-                        <h6 class="m-0 font-weight-bold text-primary" style="font-size: 1.5rem; color: #007bff;">
+                        <h6 class="m-0 font-weight-bold" style="font-size: 1.5rem; color: #007bff;">
                             Khởi tạo người dùng mới
                         </h6>
                     </div>
+                    <!-- Form -->
                     <div class="card-body">
-                        <form th:method="POST" th:action="@{/user/add-user-by-admin}" th:object="${newUser}" class="row g-3">
-                            <div class="col-md-6">
-                                <label for="username" class="form-label font-weight-bold">Tên người dùng</label>
-                                <input class="form-control border-primary" type="text" th:field="*{username}" id="username" name="username" placeholder="Nhập tên người dùng" />
+                        <form th:method="POST" th:action="@{/user/add-user-by-admin}" th:object="${newUser}" id="createUserForm" class="row g-3">
+                            <div class="row" style="padding-top: 20px">
+                                <!-- User Information -->
+                                <div class="col-md-6 form-section">
+                                    <div class="card shadow">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Thông tin người dùng</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label for="username" class="form-label label-custom">Tên người dùng</label>
+                                                <input type="text" th:field="*{username}" class="form-control" id="username" required>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="firstname" class="form-label label-custom">Họ</label>
+                                                    <input type="text" th:field="*{firstname}" class="form-control" id="firstname" required>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="lastname" class="form-label label-custom">Tên</label>
+                                                    <input type="text" th:field="*{lastname}" class="form-control" id="lastname" required>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="phone" class="form-label label-custom">Số điện thoại</label>
+                                                    <input type="text" th:field="*{phone}" class="form-control" id="phone" required>
+                                                    <small th:if="${duplicatePhone != null}" class="text-danger">Số điện thoại này đã được sử dụng.</small>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="role" class="form-label label-custom">Vai trò</label>
+                                                    <select th:field="*{role}" class="form-select" id="role">
+                                                        <option value="ADMIN">Quản trị viên</option>
+                                                        <option value="USER">Người dùng</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="status" class="form-label label-custom">Trạng thái</label>
+                                                    <select th:field="*{status}" class="form-select" id="status">
+                                                        <option value="ACTIVE">Hoạt động</option>
+                                                        <option value="INACTIVE">Không hoạt động</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Login Information -->
+                                <div class="col-md-6 form-section">
+                                    <div class="card shadow">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Thông tin đăng nhập</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label label-custom">Địa chỉ email</label>
+                                                <input type="email" th:field="*{email}" class="form-control" id="email" required>
+                                                <small th:if="${duplicateEmail != null}" class="text-danger">Email này đã được đăng ký.</small>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="password" class="form-label label-custom">Mật khẩu</label>
+                                                <input type="password" th:field="*{password}" class="form-control" id="password" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="confirmPassword" class="form-label label-custom">Nhập lại mật khẩu</label>
+                                                <input type="password" class="form-control" id="confirmPassword" required>
+                                                <small id="passwordError" class="text-danger" style="display: none;">Mật khẩu không khớp!</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="password" class="form-label font-weight-bold">Mật khẩu</label>
-                                <input class="form-control border-primary" type="password" th:field="*{password}" id="password" name="password" placeholder="Nhập mật khẩu" />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="firstname" class="form-label font-weight-bold">Họ</label>
-                                <input class="form-control border-primary" type="text" th:field="*{firstname}" id="firstname" name="firstname" placeholder="Nhập họ" />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="lastname" class="form-label font-weight-bold">Tên</label>
-                                <input class="form-control border-primary" type="text" th:field="*{lastname}" id="lastname" name="lastname" placeholder="Nhập tên" />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="email" class="form-label font-weight-bold">Email</label>
-                                <input class="form-control border-primary" type="text" th:field="*{email}" id="email" name="email" placeholder="Nhập email" />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="phone" class="form-label font-weight-bold">Số điện thoại</label>
-                                <input class="form-control border-primary" type="text" th:field="*{phone}" id="phone" name="phone" placeholder="Nhập số điện thoại" />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="role" class="form-label font-weight-bold">Vai Trò</label>
-                                <select class="form-select border-primary" th:field="*{role}" id="role">
-                                    <option th:value="${T(com.fjb.sunrise.enums.ERole).ADMIN}">
-                                        Quản trị viên
-                                    </option>
-                                    <option th:value="${T(com.fjb.sunrise.enums.ERole).USER}">
-                                        Người dùng
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="status" class="form-label font-weight-bold">Trạng Thái</label>
-                                <select class="form-select border-primary" th:field="*{status}" id="status">
-                                    <option th:value="${T(com.fjb.sunrise.enums.EStatus).ACTIVE}">
-                                        Hoạt động
-                                    </option>
-                                    <option th:value="${T(com.fjb.sunrise.enums.EStatus).NOT_ACTIVE}">
-                                        Không hoạt động
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                <button type="reset" class="btn btn-secondary">Reset</button>
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="submit" id="createUserBtn" class="btn btn-success flex-fill mx-3">Khởi tạo</button>
+                                <button type="reset" class="btn btn-secondary flex-fill mx-3"
+                                        onclick="return confirm('Bạn có chắc chắn muốn hủy bỏ và xóa tất cả các thay đổi?')">Hủy bỏ</button>
                             </div>
                         </form>
                     </div>
+                    <!-- End of Form -->
                 </div>
             </div>
-            <!-- /.container-fluid -->
         </div>
-        <!-- End of Main Content -->
-
         <!-- Footer -->
         <div th:replace="~{footer :: footer}"></div>
-        <!-- End of Footer -->
     </div>
-    <!-- End of Content Wrapper -->
 </div>
-<!-- End of Page Wrapper -->
 
-<!-- Bootstrap core JavaScript-->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}" type="application/javascript"></script>
 <script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
-<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
-<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
+
+<script>
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const passwordError = document.getElementById('passwordError');
+    const createUserForm = document.getElementById('createUserForm');
+
+    function checkPasswordMatch() {
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.classList.add('is-invalid');
+            passwordError.style.display = 'block';
+            return false;
+        } else {
+            confirmPassword.classList.remove('is-invalid');
+            passwordError.style.display = 'none';
+            return true;
+        }
+    }
+
+    createUserForm.addEventListener('submit', function(event) {
+        if (!checkPasswordMatch()) {
+            event.preventDefault();
+        }
+    });
+
+    confirmPassword.addEventListener('input', checkPasswordMatch);
+</script>
 
 </body>
-
 </html>

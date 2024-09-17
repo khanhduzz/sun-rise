@@ -187,6 +187,11 @@ public class UserServiceImpl implements UserService {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmailOrPhone(name);
         user.setUsername(userResponseDTO.getUsername());
+
+        if (!passwordEncoder.matches(userResponseDTO.getPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userResponseDTO.getPassword()));
+        }
+
         user.setFirstname(userResponseDTO.getFirstname());
         user.setLastname(userResponseDTO.getLastname());
         user.setPhone(userResponseDTO.getPhone());
@@ -194,4 +199,15 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return true;
     }
+
+    @Override
+    public boolean checkIsEmailDuplicate(String email) {
+        return userRepository.existsUserByEmail(email);
+    }
+
+    @Override
+    public boolean checkPhoneIsDuplicate(String phone) {
+        return userRepository.existsUserByPhone(phone);
+    }
+
 }
