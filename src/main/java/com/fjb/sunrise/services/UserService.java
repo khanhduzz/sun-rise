@@ -32,4 +32,8 @@ public interface UserService {
     UserResponseDTO getInfor();
 
     boolean editUser(UserResponseDTO userResponseDTO);
+
+    boolean checkIsEmailDuplicate(String email);
+
+    boolean checkPhoneIsDuplicate(String phone);
 }

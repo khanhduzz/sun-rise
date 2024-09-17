@@ -49,7 +49,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary text-center">Chỉnh sửa thông tin</h6>
                             </div>
                             <div class="card-body">
-                                <form th:action="@{/user/edit-infor}" th:object="${userInfor}" method="POST">
+                                <form id="editUserForm" th:action="@{/user/edit-infor}" th:object="${userInfor}" method="POST">
                                     <input type="hidden" th:field="*{id}">
 
                                     <!-- Username field -->
@@ -74,6 +74,15 @@
                                     <div class="mb-3">
                                         <label>Email</label>
                                         <input type="email" class="form-control" th:field="*{email}" placeholder="Vui lòng nhập email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label label-custom">Mật khẩu</label>
+                                        <input type="password" th:field="*{password}" class="form-control" id="password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label label-custom">Nhập lại mật khẩu</label>
+                                        <input type="password" class="form-control" id="confirmPassword">
+                                        <small id="passwordError" class="text-danger" style="display: none;">Mật khẩu không khớp!</small>
                                     </div>
 
                                     <!-- Phone field -->
@@ -147,6 +156,32 @@
 <!-- Page level plugins -->
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
+<script>
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const passwordError = document.getElementById('passwordError');
+    const editUserForm = document.getElementById('editUserForm');
+
+    function checkPasswordMatch() {
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.classList.add('is-invalid');
+            passwordError.style.display = 'block';
+        } else {
+            confirmPassword.classList.remove('is-invalid');
+            passwordError.style.display = 'none';
+        }
+    }
+
+    confirmPassword.addEventListener('input', checkPasswordMatch);
+    password.addEventListener('input', checkPasswordMatch);
+
+    editUserForm.addEventListener('submit', function(event) {
+        if (password.value !== confirmPassword.value) {
+            event.preventDefault();
+            passwordError.style.display = 'block';
+        }
+    });
+</script>
 </body>
 
 </html>

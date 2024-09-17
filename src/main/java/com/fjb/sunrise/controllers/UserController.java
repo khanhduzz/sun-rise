@@ -45,7 +45,6 @@ public class UserController {
     @PostMapping("/edit-infor")
     public ModelAndView editUserInfo(@ModelAttribute("userInfor") UserResponseDTO userResponseDTO) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(Constants.ApiConstant.USER_INFORMATION);
         userService.getInfor();
         boolean editInfor = userService.editUser(userResponseDTO);
         if (editInfor) {
@@ -53,7 +52,7 @@ public class UserController {
         } else {
             modelAndView.addObject("error", "Failed to update user");
         }
-        modelAndView.setViewName(Constants.ApiConstant.ADMIN_REDIRECT);
+        modelAndView.setViewName(Constants.ApiConstant.USER_REDIRECT);
         return modelAndView;
     }
 
@@ -80,11 +79,28 @@ public class UserController {
     public ModelAndView doAddUserByAdmin(@ModelAttribute("newUser") EditProfileByAdminDTO newUser,
                                          RedirectAttributes redirect) {
         ModelAndView modelAndView = new ModelAndView();
+
+        boolean isDuplicateEmail = userService.checkIsEmailDuplicate(newUser.getEmail());
+        if (isDuplicateEmail) {
+            modelAndView.addObject("duplicateEmail", "Email này đã được đăng ký");
+            modelAndView.setViewName(Constants.ApiConstant.ADMIN_ADD_NEW_USER);
+            return modelAndView;
+        }
+
+        boolean isDuplicatePhone = userService.checkPhoneIsDuplicate(newUser.getPhone());
+        if (isDuplicatePhone) {
+            modelAndView.addObject("duplicatePhone", "Số điện thoại này đã được sử dụng");
+            modelAndView.setViewName(Constants.ApiConstant.ADMIN_ADD_NEW_USER);
+            return modelAndView;
+        }
+
         userService.createUserByAdmin(newUser);
         redirect.addFlashAttribute("message", "User added successfully");
+
         modelAndView.setViewName(Constants.ApiConstant.ADMIN_REDIRECT);
         return modelAndView;
     }
+
 
     @PostMapping("/page")
     @ResponseBody
