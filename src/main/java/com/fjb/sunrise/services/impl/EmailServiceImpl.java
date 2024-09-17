@@ -41,19 +41,18 @@ public class EmailServiceImpl implements EmailService {
         user.setVerificationCode(code);
         userRepository.save(user);
 
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(emailServer);
-        simpleMailMessage.setTo(verification.getEmail());
-        simpleMailMessage.setSubject("Verification Email");
-        simpleMailMessage.setText("Click this link to change password: \n"
-            + "http://localhost:8086/sun/auth/verify?code="
-            + code);
-
-        try {
+        Thread thread = new Thread(() -> {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom(emailServer);
+            simpleMailMessage.setTo(verification.getEmail());
+            simpleMailMessage.setSubject("Verification Email");
+            simpleMailMessage.setText("Click this link to change password: \n"
+                + "http://localhost:8086/sun/auth/verify?code="
+                + code);
             javaMailSender.send(simpleMailMessage);
-        } catch (Exception e) {
-            return "Gửi mail không thành công!";
-        }
+        });
+        thread.start();
+
         return "Gửi mail thành công! \nVui lòng kiểm tra email của bạn!";
     }
 
