@@ -35,11 +35,11 @@ public class AuthController {
     private final EmailService emailService;
     private final ReCaptchaService reCaptchaService;
 
-
     @GetMapping({"/login", "/register"})
     public ModelAndView indexLogin(@RequestParam(value = "error", required = false) String error) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
+        if (authentication != null && authentication.isAuthenticated()
+            && !(authentication.getPrincipal() instanceof String)) {
             return new ModelAndView("redirect:/health");
         }
 
