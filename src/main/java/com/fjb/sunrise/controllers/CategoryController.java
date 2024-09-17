@@ -34,11 +34,13 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
 
+    private static final String CATEGORY_CREATE = "categoryCreate";
+
     @GetMapping("/index")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categories", categoryService.getAllCategories());
-        modelAndView.addObject("categoryCreate", new CategoryCreateDto());
+        modelAndView.addObject(CATEGORY_CREATE, new CategoryCreateDto());
         modelAndView.addObject("categoryUpdate", new CategoryUpdateDto());
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
@@ -61,13 +63,13 @@ public class CategoryController {
     //create
 
     @PostMapping("/add")
-    public ModelAndView addCategory(@ModelAttribute("categoryCreate")
+    public ModelAndView addCategory(@ModelAttribute(CATEGORY_CREATE)
                                     @Valid CategoryCreateDto categoryCreateDto,
                                     BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
-            modelAndView.addObject("categoryCreate", new CategoryCreateDto());
+            modelAndView.addObject(CATEGORY_CREATE, new CategoryCreateDto());
             return modelAndView;
         }
         categoryService.createCategory(categoryCreateDto);
@@ -78,7 +80,7 @@ public class CategoryController {
     @GetMapping("/add")
     public ModelAndView addCategory() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("categoryCreate", new CategoryCreateDto());
+        modelAndView.addObject(CATEGORY_CREATE, new CategoryCreateDto());
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
@@ -90,7 +92,7 @@ public class CategoryController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("category", categoryService.getCategoryById(id));
         modelAndView.addObject("categoryUpdate", new CategoryUpdateDto());
-        modelAndView.addObject("categoryCreate", new CategoryCreateDto());
+        modelAndView.addObject(CATEGORY_CREATE, new CategoryCreateDto());
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
@@ -102,7 +104,7 @@ public class CategoryController {
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
             modelAndView.addObject("category", categoryService.getCategoryById(id));
-            modelAndView.addObject("categoryCreate", new CategoryCreateDto());
+            modelAndView.addObject(CATEGORY_CREATE, new CategoryCreateDto());
             return modelAndView;
         }
         categoryService.updateCategory(id, categoryUpdateDto);
