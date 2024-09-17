@@ -34,7 +34,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
 
-    @GetMapping
+    @GetMapping("/index")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categories", categoryService.getAllCategories());
@@ -67,6 +67,7 @@ public class CategoryController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
+            modelAndView.addObject("categoryCreate", new CategoryCreateDto());
             return modelAndView;
         }
         categoryService.createCategory(categoryCreateDto);
@@ -89,6 +90,7 @@ public class CategoryController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("category", categoryService.getCategoryById(id));
         modelAndView.addObject("categoryUpdate", new CategoryUpdateDto());
+        modelAndView.addObject("categoryCreate", new CategoryCreateDto());
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;
     }
@@ -100,6 +102,7 @@ public class CategoryController {
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         if (result.hasErrors()) {
             modelAndView.addObject("category", categoryService.getCategoryById(id));
+            modelAndView.addObject("categoryCreate", new CategoryCreateDto());
             return modelAndView;
         }
         categoryService.updateCategory(id, categoryUpdateDto);
@@ -112,9 +115,13 @@ public class CategoryController {
     @PostMapping("/delete/{id}")
     public ModelAndView changeStatusCategory(@PathVariable("id") Long id, @ModelAttribute("categoryStatus")
                                                 @Valid CategoryStatusDto categoryStatusDto,
+                                             BindingResult bindingResult,
                                              RedirectAttributes redirectAttributes) {
         ModelAndView modelAndView = new ModelAndView();
         CategoryResponseDto category = categoryService.getCategoryById(id);
+        if (bindingResult.hasErrors()) {
+            return modelAndView;
+        }
         try {
             if (category.getStatus() == EStatus.NOT_ACTIVE) {
                 categoryService.enableCategory(id);
