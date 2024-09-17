@@ -20,6 +20,9 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.mail.username}")
     private String emailServer;
 
+    @Value("${default.timing-send=mail}")
+    private Integer time;
+
     private final UserRepository userRepository;
     private final Encoder encoder;
 
@@ -78,7 +81,7 @@ public class EmailServiceImpl implements EmailService {
             return "Lỗi trong quá trình xác thực!";
         }
 
-        if (verification.getRequestTime().plusMinutes(2).isBefore(LocalDateTime.now())) {
+        if (verification.getRequestTime().plusSeconds(time).isBefore(LocalDateTime.now())) {
             return "Vượt quá thời gian xác thực!";
         }
 
