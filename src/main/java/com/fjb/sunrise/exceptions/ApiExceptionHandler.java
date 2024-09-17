@@ -24,6 +24,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class ApiExceptionHandler {
 
     private static final String ERROR_LOG_FORMAT = "Error: URI: {}, ErrorCode: {}, Message: {}";
+    private static final String ERROR = "error";
 
     @ExceptionHandler(NotFoundException.class)
     public ModelAndView handleNotFoundException(NotFoundException ex, WebRequest request) {
@@ -35,8 +36,8 @@ public class ApiExceptionHandler {
         log.warn(ERROR_LOG_FORMAT, this.getServletPath(request), 404, message);
         log.debug(ex.toString());
 
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("error", errorVm);
+        ModelAndView modelAndView = new ModelAndView(ERROR);
+        modelAndView.addObject(ERROR, errorVm);
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
 
         return modelAndView;
@@ -52,8 +53,8 @@ public class ApiExceptionHandler {
         log.warn(ERROR_LOG_FORMAT, this.getServletPath(request), 400, message);
         log.debug(ex.toString());
 
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("error", errorVm);
+        ModelAndView modelAndView = new ModelAndView(ERROR);
+        modelAndView.addObject(ERROR, errorVm);
         modelAndView.setStatus(HttpStatus.BAD_REQUEST);
 
         return modelAndView;
@@ -106,8 +107,8 @@ public class ApiExceptionHandler {
         log.warn(ERROR_LOG_FORMAT, this.getServletPath(request), 500, message);
         log.debug(ex.toString());
 
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("error", errorVm);
+        ModelAndView modelAndView = new ModelAndView(ERROR);
+        modelAndView.addObject(ERROR, errorVm);
         modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 
         return modelAndView;
@@ -120,8 +121,8 @@ public class ApiExceptionHandler {
         ErrorVm errorVm = new ErrorVm("404",
             HttpStatus.NOT_FOUND.getReasonPhrase(), message);
 
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("error", errorVm);
+        ModelAndView modelAndView = new ModelAndView(ERROR);
+        modelAndView.addObject(ERROR, errorVm);
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
 
         return modelAndView;
@@ -137,8 +138,8 @@ public class ApiExceptionHandler {
         log.warn(ERROR_LOG_FORMAT, this.getServletPath(request), 401, message);
         log.debug(ex.toString());
 
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("error", errorVm);
+        ModelAndView modelAndView = new ModelAndView(ERROR);
+        modelAndView.addObject(ERROR, errorVm);
         modelAndView.setStatus(HttpStatus.UNAUTHORIZED);
 
         return modelAndView;
@@ -154,8 +155,8 @@ public class ApiExceptionHandler {
         log.warn(ERROR_LOG_FORMAT, this.getServletPath(request), 403, message);
         log.debug(ex.toString());
 
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("error", errorVm);
+        ModelAndView modelAndView = new ModelAndView(ERROR);
+        modelAndView.addObject(ERROR, errorVm);
         modelAndView.setStatus(HttpStatus.FORBIDDEN);
 
         return modelAndView;
