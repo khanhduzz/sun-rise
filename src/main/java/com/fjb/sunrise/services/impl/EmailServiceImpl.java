@@ -20,7 +20,7 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.mail.username}")
     private String emailServer;
 
-    @Value("${default.timing-send=mail}")
+    @Value("${default.timing-send-mail}")
     private Integer time;
 
     private final UserRepository userRepository;

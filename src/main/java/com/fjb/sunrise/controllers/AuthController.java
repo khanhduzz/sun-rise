@@ -29,7 +29,7 @@ public class AuthController {
     @Value("${default.captcha-enable}")
     private String captchaEnable;
 
-    @Value("${default.timing-send=mail}")
+    @Value("${default.timing-send-mail}")
     private Integer timer;
 
     private final UserService userService;
