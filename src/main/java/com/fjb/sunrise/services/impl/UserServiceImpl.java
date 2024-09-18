@@ -6,6 +6,7 @@ import com.fjb.sunrise.dtos.responses.UserResponseDTO;
 import com.fjb.sunrise.dtos.user.EditProfileByAdminDTO;
 import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.enums.EStatus;
+import com.fjb.sunrise.exceptions.DuplicatedException;
 import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.mappers.UserMapper;
 import com.fjb.sunrise.models.User;
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public String checkRegister(RegisterRequest registerRequest) {
         //check already exist email or phone
         if (userRepository.existsUserByEmailOrPhone(registerRequest.getEmail(), registerRequest.getPhone())) {
-            return "Email hoặc số điện thoại đã được đăng ký!";
+            throw new DuplicatedException("Email hoặc số điện thoại đã được đăng ký!");
         }
 
         User user = mapper.toEntity(registerRequest);
