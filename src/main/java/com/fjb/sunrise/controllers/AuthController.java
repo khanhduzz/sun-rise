@@ -29,6 +29,9 @@ public class AuthController {
     @Value("${default.captcha-enable}")
     private String captchaEnable;
 
+    @Value("${default.timing-send-mail}")
+    private Integer timer;
+
     private final UserService userService;
     private final EmailService emailService;
     private final ReCaptchaService reCaptchaService;
@@ -95,7 +98,7 @@ public class AuthController {
         return modelAndView;
     }
 
-    @PostMapping("/sendToEmail")
+    @PostMapping("/forgotPassword")
     public ModelAndView doSendCodeToEmail(@ModelAttribute(Constants.ApiConstant.EMAIL_OBJECT)
                                               String email) {
         ModelAndView modelAndView = new ModelAndView();
@@ -106,6 +109,7 @@ public class AuthController {
 
         modelAndView.setViewName(Constants.ApiConstant.VERIFICATION_BY_EMAIL_VIEW);
         modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, message);
+        modelAndView.addObject("timer", timer);
 
         return modelAndView;
     }
