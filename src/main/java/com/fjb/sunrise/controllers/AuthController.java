@@ -3,6 +3,7 @@ package com.fjb.sunrise.controllers;
 import com.fjb.sunrise.dtos.requests.LoginRequest;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.requests.VerificationByEmail;
+import com.fjb.sunrise.dtos.responses.ErrorVm;
 import com.fjb.sunrise.services.EmailService;
 import com.fjb.sunrise.services.ReCaptchaService;
 import com.fjb.sunrise.services.UserService;

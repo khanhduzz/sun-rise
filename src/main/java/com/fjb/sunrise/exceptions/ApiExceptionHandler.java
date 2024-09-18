@@ -1,6 +1,7 @@
 package com.fjb.sunrise.exceptions;
 
 import com.fjb.sunrise.dtos.responses.ErrorVm;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @ControllerAdvice
 @Slf4j
@@ -92,9 +94,23 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(DuplicatedException.class)
-    protected ErrorVm handleDuplicated(DuplicatedException e) {
-        return new ErrorVm(HttpStatus.BAD_REQUEST.toString(),
-            HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage());
+    protected String handleDuplicated(DuplicatedException e, RedirectAttributes redirectAttributes,
+                                      WebRequest request, HttpServletRequest httpRequest) {
+        String message = e.getMessage();
+        ErrorVm errorVm = new ErrorVm("400",
+            HttpStatus.BAD_REQUEST.getReasonPhrase(), message);
+        redirectAttributes.addFlashAttribute(ERROR, errorVm);
+
+        log.warn(ERROR_LOG_FORMAT, request.getDescription(false), 400, message);
+        log.debug(e.toString());
+
+        String currentUri = httpRequest.getRequestURI();
+        String contextPath = httpRequest.getContextPath();
+        if (currentUri.startsWith(contextPath)) {
+            currentUri = currentUri.substring(contextPath.length());
+        }
+
+        return "redirect:" + (currentUri.isEmpty() ? "/error" : currentUri);
     }
 
     @ExceptionHandler(Exception.class)
