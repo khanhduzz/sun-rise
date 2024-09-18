@@ -14,9 +14,8 @@
 
     <!-- Custom fonts for this template-->
     <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
 
     <!-- Custom styles for this template-->
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
@@ -172,42 +171,7 @@
     </div>
 </div>
 
-<!-- Status Category Modal-->
-<div class="modal fade" id="statusCategoryModal" tabindex="-1" role="dialog"
-     aria-labelledby="editCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel3">Trạng thái danh mục</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <!-- Form để gửi yêu cầu POST -->
-<!--            <form id="statusCategory" th:object="${categoryStatus}" th:action="@{/category/delete/{id}}" method="POST">-->
-<!--                &lt;!&ndash; Truyền ID danh mục qua tham số hidden &ndash;&gt;-->
-<!--&lt;!&ndash;                <input type="hidden" name="id" th:value="${category.id}">&ndash;&gt;-->
 
-<!--                &lt;!&ndash; Hiển thị nút bật/tắt trạng thái &ndash;&gt;-->
-<!--                <button type="submit" name="status" th:value="${category.status == 'ACTIVE' ? 'NOT_ACTIVE' : 'ACTIVE'}">-->
-<!--                    <span th:text="${category.status == 'ACTIVE' ? 'Deactivate' : 'Activate'}"></span>-->
-<!--                </button>-->
-<!--            </form>-->
-<!--            <form id="" th:object="${categoryUpdate}" th:action="@{/category/update/{id}}" method="POST">-->
-<!--                <div class="modal-body">-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="inputNewCategoryName">Tên danh mục</label>-->
-<!--                        <input type="text" class="form-control" id="inputNewCategoryStatus" th:field="*{name}" aria-describedby="categoryHelp">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="modal-footer">-->
-<!--                    <button class="btn btn-secondary" type="reset" data-dismiss="modal">Hủy</button>-->
-<!--                    <button class="btn btn-primary" type="submit">Gửi</button>-->
-<!--                </div>-->
-<!--            </form>-->
-        </div>
-    </div>
-</div>
 
 
 <!-- Bootstrap core JavaScript-->
@@ -262,19 +226,36 @@
             columns: cols
         });
     };
+
     const cols = [
         {"data": "id"},
         {"data": "name"},
         {"data": "createdDate"},
         {"data": "lastModifiedDate"},
-        {"data": "status"},
-        {"data": null, "defaultContent":"" +
-                "<div>" +
-                "<button data-toggle=\"modal\" data-target=\"#editCategoryModal\" class=\"btn btn-outline-danger\">Edit</button>" +
-                "<button data-toggle=\"modal\" data-target=\"#statusCategoryModal\" class=\"btn btn-outline-primary\">Status</button>" +
-                "</div>"
+        {"data": "status", "render": function(data, type, row) {
+                return translateStatus(data);
+            }
+        },
+        {
+            "data": null, "render": function (data, type, row) {
+                return `
+                <div class="btn-group" role="group" aria-label="Category Actions">
+                        <button class="btn btn-outline-info" data-toggle=\"modal\" data-target=\"#editCategoryModal\">
+                            Edit
+                        </button>
+
+                        <button class="btn ${row.status === 'ACTIVE' ? 'btn-outline-warning' : 'btn-outline-success'}"
+                        onclick="changeCategoryStatus(${row.id}, '${row.status === 'ACTIVE' ? 'deactivate' : 'activate'}')">
+                        <i class="fas ${row.status === 'ACTIVE' ? 'fa-ban' : 'fa-check-circle'}"></i>
+                        </button>
+
+                    </div>
+                `
+            }
         }
     ];
+
+
 
     const table = installTable('dataTableCategory', '/sun/category/page', cols)
     $('#dataTableCategory tbody').on('click', 'tr', function () {
@@ -286,13 +267,50 @@
 
         $(`#inputNewCategoryName`).val(name);
 
-
-        $('#createCategoryModal').modal('show');
-        $('#addCategory').attr('action', `/sun/category/add/`);
-
-        $('#editCategoryModal').modal('show');
         $('#updateCategory').attr('action', `/sun/category/update/${data.id}`);
     });
+
+    function changeCategoryStatus(id, action) {
+        if (confirm(`Are you sure you want to ${action === 'activate' ? 'activate' : 'deactivate'} this category?`)) {
+            let url = `/sun/category/${action}/${id}`;
+
+            // Gửi yêu cầu đến backend bằng Fetch API
+            fetch(url, {
+                method: 'GET', // Hoặc 'PATCH', tùy thuộc vào API của bạn
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Cập nhật giao diện ngay lập tức nếu yêu cầu thành công
+                        const button = $(`button[onclick*="changeCategoryStatus(${id},"]`);
+                        button.toggleClass('btn-outline-warning btn-outline-success');
+
+                        // Cập nhật biểu tượng và onclick
+                        if (action === 'activate') {
+                            button.html('<i class="fas fa-ban"></i>');
+                            button.attr('onclick', `changeCategoryStatus(${id}, 'deactivate')`);
+                        } else {
+                            button.html('<i class="fas fa-check-circle"></i>');
+                            button.attr('onclick', `changeCategoryStatus(${id}, 'activate')`);
+                        }
+                    } else {
+                        alert('Error: Unable to change category status.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Request failed. Please try again later.');
+                });
+        }
+    }
+
+
+    const translateStatus = (status) => {
+        if (status === 'ACTIVE') return 'Hoạt Động';
+        if (status === 'NOT_ACTIVE') return 'Không Hoạt Động';
+        return status;
+    };
+
+
 </script>
 <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
 

@@ -2,11 +2,8 @@ package com.fjb.sunrise.controllers;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
-import com.fjb.sunrise.dtos.requests.CategoryStatusDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryFullPageResponse;
-import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
-import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.services.CategoryService;
@@ -15,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -114,30 +112,28 @@ public class CategoryController {
 
     //change-status
 
-    @PostMapping("/delete/{id}")
-    public ModelAndView changeStatusCategory(@PathVariable("id") Long id, @ModelAttribute("categoryStatus")
-                                                @Valid CategoryStatusDto categoryStatusDto,
-                                             BindingResult bindingResult,
-                                             RedirectAttributes redirectAttributes) {
-        ModelAndView modelAndView = new ModelAndView();
-        CategoryResponseDto category = categoryService.getCategoryById(id);
-        if (bindingResult.hasErrors()) {
-            return modelAndView;
-        }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/deactivate/{id}")
+    public String disableCategory(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
-            if (category.getStatus() == EStatus.NOT_ACTIVE) {
-                categoryService.enableCategory(id);
-                redirectAttributes.addFlashAttribute("message", "Category enabled successfully.");
-            } else if (category.getStatus() == EStatus.ACTIVE) {
-                categoryService.disableCategory(id);
-                redirectAttributes.addFlashAttribute("message", "Category disabled successfully.");
-            }
+            categoryService.disableCategory(id);
+            redirectAttributes.addFlashAttribute("message", "Category deactivated successfully");
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute(Constants.ErrorCode.ERROR, e.getMessage());
+        }
+        return Constants.ApiConstant.CATEGORY_INDEX;
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/activate/{id}")
+    public String enableCategory(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            categoryService.enableCategory(id);
+            redirectAttributes.addFlashAttribute("message", "Category activated successfully");
         } catch (EntityNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        categoryService.saveStatusCategory(id, categoryStatusDto);
-        modelAndView.setViewName(Constants.ApiConstant.CATEGORY_REDIRECT);
-        return modelAndView;
+        return Constants.ApiConstant.CATEGORY_INDEX;
     }
 
     //get-list

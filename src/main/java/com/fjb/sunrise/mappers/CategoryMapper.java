@@ -1,7 +1,6 @@
 package com.fjb.sunrise.mappers;
 
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
-import com.fjb.sunrise.dtos.requests.CategoryStatusDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.models.Category;
@@ -20,7 +19,6 @@ public interface CategoryMapper {
 
     Category updateCategory(@MappingTarget Category category, CategoryUpdateDto categoryUpdateDto);
 
-    Category statusCategory(@MappingTarget Category category, CategoryStatusDto categoryStatusDto);
 
     List<CategoryResponseDto> listCategoryToListCategoryPageResponse(List<Category> categories);
 }
