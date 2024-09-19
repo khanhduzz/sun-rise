@@ -54,26 +54,26 @@
 
                                     <!-- Username field -->
                                     <div class="mb-3">
-                                        <label>Username</label>
-                                        <input type="text" class="form-control" th:field="*{username}" placeholder="Vui lòng nhập tên người dùng">
+                                        <label for="username">Username</label>
+                                        <input id="username" type="text" class="form-control" th:field="*{username}" placeholder="Vui lòng nhập tên người dùng">
                                     </div>
 
                                     <!-- First Name field -->
                                     <div class="mb-3">
-                                        <label>First Name</label>
-                                        <input type="text" class="form-control" th:field="*{firstname}" placeholder="Vui lòng nhập họ">
+                                        <label for="firstname">First Name</label>
+                                        <input id="firstname" type="text" class="form-control" th:field="*{firstname}" placeholder="Vui lòng nhập họ">
                                     </div>
 
                                     <!-- Last Name field -->
                                     <div class="mb-3">
-                                        <label>Last Name</label>
-                                        <input type="text" class="form-control" th:field="*{lastname}" placeholder="Vui lòng nhập tên">
+                                        <label for="lastname">Last Name</label>
+                                        <input id="lastname" type="text" class="form-control" th:field="*{lastname}" placeholder="Vui lòng nhập tên">
                                     </div>
 
                                     <!-- Email field -->
                                     <div class="mb-3">
-                                        <label>Email</label>
-                                        <input type="email" class="form-control" th:field="*{email}" placeholder="Vui lòng nhập email">
+                                        <label  for="email">Email</label>
+                                        <input for="email" type="email" class="form-control" th:field="*{email}" placeholder="Vui lòng nhập email">
                                     </div>
                                     <div class="mb-3">
                                         <label for="password" class="form-label label-custom">Mật khẩu</label>
@@ -87,8 +87,8 @@
 
                                     <!-- Phone field -->
                                     <div class="mb-3">
-                                        <label>Phone</label>
-                                        <input type="text" class="form-control" th:field="*{phone}" placeholder="Vui lòng nhập số điện thoại">
+                                        <label for="phone">Phone</label>
+                                        <input id="phone" type="text" class="form-control" th:field="*{phone}" placeholder="Vui lòng nhập số điện thoại">
                                     </div>
 
                                     <div class="text-center">
@@ -121,8 +121,8 @@
 </a>
 
 <!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<dialog class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn thoát?</h5>
@@ -136,7 +136,7 @@
             </div>
         </div>
     </div>
-</div>
+</dialog>
 
 <!-- Bootstrap core JavaScript-->
 <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
@@ -165,10 +165,10 @@
     function checkPasswordMatch() {
         if (password.value !== confirmPassword.value) {
             confirmPassword.classList.add('is-invalid');
-            passwordError.style.display = 'block';
+            passwordError.classList.remove('d-none');
         } else {
             confirmPassword.classList.remove('is-invalid');
-            passwordError.style.display = 'none';
+            passwordError.classList.add('d-none');
         }
     }
 
@@ -178,7 +178,7 @@
     editUserForm.addEventListener('submit', function(event) {
         if (password.value !== confirmPassword.value) {
             event.preventDefault();
-            passwordError.style.display = 'block';
+            passwordError.classList.remove('d-none');
         }
     });
 </script>

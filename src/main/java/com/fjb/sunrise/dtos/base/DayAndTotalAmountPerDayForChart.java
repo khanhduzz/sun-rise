@@ -1,7 +1,6 @@
 package com.fjb.sunrise.dtos.base;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 public class DayAndTotalAmountPerDayForChart implements Serializable {
     private String day;

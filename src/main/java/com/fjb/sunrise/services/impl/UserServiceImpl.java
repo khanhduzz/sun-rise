@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUserByAdmin(EditProfileByAdminDTO byAdminDTO) {
         User user = userRepository.findById(byAdminDTO.getId())
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new NotFoundException("User not found"));
 
         user.setUsername(byAdminDTO.getUsername());
         if (!passwordEncoder.matches(byAdminDTO.getPassword(), user.getPassword())) {
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
             user.setStatus(EStatus.ACTIVE);
             userRepository.save(user);
         } else {
-            throw new RuntimeException("User not found");
+            throw new NotFoundException("User not found");
         }
     }
 

@@ -99,9 +99,9 @@
 </a>
 
 <!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<dialog class="modal fade" id="logoutModal" tabindex="-1"  aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn thoát?</h5>
@@ -115,7 +115,7 @@
             </div>
         </div>
     </div>
-</div>
+</dialog>
 
 <!-- Create Category Modal-->
 <div class="modal fade" id="createCategoryModal" tabindex="-1" role="dialog"
@@ -145,9 +145,9 @@
 </div>
 
 <!-- Edit Category Modal-->
-<div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog"
+<dialog class="modal fade" id="editCategoryModal" tabindex="-1"
      aria-labelledby="editCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel2">Sửa tên danh mục</h5>
@@ -169,7 +169,7 @@
             </form>
         </div>
     </div>
-</div>
+</dialog>
 
 
 
@@ -183,13 +183,6 @@
 
 <!-- Custom scripts for all pages-->
 <script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
-
-<!-- Page level plugins -->
-<!--<script th:src="@{/vendor/chart.js/Chart.min.js}" type="application/javascript"></script>-->
-
-<!-- Page level custom scripts -->
-<!--<script th:src="@{/js/demo/chart-area-demo.js}" type="application/javascript"></script>-->
-<!--<script th:src="@{/js/demo/chart-pie-demo.js}" type="application/javascript"></script>-->
 
 <!-- Page level plugins -->
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
@@ -240,7 +233,7 @@
             "data": null, "render": function (data, type, row) {
                 return `
                 <div class="btn-group" role="group" aria-label="Category Actions">
-                        <button class="btn btn-outline-info" data-toggle=\"modal\" data-target=\"#editCategoryModal\">
+                        <button class="btn btn-outline-info" data-toggle="modal" data-target="#editCategoryModal">
                             Edit
                         </button>
 

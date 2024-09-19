@@ -189,11 +189,11 @@
     function checkPasswordMatch() {
         if (password.value !== confirmPassword.value) {
             confirmPassword.classList.add('is-invalid');
-            passwordError.style.display = 'block';
+            passwordError.classList.remove('d-none');
             return false;
         } else {
             confirmPassword.classList.remove('is-invalid');
-            passwordError.style.display = 'none';
+            passwordError.classList.add('d-none');
             return true;
         }
     }

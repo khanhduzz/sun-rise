@@ -11,7 +11,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
@@ -50,7 +49,7 @@ public class UserController {
         if (editInfor) {
             modelAndView.setViewName(Constants.ApiConstant.TRANSACTION_INDEX);
         } else {
-            modelAndView.addObject("error", "Failed to update user");
+            modelAndView.addObject(Constants.ErrorCode.ERROR, "Failed to update user");
         }
         modelAndView.setViewName(Constants.ApiConstant.USER_REDIRECT);
         return modelAndView;
@@ -95,7 +94,7 @@ public class UserController {
         }
 
         userService.createUserByAdmin(newUser);
-        redirect.addFlashAttribute("message", "User added successfully");
+        redirect.addFlashAttribute(Constants.ApiConstant.MESSAGE, "User added successfully");
 
         modelAndView.setViewName(Constants.ApiConstant.ADMIN_REDIRECT);
         return modelAndView;
@@ -103,7 +102,6 @@ public class UserController {
 
 
     @PostMapping("/page")
-    @ResponseBody
     public UserFullPageResponse getPage(@RequestBody DataTableInputDTO payload) {
         Page<User> transactionPage = userService.getUserList(payload);
         UserFullPageResponse response = new UserFullPageResponse();
@@ -119,7 +117,7 @@ public class UserController {
     public String detailAndEditByAdmin(@PathVariable("id") Long id, Model model) {
         User user = userService.getUserById(id);
         if (user == null) {
-            model.addAttribute("error", "User not found");
+            model.addAttribute(Constants.ErrorCode.ERROR, "User not found");
             return Constants.ApiConstant.ADMIN_REDIRECT;
         }
         model.addAttribute("userDetail", user);
@@ -141,7 +139,7 @@ public class UserController {
         try {
             User existingUser = userService.getUserById(id);
             if (existingUser == null) {
-                modelAndView.addObject("error", "User not found");
+                modelAndView.addObject(Constants.ErrorCode.ERROR, "User not found");
                 return modelAndView;
             }
 
@@ -165,7 +163,7 @@ public class UserController {
     public String deleteUserByAdmin(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             userService.deleteUserById(id);
-            redirectAttributes.addFlashAttribute("message", "User deleted successfully");
+            redirectAttributes.addFlashAttribute(Constants.ApiConstant.MESSAGE, "User deleted successfully");
         } catch (EntityNotFoundException e) {
             redirectAttributes.addFlashAttribute(Constants.ErrorCode.ERROR, e.getMessage());
         }
@@ -177,7 +175,7 @@ public class UserController {
     public String deactivateUserByAdmin(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             userService.deactivateUserById(id);
-            redirectAttributes.addFlashAttribute("message", "User deactivated successfully");
+            redirectAttributes.addFlashAttribute(Constants.ApiConstant.MESSAGE, "User deactivated successfully");
         } catch (EntityNotFoundException e) {
             redirectAttributes.addFlashAttribute(Constants.ErrorCode.ERROR, e.getMessage());
         }
@@ -189,9 +187,9 @@ public class UserController {
     public String activateUserByAdmin(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             userService.activateUserById(id);
-            redirectAttributes.addFlashAttribute("message", "User activated successfully");
+            redirectAttributes.addFlashAttribute(Constants.ApiConstant.MESSAGE, "User activated successfully");
         } catch (EntityNotFoundException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute(Constants.ErrorCode.ERROR, e.getMessage());
         }
         return Constants.ApiConstant.ADMIN_REDIRECT;
     }
