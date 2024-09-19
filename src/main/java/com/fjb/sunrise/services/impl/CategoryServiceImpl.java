@@ -13,7 +13,6 @@ import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.CategoryService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
