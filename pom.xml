@@ -184,7 +184,6 @@
                             <formats>
                                 <format>HTML</format>
                                 <format>XML</format>
-                                <format>cobertura</format>
                             </formats>
                         </configuration>
                     </execution>
