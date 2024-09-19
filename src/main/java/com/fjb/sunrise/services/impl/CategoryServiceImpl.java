@@ -5,6 +5,7 @@ import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.enums.EStatus;
+import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.models.User;
@@ -74,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .map(categoryMapper::toCategoryResponseDto)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
     }
 
     @Override

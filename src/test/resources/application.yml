@@ -25,6 +25,10 @@ application:
       lastname: bond
       email: sun@sun.com
 
+server:
+  servlet:
+    context-path: /sun
+
 default:
   admin-create-key: dfjkNdkMAnje #gitleaks:allow
   recaptcha-secret-key: abcdT #gitleaks:allow
