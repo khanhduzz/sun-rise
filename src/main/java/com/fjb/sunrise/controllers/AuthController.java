@@ -10,6 +10,8 @@ import com.fjb.sunrise.utils.Constants;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,33 +31,31 @@ public class AuthController {
     @Value("${default.captcha-enable}")
     private String captchaEnable;
 
+    @Value("${default.timing-send-mail}")
+    private Integer timer;
+
     private final UserService userService;
     private final EmailService emailService;
     private final ReCaptchaService reCaptchaService;
 
-
-    @GetMapping("/login")
+    @GetMapping({"/login", "/register"})
     public ModelAndView indexLogin(@RequestParam(value = "error", required = false) String error) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+            && !(authentication.getPrincipal() instanceof String)) {
+            return new ModelAndView("redirect:/health");
+        }
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
         modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
         modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
         modelAndView.addObject("recaptchaSiteKey", recaptchaSiteKey);
         modelAndView.addObject("captchaEnable", captchaEnable);
+
         if (error != null) {
             modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, "Đăng nhập không thành công!");
         }
-        return modelAndView;
-    }
-
-    @GetMapping("/register")
-    public ModelAndView indexRegister() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(Constants.ApiConstant.AUTH_VIEW);
-        modelAndView.addObject(Constants.ApiConstant.LOGIN_OBJECT, new LoginRequest());
-        modelAndView.addObject(Constants.ApiConstant.REGISTER_OBJECT, new RegisterRequest());
-        modelAndView.addObject("recaptchaSiteKey", recaptchaSiteKey);
-        modelAndView.addObject("captchaEnable", captchaEnable);
         return modelAndView;
     }
 
@@ -95,7 +95,7 @@ public class AuthController {
         return modelAndView;
     }
 
-    @PostMapping("/sendToEmail")
+    @PostMapping("/forgotPassword")
     public ModelAndView doSendCodeToEmail(@ModelAttribute(Constants.ApiConstant.EMAIL_OBJECT)
                                               String email) {
         ModelAndView modelAndView = new ModelAndView();
@@ -106,6 +106,7 @@ public class AuthController {
 
         modelAndView.setViewName(Constants.ApiConstant.VERIFICATION_BY_EMAIL_VIEW);
         modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, message);
+        modelAndView.addObject("timer", timer);
 
         return modelAndView;
     }

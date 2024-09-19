@@ -29,13 +29,48 @@
 <div class="background-custom">
     <div class="box-custom forgot">
         <h2>Điền email để xác thực tài khoản!</h2>
-        <form th:method="POST" th:action="@{/auth/sendToEmail}">
+        <form th:method="POST" th:action="@{/auth/forgotPassword}">
             <input id="email" th:value="${email}" name="email" type="text" class="field-custom mb-3" placeholder="Nhập Email">
-            <button type="submit">Gửi</button>
+            <th:block th:if="${timer != null}">
+                <div id="timer-resend"></div>
+            </th:block>
+            <button id="btn-submit" type="submit">Gửi</button>
         </form>
     </div>
 </div>
 
 <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript">
+    const timeString = '[[${timer}]]';
+
+    window.onload = function() {
+        countDown();
+    };
+
+    function countDown() {
+        let time = +timeString/1000;
+        const timeView = document.getElementById("timer-resend");
+        const btn = document.getElementById("btn-submit");
+
+        const interval = setInterval(function() {
+            if (time > 0) {
+                timeView.innerHTML = `<p style="text-align: center; color: red">${renderTime(time)}</p>`;
+                time--;
+                btn.type = "button";
+            } else {
+                clearInterval(interval);
+                timeView.innerHTML = `<p style="text-align: center; color: red">Bạn chưa nhận được email?<p>`;
+                btn.type = "submit";
+                btn.textContent = "Gửi lại";
+            }
+        }, 1000);
+    }
+
+    function renderTime(second) {
+        const m = Math.floor(second / 60);
+        const s = second % 60;
+        return (m < 10 ? `0${m}` : `${m}`) + " : " + (s < 10 ? `0${s}` : `${s}`);
+    }
+</script>
 </body>
 </html>

@@ -6,6 +6,7 @@ import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.responses.UserResponseDTO;
 import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.enums.EStatus;
+import com.fjb.sunrise.exceptions.DuplicatedException;
 import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.mappers.UserMapper;
 import com.fjb.sunrise.models.User;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
     public String checkRegister(RegisterRequest registerRequest) {
         //check already exist email or phone
         if (userRepository.existsUserByEmailOrPhone(registerRequest.getEmail(), registerRequest.getPhone())) {
-            return "Email hoặc số điện thoại đã được đăng ký!";
+            throw new DuplicatedException("Email hoặc số điện thoại đã được đăng ký!");
         }
 
         User user = mapper.toEntity(registerRequest);
@@ -92,7 +93,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
         User user = userRepository.findById(byAdminDTO.getId())
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new NotFoundException("User not found"));
 
         user.setUsername(byAdminDTO.getUsername());
         user.setFirstname(byAdminDTO.getFirstname());
@@ -141,7 +142,7 @@ public class UserServiceImpl implements UserService {
             user.setStatus(EStatus.ACTIVE);
             userRepository.save(user);
         } else {
-            throw new RuntimeException("User not found");
+            throw new NotFoundException("User not found");
         }
     }
 

@@ -10,7 +10,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-
 public class CategoryCreateDto implements Serializable {
     @NotBlank(message = "Vui lòng nhâp tên danh mục")
     @Size(max = 50, message = "Không vượt quá 50 ký tự")

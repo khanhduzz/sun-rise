@@ -2,16 +2,17 @@ package com.fjb.sunrise.services.impl;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
-import com.fjb.sunrise.dtos.requests.CategoryStatusDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.enums.EStatus;
+import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
@@ -52,14 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toCategoryResponseDto(category);
     }
 
-    @Override
-    @Transactional
-    public CategoryResponseDto saveStatusCategory(Long id, CategoryStatusDto categoryStatusDto) {
-        Category category = categoryRepository.findById(id).orElseThrow();
-        category = categoryMapper.statusCategory(category, categoryStatusDto);
-        category = categoryRepository.save(category);
-        return categoryMapper.toCategoryResponseDto(category);
-    }
+
 
     @Override
     public void disableCategory(Long id) {
@@ -81,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .map(categoryMapper::toCategoryResponseDto)
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
     }
 
     @Override

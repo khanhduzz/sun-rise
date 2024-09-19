@@ -30,7 +30,7 @@ public class Constants {
         public static final String HEALTH_URL = "/health";
 
         public static final String CATEGORY_INDEX = "category/index";
-        public static final String CATEGORY_REDIRECT = "redirect:/category";
+        public static final String CATEGORY_REDIRECT = "redirect:/category/index";
 
         public static final String TRANSACTION_INDEX = "transaction/index";
         public static final String CATEGORIES = "categories";
@@ -51,6 +51,10 @@ public class Constants {
         public static final String ADMIN_REDIRECT = "redirect:/user/admin-page";
         public static final String USER_INFORMATION = "/user/edit-infor";
         public static final String USER_REDIRECT = "redirect:/health";
+
+        public static final String MESSAGE = "message";
+        public static final String VALUE = "value";
+
 
         public static final String CODE_200 = "200";
         public static final String OK = "Ok";

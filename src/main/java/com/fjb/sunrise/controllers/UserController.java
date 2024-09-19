@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
@@ -49,7 +49,7 @@ public class UserController {
         if (editInfor) {
             modelAndView.setViewName(Constants.ApiConstant.TRANSACTION_INDEX);
         } else {
-            modelAndView.addObject("error", "Failed to update user");
+            modelAndView.addObject(Constants.ErrorCode.ERROR, "Failed to update user");
         }
         modelAndView.setViewName(Constants.ApiConstant.USER_REDIRECT);
         return modelAndView;
@@ -103,7 +103,6 @@ public class UserController {
 
 
     @PostMapping("/page")
-    @ResponseBody
     public UserFullPageResponse getPage(@RequestBody DataTableInputDTO payload) {
         Page<User> transactionPage = userService.getUserList(payload);
         UserFullPageResponse response = new UserFullPageResponse();
@@ -119,7 +118,7 @@ public class UserController {
     public String detailAndEditByAdmin(@PathVariable("id") Long id, Model model) {
         User user = userService.getUserById(id);
         if (user == null) {
-            model.addAttribute("error", "User not found");
+            model.addAttribute(Constants.ErrorCode.ERROR, "User not found");
             return Constants.ApiConstant.ADMIN_REDIRECT;
         }
         model.addAttribute("userDetail", user);
@@ -141,7 +140,7 @@ public class UserController {
         try {
             User existingUser = userService.getUserById(id);
             if (existingUser == null) {
-                modelAndView.addObject("error", "User not found");
+                modelAndView.addObject(Constants.ErrorCode.ERROR, "User not found");
                 return modelAndView;
             }
 

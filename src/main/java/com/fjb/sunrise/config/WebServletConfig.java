@@ -1,7 +1,6 @@
 package com.fjb.sunrise.config;
 
 import static com.fjb.sunrise.utils.Constants.ApiConstant.AUTH_VIEW;
-import static com.fjb.sunrise.utils.Constants.ApiConstant.TRANSACTION_INDEX;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -64,5 +63,7 @@ public class WebServletConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/health").setViewName("health");
         registry.addViewController("/auth/login").setViewName(AUTH_VIEW);
+        registry.addViewController("/auth/register").setViewName(AUTH_VIEW);
+        registry.addViewController("/category/index").setViewName("category/index");
     }
 }
