@@ -16,26 +16,16 @@ function number_format(number, decimals, dec_point, thousands_sep) {
       return '' + Math.round(n * k) / k;
     };
   // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-  s = formatNumber(n, prec, sep);
-  if ((s[1] || '').length < prec) {
-    s[1] = s[1] || '';
-    s[1] += new Array(prec - s[1].length + 1).join('0');
-  }
-  return s.join(dec);
+  s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3) {
+      s[0] = s[0].replace(/\B(?=(?:\d{3})*(?!\d))/g, sep);
+    }
+    if ((s[1] || '').length < prec) {
+      s[1] = s[1] || '';
+      s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    return s.join(dec);
 }
-
-function formatNumber(n, prec, sep) {
-    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-    const toFixedFix = (num, precision) => {
-        const k = Math.pow(10, precision);
-        return Math.round(num * k) / k;
-    };
-    let s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-    // Use a more efficient approach for adding separators
-    s[0] = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, sep);
-    return s.join('.');
-}
-
 
 // Area Chart Example
 // WARNING: change var to let/const break chart
