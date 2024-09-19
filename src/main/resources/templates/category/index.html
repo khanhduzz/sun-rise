@@ -292,6 +292,8 @@
                             button.html('<i class="fas fa-check-circle"></i>');
                             button.attr('onclick', `changeCategoryStatus(${id}, 'activate')`);
                         }
+
+                         table.ajax.reload(null, false);
                     } else {
                         alert('Error: Unable to change category status.');
                     }
