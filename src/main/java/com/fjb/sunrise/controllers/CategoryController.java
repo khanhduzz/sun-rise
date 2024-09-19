@@ -4,12 +4,14 @@ import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryFullPageResponse;
+import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.services.CategoryService;
 import com.fjb.sunrise.utils.Constants;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 @RestController
 @RequestMapping("/category")
@@ -47,9 +50,10 @@ public class CategoryController {
     public CategoryFullPageResponse getPage(@RequestBody DataTableInputDTO payload) {
         Page<Category> categoryPage = categoryService.getCategoryList(payload);
         CategoryFullPageResponse response = new CategoryFullPageResponse();
-        response.setData(categoryMapper.listCategoryToListCategoryPageResponse(
+        List<CategoryResponseDto> category = categoryMapper.listCategoryToListCategoryPageResponse(
                 categoryPage.stream().toList()
-        ));
+        );
+        response.setData(categoryService.addIsAdminToCategory(category));
         response.setDraw(payload.getDraw());
         response.setRecordsFiltered(categoryPage.getTotalElements());
         response.setRecordsTotal(categoryPage.getTotalElements());
