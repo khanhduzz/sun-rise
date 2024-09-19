@@ -9,24 +9,22 @@ import com.fjb.sunrise.dtos.responses.StatisticResponse;
 import com.fjb.sunrise.dtos.responses.TransactionFullPageResponse;
 import com.fjb.sunrise.mappers.TransactionMapper;
 import com.fjb.sunrise.models.Transaction;
-import com.fjb.sunrise.repositories.CategoryRepository;
 import com.fjb.sunrise.services.CategoryService;
 import com.fjb.sunrise.services.TransactionService;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+@RestController
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
 @Slf4j
@@ -36,22 +34,25 @@ public class TransactionController {
     private final TransactionMapper transactionMapper;
 
     @GetMapping("/create")
-    public String getCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
-        model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
-        return TRANSACTION_INDEX;
+    public ModelAndView getCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(TRANSACTION_INDEX);
+        modelAndView.addObject(CATEGORIES, categoryService.findCategoryByAdminAndUser());
+        return modelAndView;
     }
 
     @PostMapping("/create")
-    public String postCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model)
+    public ModelAndView postCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request)
         throws ParseException {
-        model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(TRANSACTION_INDEX);
+        modelAndView.addObject(CATEGORIES, categoryService.findCategoryByAdminAndUser());
         Transaction transaction = transactionService.create(request);
-        return TRANSACTION_INDEX;
+        return modelAndView;
     }
 
 
     @PostMapping("/page")
-    @ResponseBody
     public TransactionFullPageResponse getPage(@RequestBody DataTableInputDTO payload) {
         Page<Transaction> transactionPage = transactionService.getTransactionList(payload);
         TransactionFullPageResponse response = new TransactionFullPageResponse();
@@ -65,16 +66,17 @@ public class TransactionController {
     }
 
     @PostMapping("/update/{id}")
-    public String postUpdate(@PathVariable Long id,
+    public ModelAndView postUpdate(@PathVariable Long id,
                              @ModelAttribute("request") CreateOrUpdateTransactionRequest request)
         throws ParseException {
         request.setId(id);
         transactionService.update(request);
-        return "redirect:/transaction/create";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/transaction/create");
+        return modelAndView;
     }
 
     @GetMapping("/statistic")
-    @ResponseBody
     public StatisticResponse getStatistic() {
         return transactionService.statistic();
     }
