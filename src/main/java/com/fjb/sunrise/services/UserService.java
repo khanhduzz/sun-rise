@@ -1,9 +1,9 @@
 package com.fjb.sunrise.services;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
+import com.fjb.sunrise.dtos.requests.CreateAndEditUserByAdminDTO;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.responses.UserResponseDTO;
-import com.fjb.sunrise.dtos.user.EditProfileByAdminDTO;
 import com.fjb.sunrise.models.User;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -13,9 +13,9 @@ public interface UserService {
 
     String changePassword(String email, String password);
 
-    User createUserByAdmin(EditProfileByAdminDTO byAdminDTO);
+    User createUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO);
 
-    boolean updateUserByAdmin(EditProfileByAdminDTO byAdminDTO);
+    boolean updateUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO);
 
     List<User> getAllUsers();
 
@@ -36,4 +36,7 @@ public interface UserService {
     boolean checkIsEmailDuplicate(String email);
 
     boolean checkPhoneIsDuplicate(String phone);
+
+    User getUserByEmailOrPhone(String emailOrPhone);
+
 }

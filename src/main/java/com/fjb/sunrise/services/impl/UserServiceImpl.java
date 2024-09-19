@@ -1,9 +1,9 @@
 package com.fjb.sunrise.services.impl;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
+import com.fjb.sunrise.dtos.requests.CreateAndEditUserByAdminDTO;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.responses.UserResponseDTO;
-import com.fjb.sunrise.dtos.user.EditProfileByAdminDTO;
 import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.exceptions.NotFoundException;
@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -73,35 +74,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUserByAdmin(EditProfileByAdminDTO byAdminDTO) {
-        User user = mapper.toEntityByAdmin(byAdminDTO);
+    public User createUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
+        User user = mapper.toEntityCreateByAdmin(byAdminDTO);
         user.setUsername(byAdminDTO.getUsername());
         user.setPassword(passwordEncoder.encode(byAdminDTO.getPassword()));
+        user.setFirstname(byAdminDTO.getFirstname());
+        user.setLastname(byAdminDTO.getLastname());
+        user.setEmail(byAdminDTO.getEmail());
+        user.setPhone(byAdminDTO.getPhone());
+        user.setCreatedBy(byAdminDTO.getCreatedBy());
+        user.setCreatedDate(byAdminDTO.getCreatedDate());
         user.setRole(ERole.valueOf(byAdminDTO.getRole()));
-        user.setStatus(EStatus.ACTIVE);
+        user.setStatus(EStatus.valueOf(byAdminDTO.getStatus()));
         return userRepository.save(user);
     }
 
     @Override
-    public boolean updateUserByAdmin(EditProfileByAdminDTO byAdminDTO) {
+    public boolean updateUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
         User user = userRepository.findById(byAdminDTO.getId())
             .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setUsername(byAdminDTO.getUsername());
-        if (!passwordEncoder.matches(byAdminDTO.getPassword(), user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(byAdminDTO.getPassword()));
-        }
-
         user.setFirstname(byAdminDTO.getFirstname());
         user.setLastname(byAdminDTO.getLastname());
         user.setEmail(byAdminDTO.getEmail());
         user.setPhone(byAdminDTO.getPhone());
         user.setRole(ERole.valueOf(byAdminDTO.getRole()));
         user.setStatus(EStatus.valueOf(byAdminDTO.getStatus()));
-        user.setCreatedDate(byAdminDTO.getCreatedDate());
-        user.setCreatedBy(byAdminDTO.getCreatedBy());
-        user.setLastModifiedDate(byAdminDTO.getLastModifiedDate());
-        user.setLastModifiedBy(byAdminDTO.getLastModifiedBy());
 
         userRepository.save(user);
         return true;
@@ -208,6 +207,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkPhoneIsDuplicate(String phone) {
         return userRepository.existsUserByPhone(phone);
+    }
+
+    @Override
+    public User getUserByEmailOrPhone(String emailOrPhone) {
+        User user = userRepository.findByEmailOrPhone(emailOrPhone);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email or phone: " + emailOrPhone);
+        }
+        return user;
     }
 
 }
