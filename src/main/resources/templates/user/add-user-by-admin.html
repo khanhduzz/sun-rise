@@ -72,6 +72,9 @@
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Topbar -->
+        <div th:replace="~{header :: header}"></div>
+        <!-- End of Topbar -->
         <!-- Main Content -->
         <div id="content" class="d-flex justify-content-center align-items-center vh-100">
             <!-- Begin Page Content -->
@@ -110,8 +113,8 @@
                                             <div class="row">
                                                 <div class="col-md-4 mb-3">
                                                     <label for="phone" class="form-label label-custom">Số điện thoại</label>
-                                                    <input type="text" th:field="*{phone}" class="form-control" id="phone" required>
-                                                    <small th:if="${duplicatePhone != null}" class="text-danger">Số điện thoại này đã được sử dụng.</small>
+                                                    <input type="text" th:field="*{phone}" class="form-control" id="phone" required pattern="\d{0,9}">
+                                                    <small id="phoneError" th:if="${duplicatePhone != null}" class="text-danger">Số điện thoại này đã được sử dụng.</small>
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <label for="role" class="form-label label-custom">Vai trò</label>
@@ -142,7 +145,7 @@
                                             <div class="mb-3">
                                                 <label for="email" class="form-label label-custom">Địa chỉ email</label>
                                                 <input type="email" th:field="*{email}" class="form-control" id="email" required>
-                                                <small th:if="${duplicateEmail != null}" class="text-danger">Email này đã được đăng ký.</small>
+                                                <small id="emailError" th:if="${duplicateEmail != null}" class="text-danger">Email này đã được đăng ký.</small>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="password" class="form-label label-custom">Mật khẩu</label>
@@ -185,18 +188,30 @@
     const confirmPassword = document.getElementById('confirmPassword');
     const passwordError = document.getElementById('passwordError');
     const createUserForm = document.getElementById('createUserForm');
+    const inputs = document.querySelectorAll('input, textarea, select');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const emailError = document.getElementById('emailError');
+    const phoneError = document.getElementById('phoneError');
+    const requiredInputs = document.querySelectorAll('input[required]');
 
     function checkPasswordMatch() {
         if (password.value !== confirmPassword.value) {
             confirmPassword.classList.add('is-invalid');
-            passwordError.classList.remove('d-none');
+            passwordError.style.display = 'block';
             return false;
         } else {
             confirmPassword.classList.remove('is-invalid');
-            passwordError.classList.add('d-none');
+            passwordError.style.display = 'none';
             return true;
         }
     }
+
+    createUserForm.addEventListener('reset', () => {
+        inputs.forEach(input => {
+            input.classList.remove('valid-input', 'invalid-input');
+        });
+    });
 
     createUserForm.addEventListener('submit', function(event) {
         if (!checkPasswordMatch()) {
@@ -205,7 +220,66 @@
     });
 
     confirmPassword.addEventListener('input', checkPasswordMatch);
-</script>
 
+    requiredInputs.forEach(input => {
+        input.addEventListener('invalid', function() {
+            if (this.type === 'email') {
+                if (this.value === "") {
+                    this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
+                } else if (!this.value.includes('@')) {
+                    this.setCustomValidity('Vui lòng bao gồm ký tự \'@\' trong địa chỉ email.');
+                } else {
+                    this.setCustomValidity('Vui lòng hoàn thiện email theo định dạng: example@example.com');
+                }
+            } else if (this.id === 'phone') {
+                const phonePattern = /^\d+$/;
+                if (this.value === "") {
+                    this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
+                } else if (!phonePattern.test(this.value)) {
+                    this.setCustomValidity('Số điện thoại chỉ được chứa các chữ số.');
+                } else if (this.value.length >= 10) {
+                    this.setCustomValidity('Số điện thoại không được quá 9 chữ số.');
+                } else {
+                    this.setCustomValidity('');
+                }
+            } else if (this.value === "") {
+                this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
+            }
+        });
+
+        input.addEventListener('input', function() {
+            this.setCustomValidity('');
+        });
+    });
+
+    inputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            input.classList.add('focus-input');
+        });
+
+        input.addEventListener('blur', () => {
+            if (input.value === '') {
+                input.classList.remove('valid-input', 'focus-input');
+            } else {
+                input.classList.add('valid-input');
+            }
+        });
+    });
+
+    function checkValidation(input, errorElement) {
+        if (!input.checkValidity()) {
+            errorElement.style.display = 'block';
+        } else {
+            errorElement.style.display = 'none';
+        }
+    }
+
+    emailInput.addEventListener('input', () => checkValidation(emailInput, emailError));
+    phoneInput.addEventListener('input', () => checkValidation(phoneInput, phoneError));
+
+    emailInput.addEventListener('focus', () => emailError.style.display = 'none');
+    phoneInput.addEventListener('focus', () => phoneError.style.display = 'none');
+
+</script>
 </body>
 </html>

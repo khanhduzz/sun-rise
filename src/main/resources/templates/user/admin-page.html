@@ -62,16 +62,13 @@
         <!-- Main Content -->
         <div id="content">
 
-            <!-- Topbar -->
+            <!-- Top bar -->
             <div th:replace="~{header :: header}"></div>
-            <!-- End of Topbar -->
+            <!-- End of Top bar -->
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <!-- Success message alert -->
-                <div th:if="${message}" id="notification" class="alert alert-success" role="alert">
-                    <p th:text="${message}"></p>
-                </div>
+
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Danh sách người dùng</h6>
@@ -143,8 +140,8 @@
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
 
-<script type="text/javascript">
-    const installTable = (id, url, cols) => {
+<script type="text/javascript" th:inline="javascript">
+    const installTable = (id, url, cols, currentUserId) => {
         return $(`#${id}`).DataTable({
             "language": {
                 "search": "Search:",
@@ -175,7 +172,6 @@
         });
     };
 
-    // Function to translate status and role
     const translateStatus = (status) => {
         if (status === 'ACTIVE') return 'Hoạt Động';
         if (status === 'NOT_ACTIVE') return 'Không Hoạt Động';
@@ -200,19 +196,34 @@
             }
         },
         {"data": null, "render": function(data, type, row) {
-                return `
-                    <div class="btn-group" role="group" aria-label="User Actions">
-                        <button class="btn btn-outline-info" onclick="viewUserDetail(${row.id})">
-                            <i class="fas fa-info-circle"></i>
-                        </button>
-                        <button class="btn btn-outline-danger" onclick="deleteUser(${row.id})">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                        <button class="btn ${row.status === 'ACTIVE' ? 'btn-outline-warning' : 'btn-outline-success'}"
-                            onclick="changeUserStatus(${row.id}, '${row.status === 'ACTIVE' ? 'deactivate' : 'activate'}')">
-                            <i class="fas ${row.status === 'ACTIVE' ? 'fa-ban' : 'fa-check-circle'}"></i>
-                        </button>
-                    </div>`;
+                if (row.id === currentUserId) {
+                    return `
+                        <div class="btn-group" role="group" aria-label="User Actions">
+                            <button class="btn btn-outline-info" disabled>
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                            <button class="btn btn-outline-danger" disabled>
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <button class="btn btn-outline-warning" disabled>
+                                <i class="fas fa-ban"></i>
+                            </button>
+                        </div>`;
+                } else {
+                    return `
+                        <div class="btn-group" role="group" aria-label="User Actions">
+                            <button class="btn btn-outline-info" onclick="viewUserDetail(${row.id})">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                            <button class="btn btn-outline-danger" onclick="deleteUser(${row.id})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <button class="btn ${row.status === 'ACTIVE' ? 'btn-outline-warning' : 'btn-outline-success'}"
+                                onclick="changeUserStatus(${row.id}, '${row.status === 'ACTIVE' ? 'deactivate' : 'activate'}')">
+                                <i class="fas ${row.status === 'ACTIVE' ? 'fa-ban' : 'fa-check-circle'}"></i>
+                            </button>
+                        </div>`;
+                }
             }
         }
     ];
@@ -234,8 +245,10 @@
         }
     }
 
-    const tableUsers = installTable('tableUser', '/sun/user/page', cols);
+    const currentUserId = [[${currentUserId}]];
+    const tableUsers = installTable('tableUser', '/sun/user/page', cols, currentUserId);
 </script>
+
 </body>
 
 </html>

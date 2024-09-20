@@ -54,26 +54,26 @@
 
                                     <!-- Username field -->
                                     <div class="mb-3">
-                                        <label for="username">Username</label>
-                                        <input id="username" type="text" class="form-control" th:field="*{username}" placeholder="Vui lòng nhập tên người dùng">
+                                        <label>Tên người dùng</label>
+                                        <input type="text" class="form-control" th:field="*{username}">
                                     </div>
 
                                     <!-- First Name field -->
                                     <div class="mb-3">
-                                        <label for="firstname">First Name</label>
-                                        <input id="firstname" type="text" class="form-control" th:field="*{firstname}" placeholder="Vui lòng nhập họ">
+                                        <label>Họ</label>
+                                        <input type="text" class="form-control" th:field="*{firstname}">
                                     </div>
 
                                     <!-- Last Name field -->
                                     <div class="mb-3">
-                                        <label for="lastname">Last Name</label>
-                                        <input id="lastname" type="text" class="form-control" th:field="*{lastname}" placeholder="Vui lòng nhập tên">
+                                        <label>Tên</label>
+                                        <input type="text" class="form-control" th:field="*{lastname}">
                                     </div>
 
                                     <!-- Email field -->
                                     <div class="mb-3">
-                                        <label  for="email">Email</label>
-                                        <input for="email" type="email" class="form-control" th:field="*{email}" placeholder="Vui lòng nhập email">
+                                        <label>Địa chỉ Email</label>
+                                        <input type="email" class="form-control" th:field="*{email}" readonly>
                                     </div>
                                     <div class="mb-3">
                                         <label for="password" class="form-label label-custom">Mật khẩu</label>
@@ -87,8 +87,8 @@
 
                                     <!-- Phone field -->
                                     <div class="mb-3">
-                                        <label for="phone">Phone</label>
-                                        <input id="phone" type="text" class="form-control" th:field="*{phone}" placeholder="Vui lòng nhập số điện thoại">
+                                        <label>Số điện thoại</label>
+                                        <input type="text" class="form-control" th:field="*{phone}" readonly>
                                     </div>
 
                                     <div class="text-center">
@@ -165,10 +165,10 @@
     function checkPasswordMatch() {
         if (password.value !== confirmPassword.value) {
             confirmPassword.classList.add('is-invalid');
-            passwordError.classList.remove('d-none');
+            passwordError.style.display = 'block';
         } else {
             confirmPassword.classList.remove('is-invalid');
-            passwordError.classList.add('d-none');
+            passwordError.style.display = 'none';
         }
     }
 
@@ -178,7 +178,7 @@
     editUserForm.addEventListener('submit', function(event) {
         if (password.value !== confirmPassword.value) {
             event.preventDefault();
-            passwordError.classList.remove('d-none');
+            passwordError.style.display = 'block';
         }
     });
 </script>

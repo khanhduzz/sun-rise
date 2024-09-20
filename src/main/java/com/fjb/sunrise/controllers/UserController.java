@@ -1,16 +1,17 @@
 package com.fjb.sunrise.controllers;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
+import com.fjb.sunrise.dtos.requests.CreateAndEditUserByAdminDTO;
 import com.fjb.sunrise.dtos.responses.UserFullPageResponse;
 import com.fjb.sunrise.dtos.responses.UserResponseDTO;
-import com.fjb.sunrise.dtos.user.EditProfileByAdminDTO;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.services.UserService;
 import com.fjb.sunrise.utils.Constants;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,28 +57,31 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin-page")
-    public ModelAndView adminDashboard() {
+    public ModelAndView adminDashboard(Authentication authentication) {
         ModelAndView modelAndView = new ModelAndView();
+        String currentEmailOrPhone = authentication.getName();
+        User currentUser = userService.getUserByEmailOrPhone(currentEmailOrPhone);
+        modelAndView.addObject("currentUser", currentUser);
+        modelAndView.addObject("currentUserId", currentUser.getId());
         modelAndView.addObject("users", userService.getAllUsers());
         modelAndView.setViewName(Constants.ApiConstant.ADMIN_VIEW);
         return modelAndView;
     }
 
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/add-user-by-admin")
     public ModelAndView addUserByAdmin() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("newUser", new EditProfileByAdminDTO());
+        modelAndView.addObject("newUser", new CreateAndEditUserByAdminDTO());
         modelAndView.setViewName(Constants.ApiConstant.ADMIN_ADD_NEW_USER);
         return modelAndView;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add-user-by-admin")
-    public ModelAndView doAddUserByAdmin(@ModelAttribute("newUser") EditProfileByAdminDTO newUser,
-                                         RedirectAttributes redirect) {
+    public ModelAndView doAddUserByAdmin(@ModelAttribute("newUser") CreateAndEditUserByAdminDTO newUser) {
         ModelAndView modelAndView = new ModelAndView();
-
         boolean isDuplicateEmail = userService.checkIsEmailDuplicate(newUser.getEmail());
         if (isDuplicateEmail) {
             modelAndView.addObject("duplicateEmail", "Email này đã được đăng ký");
@@ -94,8 +97,6 @@ public class UserController {
         }
 
         userService.createUserByAdmin(newUser);
-        redirect.addFlashAttribute(Constants.ApiConstant.MESSAGE, "User added successfully");
-
         modelAndView.setViewName(Constants.ApiConstant.ADMIN_REDIRECT);
         return modelAndView;
     }
@@ -127,7 +128,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/detail-and-edit/{id}")
     public ModelAndView doEditUserByAdmin(@PathVariable("id") Long id,
-                                          @ModelAttribute("userDetail") EditProfileByAdminDTO userDTO,
+                                          @ModelAttribute("userDetail")CreateAndEditUserByAdminDTO editUserByAdminDTO,
                                           BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.ADMIN_DETAILS_AND_EDIT);
@@ -143,8 +144,8 @@ public class UserController {
                 return modelAndView;
             }
 
-            userDTO.setId(id);
-            boolean updated = userService.updateUserByAdmin(userDTO);
+            editUserByAdminDTO.setId(id);
+            boolean updated = userService.updateUserByAdmin(editUserByAdminDTO);
 
             if (updated) {
                 modelAndView.setViewName(Constants.ApiConstant.ADMIN_REDIRECT);
@@ -160,37 +161,22 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/delete/{id}")
-    public String deleteUserByAdmin(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-        try {
-            userService.deleteUserById(id);
-            redirectAttributes.addFlashAttribute(Constants.ApiConstant.MESSAGE, "User deleted successfully");
-        } catch (EntityNotFoundException e) {
-            redirectAttributes.addFlashAttribute(Constants.ErrorCode.ERROR, e.getMessage());
-        }
+    public String deleteUserByAdmin(@PathVariable("id") Long id) {
+        userService.deleteUserById(id);
         return Constants.ApiConstant.ADMIN_REDIRECT;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/deactivate/{id}")
-    public String deactivateUserByAdmin(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-        try {
-            userService.deactivateUserById(id);
-            redirectAttributes.addFlashAttribute(Constants.ApiConstant.MESSAGE, "User deactivated successfully");
-        } catch (EntityNotFoundException e) {
-            redirectAttributes.addFlashAttribute(Constants.ErrorCode.ERROR, e.getMessage());
-        }
+    public String deactivateUserByAdmin(@PathVariable("id") Long id) {
+        userService.deactivateUserById(id);
         return Constants.ApiConstant.ADMIN_REDIRECT;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/activate/{id}")
-    public String activateUserByAdmin(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-        try {
-            userService.activateUserById(id);
-            redirectAttributes.addFlashAttribute(Constants.ApiConstant.MESSAGE, "User activated successfully");
-        } catch (EntityNotFoundException e) {
-            redirectAttributes.addFlashAttribute(Constants.ErrorCode.ERROR, e.getMessage());
-        }
+    public String activateUserByAdmin(@PathVariable("id") Long id) {
+        userService.activateUserById(id);
         return Constants.ApiConstant.ADMIN_REDIRECT;
     }
 }
