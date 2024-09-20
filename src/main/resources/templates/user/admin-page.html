@@ -18,33 +18,6 @@
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet" type="text/css">
     <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
 
-    <style>
-        .alert {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: auto;
-            max-width: 80%;
-            z-index: 1050;
-            opacity: 0;
-            transition: opacity 0.5s ease, display 0s linear 0.5s;
-        }
-
-        .alert.show {
-            opacity: 1;
-            transition: opacity 0.5s ease;
-            display: block;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            border-radius: 4px;
-            padding: 10px;
-        }
-    </style>
 </head>
 
 <body id="page-top">
@@ -80,7 +53,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Địa chỉ Email</th>
-                                    <th>Trạng thái</th>
+                                    <th>Trạng thái tài khoản</th>
                                     <th>Vai trò</th>
                                     <th>Hành động</th>
                                 </tr>
@@ -233,13 +206,13 @@
     }
 
     function deleteUser(userId) {
-        if (confirm('Are you sure you want to delete this user?')) {
+        if (confirm('Bạn có chắc muốn XÓA BỎ người dùng này?')) {
             window.location.href = `/sun/user/delete/${userId}`;
         }
     }
 
     function changeUserStatus(userId, action) {
-        if (confirm(`Are you sure you want to ${action === 'activate' ? 'activate' : 'deactivate'} this user?`)) {
+        if (confirm(`Bạn có chắc muốn ${action === 'activate' ? 'KÍCH HOẠT' : 'NGỪNG KÍCH HOẠT'} trạng thái tài khoản của người dùng này?`)) {
             let url = `/sun/user/${action}/${userId}`;
             window.location.href = url;
         }
