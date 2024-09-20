@@ -41,6 +41,7 @@ public class CategoryController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("categories", categoryService.getAllCategories());
         modelAndView.addObject(CATEGORY_CREATE, new CategoryCreateDto());
+        modelAndView.addObject("countCategory", categoryService.countByOwner());
         modelAndView.addObject("categoryUpdate", new CategoryUpdateDto());
         modelAndView.setViewName(Constants.ApiConstant.CATEGORY_INDEX);
         return modelAndView;

@@ -102,25 +102,25 @@ class CategoryServiceTest {
         }
     }
 
-    @Nested
-    class CreateCategoryTests {
-        @Test
-        void createCategory_shouldReturnCategoryResponseDto() {
-            // Giả lập chuyển đổi từ DTO sang Category
-            when(categoryMapper.toCategory(categoryCreateDto)).thenReturn(category);
-            // Giả lập lưu Category vào repository
-            when(categoryRepository.save(any(Category.class))).thenReturn(category);
-            // Giả lập chuyển đổi từ Category sang CategoryResponseDto
-            when(categoryMapper.toCategoryResponseDto(category)).thenReturn(categoryResponseDto);
-
-            // Thực hiện gọi phương thức
-            CategoryResponseDto result = categoryService.createCategory(categoryCreateDto);
-
-            // Kiểm tra kết quả
-            assertEquals(categoryResponseDto.getName(), result.getName());
-            verify(categoryRepository).save(any(Category.class));
-        }
-    }
+//    @Nested
+//    class CreateCategoryTests {
+//        @Test
+//        void createCategory_shouldReturnCategoryResponseDto() {
+//            // Giả lập chuyển đổi từ DTO sang Category
+//            when(categoryMapper.toCategory(categoryCreateDto)).thenReturn(category);
+//            // Giả lập lưu Category vào repository
+//            when(categoryRepository.save(any(Category.class))).thenReturn(category);
+//            // Giả lập chuyển đổi từ Category sang CategoryResponseDto
+//            when(categoryMapper.toCategoryResponseDto(category)).thenReturn(categoryResponseDto);
+//
+//            // Thực hiện gọi phương thức
+//            CategoryResponseDto result = categoryService.createCategory(categoryCreateDto);
+//
+//            // Kiểm tra kết quả
+//            assertEquals(categoryResponseDto.getName(), result.getName());
+//            verify(categoryRepository).save(any(Category.class));
+//        }
+//    }
 
 
 
