@@ -2,9 +2,12 @@ package com.fjb.sunrise.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
+import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.exceptions.NotFoundException;
@@ -40,6 +43,10 @@ class CategoryServiceTest {
     private Category category;
     private CategoryResponseDto categoryResponseDto;
 
+    private CategoryCreateDto categoryCreateDto;
+
+    private CategoryUpdateDto categoryUpdateDto;
+
 
     // Setup this, to re-use code along test cases
     @BeforeEach
@@ -57,6 +64,13 @@ class CategoryServiceTest {
             .name("Category-Test")
             .status(EStatus.ACTIVE)
             .build();
+
+        categoryCreateDto = new CategoryCreateDto();
+        categoryCreateDto.setName("Category-Test");
+
+        categoryUpdateDto = new CategoryUpdateDto();
+        categoryUpdateDto.setId(1L);
+        categoryUpdateDto.setName("Category-Test");
     }
 
 
@@ -87,4 +101,127 @@ class CategoryServiceTest {
             assertThrows(NotFoundException.class, () -> categoryService.getCategoryById(1L));
         }
     }
+
+    @Nested
+    class CreateCategoryTests {
+        @Test
+        void createCategory_shouldReturnCategoryResponseDto() {
+            // Giả lập chuyển đổi từ DTO sang Category
+            when(categoryMapper.toCategory(categoryCreateDto)).thenReturn(category);
+            // Giả lập lưu Category vào repository
+            when(categoryRepository.save(any(Category.class))).thenReturn(category);
+            // Giả lập chuyển đổi từ Category sang CategoryResponseDto
+            when(categoryMapper.toCategoryResponseDto(category)).thenReturn(categoryResponseDto);
+
+            // Thực hiện gọi phương thức
+            CategoryResponseDto result = categoryService.createCategory(categoryCreateDto);
+
+            // Kiểm tra kết quả
+            assertEquals(categoryResponseDto.getName(), result.getName());
+            verify(categoryRepository).save(any(Category.class));
+        }
+    }
+
+
+
+    @Nested
+    class UpdateCategoryTests {
+        @Test
+        void updateCategory_shouldReturnUpdatedCategoryResponseDto() {
+            Long categoryId = 1L;
+
+            // Giả lập dữ liệu ban đầu
+            when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+            when(categoryMapper.updateCategory(category, categoryUpdateDto)).thenReturn(category);
+            when(categoryRepository.save(category)).thenReturn(category);
+            when(categoryMapper.toCategoryResponseDto(category)).thenReturn(categoryResponseDto);
+
+            // Thực hiện gọi phương thức
+            CategoryResponseDto result = categoryService.updateCategory(categoryId, categoryUpdateDto);
+
+            // Kiểm tra kết quả
+            assertEquals(categoryResponseDto.getName(), result.getName());
+            verify(categoryRepository).findById(categoryId);
+            verify(categoryRepository).save(category);
+        }
+
+        @Test
+        void updateCategory_shouldThrowNotFound_whenCategoryDoesNotExist() {
+            Long categoryId = 1L;
+
+            // Giả lập không tìm thấy danh mục
+            when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+
+            // Kiểm tra ngoại lệ
+            assertThrows(NotFoundException.class, () -> categoryService.updateCategory(categoryId, categoryUpdateDto));
+        }
+    }
+
+
+
+    @Nested
+    class DisableCategoryTests {
+        @Test
+        void disableCategory_shouldSetStatusToNotActive() {
+            Long categoryId = 1L;
+
+            // Giả lập tìm thấy danh mục
+            when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+
+            // Thực hiện gọi phương thức
+            categoryService.disableCategory(categoryId);
+
+            // Kiểm tra trạng thái
+            assertEquals(EStatus.NOT_ACTIVE, category.getStatus());
+            verify(categoryRepository).save(category);
+        }
+
+        @Test
+        void disableCategory_shouldDoNothing_whenCategoryNotFound() {
+            Long categoryId = 1L;
+
+            // Giả lập không tìm thấy danh mục
+            when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+
+            // Thực hiện gọi phương thức
+            categoryService.disableCategory(categoryId);
+
+            // Kiểm tra không có hành động nào được thực hiện
+            verify(categoryRepository, never()).save(any(Category.class));
+        }
+    }
+
+
+    @Nested
+    class EnableCategoryTests {
+        @Test
+        void enableCategory_shouldSetStatusToActive() {
+            Long categoryId = 1L;
+
+            // Giả lập tìm thấy danh mục
+            when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+
+            // Thực hiện gọi phương thức
+            categoryService.enableCategory(categoryId);
+
+            // Kiểm tra trạng thái
+            assertEquals(EStatus.ACTIVE, category.getStatus());
+            verify(categoryRepository).save(category);
+        }
+
+        @Test
+        void enableCategory_shouldDoNothing_whenCategoryNotFound() {
+            Long categoryId = 1L;
+
+            // Giả lập không tìm thấy danh mục
+            when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+
+            // Thực hiện gọi phương thức
+            categoryService.enableCategory(categoryId);
+
+            // Kiểm tra không có hành động nào được thực hiện
+            verify(categoryRepository, never()).save(any(Category.class));
+        }
+    }
+
 }
