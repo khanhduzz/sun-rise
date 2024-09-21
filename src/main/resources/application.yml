@@ -42,7 +42,7 @@ server:
   servlet:
     context-path: /sun
     session:
-      timeout: 30s
+      timeout: 3600s
 
 logging:
   level:
