@@ -41,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto createCategory(CategoryCreateDto categoryCreateDto) {
         Category category = categoryMapper.toCategory(categoryCreateDto);
         category.setStatus(EStatus.ACTIVE);
+        category.setOwner(userRepository.findById(getCurrentUserId()).orElseThrow());
         category = categoryRepository.save(category);
         return categoryMapper.toCategoryResponseDto(category);
     }
@@ -160,5 +161,15 @@ public class CategoryServiceImpl implements CategoryService {
                 (org.springframework.security.core.userdetails.User) auth.getPrincipal();
         User dbUser = userRepository.findByEmailOrPhone(user.getUsername());
         return dbUser.getId();
+    }
+
+    @Override
+    public int countByOwner() {
+        User owner = userRepository.findById(getCurrentUserId()).orElseThrow();
+
+        if (owner.getRole() == ERole.ADMIN) {
+            return 0;
+        }
+        return categoryRepository.countByOwner(owner);
     }
 }
