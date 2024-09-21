@@ -118,9 +118,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResponseDto> addIsAdminToCategory(List<CategoryResponseDto> list) {
         List<User> admins = userRepository.findAllByRole(ERole.ADMIN);
+        User dbUser = userRepository.findById(getCurrentUserId()).orElseThrow();
         list.forEach(item ->
                 admins.forEach(admin -> {
-                    if (admin.getId() == item.getOwner().getId()) {
+                    if(dbUser.getRole()==ERole.ADMIN) {
+                        item.setAdmin(false);
+                    } else if (admin.getId() == item.getOwner().getId()) {
                         item.setAdmin(true);
                     }
                 })
@@ -147,6 +150,13 @@ public class CategoryServiceImpl implements CategoryService {
     private Specification<Category> findAllByUser() {
         return Specification.where((root, query, builder) -> {
             Join<Category, User> userJoin = root.join("owner");
+            User dbUser = userRepository.findById(getCurrentUserId()).orElseThrow();
+            if(dbUser.getRole()==ERole.ADMIN) {
+                Predicate activeStatus = builder.equal(root.get("status"), EStatus.ACTIVE);
+                Predicate notActiveStatus = builder.equal(root.get("status"), EStatus.NOT_ACTIVE);
+
+                return builder.or(activeStatus, notActiveStatus);
+            }
             Predicate hasRoleAdmin = builder.equal(userJoin.get("role"), "ADMIN");
             Predicate isOwner = builder.equal(userJoin.get("id"), getCurrentUserId());
 
