@@ -23,6 +23,7 @@ class CategoryControllerTest {
 
 
     // This test is go to the category/index and assume we see the "Danh sách danh mục"
+    // THIS CODE IS ERROR
 //    @Test
 //    @WithMockUser(username = "testUser", roles = {"ADMIN", "USER"})
 //    void goCategoryIndex_shouldGetTheCategoriesInformation() throws Exception {
