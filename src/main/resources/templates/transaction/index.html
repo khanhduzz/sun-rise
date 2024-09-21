@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -49,6 +49,15 @@
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Tổng quan</h1>
+                    <!--                    <div sec:authorize="hasRole('ROLE_USER')">Text visible to user.</div>-->
+                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <label for="users">Choose a user:</label>
+
+                        <select id="users">
+                            <option th:each="user:${users}" th:value="${user.id}"
+                                    th:text="${user.email}"></option>
+                        </select>
+                    </div>
                     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
                        data-toggle="modal" data-target="#createIncomeAndExpensesModal"><i
                             class="fas fa-download fa-sm text-white-50"></i> Tạo chi / thu</a>
@@ -244,12 +253,12 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>2023-07-01</td>
-                                    <td>001</td>
-                                    <td>Mua sắm</td>
-                                    <td>Chi</td>
-                                    <td>1,000,000</td>
-                                    <td>Mua đồ điện tử</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                                 </tbody>
@@ -280,7 +289,7 @@
 </a>
 
 <!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -299,9 +308,9 @@
 </div>
 
 <!-- Income and expenses Modal-->
-<div class="modal fade" id="createIncomeAndExpensesModal" tabindex="-1"
+<div class="modal fade" id="createIncomeAndExpensesModal" tabindex="-1" role="dialog"
      aria-labelledby="createIncomeAndExpensesModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Tạo thu/chi</h5>
@@ -353,7 +362,7 @@
                         <input th:field="*{createdAt}" type="datetime-local" class="form-control" id="inputDatetime"
                                placeholder="dd-mm-yyyy"
                                min="1997-01-01" max="2030-12-31">
-                        <!--                        <span th:if="${#fields.hasErrors('createdAt')}" th:errors="*{createdAt}" class="text-danger"></span>-->
+                        <span th:if="${#fields.hasErrors('createdAt')}" th:errors="*{createdAt}" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -402,6 +411,7 @@
                     "last": ">>"
                 }
             },
+            "destroy": true,
             "serverSide": true,
             "order": [1, "desc"],
             "ajax": {
@@ -419,14 +429,14 @@
         });
     };
 
-    const cols = [
+    const cols1 = [
         {"data": "createdAt"},
         {"data": "id"},
         {"data": "category"},
         {"data": "transactionType",
-        "render": function (data,type,row,meta) {
-            return row.transactionType === 'IN'?'THU':'CHI';
-        }},
+            "render": function (data,type,row,meta) {
+                return row.transactionType === 'IN'?'THU':'CHI';
+            }},
         {"data": "amount"},
         {"data": "note"},
         {"data": null, "defaultContent": "<button class=\"btn btn-outline-danger\" data-toggle='modal' data-target='#createIncomeAndExpensesModal'><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-pencil-square\" viewBox=\"0 0 16 16\">\n" +
@@ -435,7 +445,30 @@
                 "</svg></button>"}
     ];
 
-    const table = installTable('transactionTable', '/sun/transaction/page', cols)
+    const cols2 = [
+        {"data": "createdAt"},
+        {"data": "id"},
+        {"data": "category"},
+        {"data": "transactionType",
+            "render": function (data,type,row,meta) {
+                return row.transactionType === 'IN'?'THU':'CHI';
+            }},
+        {"data": "amount"},
+        {"data": "note"},
+        {"data": null, "defaultContent":""}
+    ];
+
+    let table;
+
+    if($('#users').length==0) {
+        table = installTable('transactionTable', '/sun/transaction/page/null', cols1)
+    } else {
+        $('#users').on('change',function() {
+            const user = $('#users option:selected').text();
+            table = installTable('transactionTable', `/sun/transaction/page/${user}`, cols2)
+        })
+    }
+
 
     $('#transactionTable tbody').on('click', 'tr', function () {
         console.log(table.row(this).data());
@@ -448,37 +481,30 @@
             $(`#exampleRadios2`).prop("checked",true);
         }
 
-        $(`#category option`).each(function (i, obj) {
+        $(`#inputCategory option`).each(function (i, obj) {
             if(obj.text === data.category) {
                 obj.selected = true;
             }
         })
-        $(`#inputDatetime`).val(data.createdAt.slice(0,data.createdAt.length-3));
-
-        $(`#exampleModalLabel`).text(`Cập nhật thu/chi`)
-        // $('#createIncomeAndExpensesModal').modal('show');
+        $('#inputDatetime').val(data.createdAt.slice(0,data.createdAt.length-3));
         $('#addOrUpdateTransaction').attr('action', `/sun/transaction/update/${data.id}`);
     });
 
-    $('#inputAmount').on('input', function () {
-        // let input = $(this).val();
-        // let ignoreComma = input.replaceAll(',', '');
-        // let convertToNumber = ignoreComma.includes('.') ? ignoreComma.substring(0, ignoreComma.indexOf('.')) : ignoreComma;
-        // let afterDecimalPoint = input.includes('.') ? input.substring(input.indexOf('.'), input.length) : '';
-        // console.log(afterDecimalPoint)
-        // let curCursor = this.selectionStart;
-        // $(this).val(Number(convertToNumber).toLocaleString() + afterDecimalPoint);
-        // this.selectionStart = curCursor;
-        // this.selectionEnd = curCursor;
-        // console.log(this.selectionStart + "," + this.selectionEnd)
-        let input = $(this).val();
-        let ignoreComma = input.replaceAll(',', '');
-        let convertToNumber = ignoreComma.includes('.') ? ignoreComma.substring(0, ignoreComma.indexOf('.')) : ignoreComma;
-        $(this).val(Number(convertToNumber).toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }));
-    })
+    // $('#inputAmount').on('input', function () {
+    //     let input = $(this).val();
+    //     let ignoreComma = input.replaceAll(',', '');
+    //     let convertToNumber = ignoreComma.includes('.') ? ignoreComma.substring(0, ignoreComma.indexOf('.')) : ignoreComma;
+    //     let afterDecimalPoint = input.includes('.') ? input.substring(input.indexOf('.'), input.length) : '';
+    //     console.log(afterDecimalPoint)
+    //     let curCursor = this.selectionStart;
+    //     $(this).val(Number(convertToNumber).toLocaleString() + afterDecimalPoint);
+    //     this.selectionStart = curCursor;
+    //     this.selectionEnd = curCursor;
+    //     console.log(this.selectionStart + "," + this.selectionEnd)
+    // })
+
+
+
 
 </script>
 </body>

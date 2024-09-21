@@ -219,4 +219,9 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public List<User> findAllNormalUser() {
+        return userRepository.findAllByRole(ERole.USER);
+    }
+
 }

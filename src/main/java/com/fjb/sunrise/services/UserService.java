@@ -39,4 +39,5 @@ public interface UserService {
 
     User getUserByEmailOrPhone(String emailOrPhone);
 
+    List<User> findAllNormalUser();
 }
