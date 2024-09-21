@@ -18,8 +18,8 @@ public class AfterAndUntilNowValidator implements ConstraintValidator<AfterAndUn
     @Override
     public boolean isValid(LocalDateTime dateTime, ConstraintValidatorContext constraintValidatorContext) {
         boolean valid = true;
-        if(dateTime != null) {
-            if(!(dateTime.isAfter(input)&&dateTime.isBefore(LocalDateTime.now()))){
+        if (dateTime != null) {
+            if (!(dateTime.isAfter(input) && dateTime.isBefore(LocalDateTime.now()))) {
                 valid = false;
             }
         }

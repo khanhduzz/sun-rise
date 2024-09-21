@@ -53,7 +53,7 @@ public class TransactionController {
             throws ParseException {
         model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
         model.addAttribute(USERS, userService.findAllNormalUser());
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
             model.addAttribute(USERS, userService.findAllNormalUser());
             return TRANSACTION_INDEX;
