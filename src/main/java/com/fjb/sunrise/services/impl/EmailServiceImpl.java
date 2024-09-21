@@ -1,6 +1,7 @@
 package com.fjb.sunrise.services.impl;
 
 import com.fjb.sunrise.dtos.requests.VerificationByEmail;
+import com.fjb.sunrise.exceptions.FailedSendMailException;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.EmailService;
@@ -30,6 +31,20 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public String sendEmail(VerificationByEmail verification) {
+        User user = userRepository.findByEmailOrPhone(verification.getEmail());
+        if (user == null) {
+            return "Email không tồn tại người dùng!";
+        }
+
+        try {
+            if (Objects.requireNonNull(VerificationByEmail.fromString(encoder.decode(user.getVerificationCode())))
+                .getRequestTime().plusSeconds(time).isAfter(LocalDateTime.now())) {
+                return "Vui lòng không spam!";
+            }
+        } catch (Exception e) {
+            return "Lỗi hệ thống";
+        }
+
         String code;
         try {
             code = encoder.encode(verification.toString());
@@ -37,10 +52,6 @@ public class EmailServiceImpl implements EmailService {
             return "Lỗi email!";
         }
 
-        User user = userRepository.findByEmailOrPhone(verification.getEmail());
-        if (user == null) {
-            return "Email không tồn tại người dùng!";
-        }
         user.setVerificationCode(code);
         userRepository.save(user);
 
@@ -52,7 +63,11 @@ public class EmailServiceImpl implements EmailService {
             simpleMailMessage.setText("Click this link to change password: \n"
                 + "http://localhost:8086/sun/auth/verify?code="
                 + code);
-            javaMailSender.send(simpleMailMessage);
+            try {
+                javaMailSender.send(simpleMailMessage);
+            } catch (Exception e) {
+                throw new FailedSendMailException("Failed while sending email!");
+            }
         });
         thread.start();
 
@@ -90,14 +105,10 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public String getEmailFromCode(String code) {
-        VerificationByEmail verification;
         try {
-            verification = VerificationByEmail.fromString(encoder.decode(code));
+            return VerificationByEmail.fromString(encoder.decode(code)).getEmail();
         } catch (Exception e) {
             return null;
         }
-
-        assert verification != null;
-        return verification.getEmail();
     }
 }

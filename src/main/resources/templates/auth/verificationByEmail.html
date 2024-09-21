@@ -9,7 +9,7 @@
     <link rel="icon" th:href="@{/img/spreadsheet_17087859.png}" type="image/png">
 </head>
 <body>
-<th:block th:if="${errorMessage != null}">
+<th:block th:if="${errorMessage != null || error != null}">
     <div id="popup-failed-register" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -17,7 +17,8 @@
                     <h1 class="modal-title fs-5">NHẮC NHỞ</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div th:text="${errorMessage}" class="modal-body"></div>
+                <div th:if="${errorMessage != null}" th:text="${errorMessage}" class="modal-body"></div>
+                <div th:if="${error != null}" th:text="${error.detail}" class="modal-body"></div>
                 <div class="modal-footer">
                     <button type="button" class="button" data-bs-dismiss="modal">Close</button>
                 </div>
@@ -28,7 +29,7 @@
 
 <div class="background-custom">
     <div class="box-custom forgot">
-        <h2>Điền email để xác thực tài khoản!</h2>
+        <h2>Điền email để xác thực tài khoản của bạn!</h2>
         <form th:method="POST" th:action="@{/auth/forgotPassword}">
             <input id="email" th:value="${email}" name="email" type="text" class="field-custom mb-3" placeholder="Nhập Email">
             <th:block th:if="${timer != null}">
@@ -40,6 +41,7 @@
 </div>
 
 <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/auth/action.js}"></script>
 <script type="text/javascript">
     const timeString = '[[${timer}]]';
 
@@ -48,20 +50,22 @@
     };
 
     function countDown() {
-        let time = +timeString/1000;
+        let time = +timeString;
         const timeView = document.getElementById("timer-resend");
         const btn = document.getElementById("btn-submit");
 
         const interval = setInterval(function() {
-            if (time > 0) {
-                timeView.innerHTML = `<p style="text-align: center; color: red">${renderTime(time)}</p>`;
-                time--;
-                btn.type = "button";
-            } else {
-                clearInterval(interval);
-                timeView.innerHTML = `<p style="text-align: center; color: red">Bạn chưa nhận được email?<p>`;
-                btn.type = "submit";
-                btn.textContent = "Gửi lại";
+            if (timeView != null) {
+                if (time > 0) {
+                    timeView.innerHTML = `<p style="text-align: center; color: red">${renderTime(time)}</p>`;
+                    time--;
+                    btn.type = "button";
+                } else {
+                    clearInterval(interval);
+                    timeView.innerHTML = `<p style="text-align: center; color: red">Bạn chưa nhận được email?<p>`;
+                    btn.type = "submit";
+                    btn.textContent = "Gửi lại";
+                }
             }
         }, 1000);
     }
