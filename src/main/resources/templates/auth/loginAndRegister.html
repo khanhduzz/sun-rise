@@ -75,9 +75,6 @@
     <div id="box-register" class="box-custom register hidden">
         <div id="form-register" class="col-custom">
             <h2>ĐĂNG KÝ</h2>
-<!--            <div th:if="${error != null}" class="alert alert-danger">-->
-<!--                <span th:text="${error.detail}">Error Detail</span>-->
-<!--            </div>-->
             <form id="formm-register" th:method="POST" th:object="${register}" th:action="@{/auth/register}" class="register-form">
                 <input th:field="*{firstname}" id="firstname" type="text" class="field-custom" placeholder="Vui lòng nhập tên">
                 <input th:field="*{lastname}" id="lastname" type="text" class="field-custom" placeholder="Vui lòng nhập họ">

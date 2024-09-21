@@ -93,28 +93,8 @@ public class ApiExceptionHandler {
             HttpStatus.BAD_REQUEST.getReasonPhrase(), message);
     }
 
-    @ExceptionHandler(DuplicatedException.class)
-    protected String handleDuplicated(DuplicatedException e, RedirectAttributes redirectAttributes,
-                                      WebRequest request, HttpServletRequest httpRequest) {
-        String message = e.getMessage();
-        ErrorVm errorVm = new ErrorVm("400",
-            HttpStatus.BAD_REQUEST.getReasonPhrase(), message);
-        redirectAttributes.addFlashAttribute(ERROR, errorVm);
-
-        log.warn(ERROR_LOG_FORMAT, request.getDescription(false), 400, message);
-        log.debug(e.toString());
-
-        String currentUri = httpRequest.getRequestURI();
-        String contextPath = httpRequest.getContextPath();
-        if (currentUri.startsWith(contextPath)) {
-            currentUri = currentUri.substring(contextPath.length());
-        }
-
-        return "redirect:" + (currentUri.isEmpty() ? "/error" : currentUri);
-    }
-
-    @ExceptionHandler(FailedSendMailException.class)
-    protected String handleFailedSendMail(FailedSendMailException e, RedirectAttributes redirectAttributes,
+    @ExceptionHandler({DuplicatedException.class, FailedSendMailException.class})
+    protected String handleDuplicated(Exception e, RedirectAttributes redirectAttributes,
                                       WebRequest request, HttpServletRequest httpRequest) {
         String message = e.getMessage();
         ErrorVm errorVm = new ErrorVm("400",
