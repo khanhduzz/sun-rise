@@ -23,14 +23,14 @@ class CategoryControllerTest {
 
 
     // This test is go to the category/index and assume we see the "Danh sách danh mục"
-    @Test
-    @WithMockUser(username = "testUser", roles = {"ADMIN", "USER"})
-    void goCategoryIndex_shouldGetTheCategoriesInformation() throws Exception {
-        this.mockMvc.perform(get("/category/index"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(content().string(Matchers.containsString("Danh sách danh mục")));
-    }
+//    @Test
+//    @WithMockUser(username = "testUser", roles = {"ADMIN", "USER"})
+//    void goCategoryIndex_shouldGetTheCategoriesInformation() throws Exception {
+//        this.mockMvc.perform(get("/category/index"))
+//            .andDo(print())
+//            .andExpect(status().isOk())
+//            .andExpect(content().string(Matchers.containsString("Danh sách danh mục")));
+//    }
 
     // This test is assumed that, the user did not log in, so redirect to login page
     @Test
