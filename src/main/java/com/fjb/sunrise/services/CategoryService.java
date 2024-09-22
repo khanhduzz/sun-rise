@@ -29,4 +29,6 @@ public interface CategoryService {
     List<Category> findCategoryByAdminAndUser();
 
     List<CategoryResponseDto> addIsAdminToCategory(List<CategoryResponseDto> categoryResponseDtoList);
+
+    int countByOwner();
 }

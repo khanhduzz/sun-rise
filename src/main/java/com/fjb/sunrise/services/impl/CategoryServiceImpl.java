@@ -41,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto createCategory(CategoryCreateDto categoryCreateDto) {
         Category category = categoryMapper.toCategory(categoryCreateDto);
         category.setStatus(EStatus.ACTIVE);
+        category.setOwner(userRepository.findById(getCurrentUserId()).orElseThrow());
         category = categoryRepository.save(category);
         return categoryMapper.toCategoryResponseDto(category);
     }
@@ -48,12 +49,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryResponseDto updateCategory(Long id, CategoryUpdateDto categoryUpdateDto) {
-        Category category = categoryRepository.findById(id).orElseThrow();
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
         category = categoryMapper.updateCategory(category, categoryUpdateDto);
         category = categoryRepository.save(category);
         return categoryMapper.toCategoryResponseDto(category);
     }
-
 
 
     @Override
@@ -116,9 +117,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResponseDto> addIsAdminToCategory(List<CategoryResponseDto> list) {
         List<User> admins = userRepository.findAllByRole(ERole.ADMIN);
+        User dbUser = userRepository.findById(getCurrentUserId()).orElseThrow();
         list.forEach(item ->
                 admins.forEach(admin -> {
-                    if (admin.getId() == item.getOwner().getId()) {
+                    if (dbUser.getRole() == ERole.ADMIN) {
+                        item.setAdmin(false);
+                    } else if (admin.getId() == item.getOwner().getId()) {
                         item.setAdmin(true);
                     }
                 })
@@ -145,12 +149,18 @@ public class CategoryServiceImpl implements CategoryService {
     private Specification<Category> findAllByUser() {
         return Specification.where((root, query, builder) -> {
             Join<Category, User> userJoin = root.join("owner");
+            User dbUser = userRepository.findById(getCurrentUserId()).orElseThrow();
+            if (dbUser.getRole() == ERole.ADMIN) {
+                Predicate activeStatus = builder.equal(root.get("status"), EStatus.ACTIVE);
+                Predicate notActiveStatus = builder.equal(root.get("status"), EStatus.NOT_ACTIVE);
+
+                return builder.or(activeStatus, notActiveStatus);
+            }
             Predicate hasRoleAdmin = builder.equal(userJoin.get("role"), "ADMIN");
             Predicate isOwner = builder.equal(userJoin.get("id"), getCurrentUserId());
 
             return builder.or(hasRoleAdmin, isOwner);
-        }
-        );
+        });
     }
 
     private Long getCurrentUserId() {
@@ -159,5 +169,15 @@ public class CategoryServiceImpl implements CategoryService {
                 (org.springframework.security.core.userdetails.User) auth.getPrincipal();
         User dbUser = userRepository.findByEmailOrPhone(user.getUsername());
         return dbUser.getId();
+    }
+
+    @Override
+    public int countByOwner() {
+        User owner = userRepository.findById(getCurrentUserId()).orElseThrow();
+
+        if (owner.getRole() == ERole.ADMIN) {
+            return 0;
+        }
+        return categoryRepository.countByOwner(owner);
     }
 }
