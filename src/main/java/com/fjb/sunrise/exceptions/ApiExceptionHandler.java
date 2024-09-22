@@ -93,8 +93,8 @@ public class ApiExceptionHandler {
             HttpStatus.BAD_REQUEST.getReasonPhrase(), message);
     }
 
-    @ExceptionHandler(DuplicatedException.class)
-    protected String handleDuplicated(DuplicatedException e, RedirectAttributes redirectAttributes,
+    @ExceptionHandler({DuplicatedException.class, FailedSendMailException.class})
+    protected String handleDuplicated(Exception e, RedirectAttributes redirectAttributes,
                                       WebRequest request, HttpServletRequest httpRequest) {
         String message = e.getMessage();
         ErrorVm errorVm = new ErrorVm("400",
