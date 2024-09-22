@@ -1,7 +1,7 @@
 services:
   sunrise:
     build: .
-    image: sunrise:latest
+    image: ghcr.io/khanhduzz/sun-rise:latest
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mock_project
       - SERVER_SERVLET_CONTEXT_PATH=/sun
@@ -21,6 +21,7 @@ services:
       - RECAPTCHA_SECRET_KEY
       - RECAPTCHA_SITE_KEY
       - CAPTCHA_ENABLE=true
+      - TIMING_SEND_EMAIL
     ports:
       - ${SERVER_LOCAL_PORT}:${SERVER_LOCAL_PORT}
     volumes:
@@ -43,7 +44,6 @@ services:
       - POSTGRES_PASSWORD=admin
     networks:
       - sun-network
-    pull_policy: always
 
   pgadmin:
     image: dpage/pgadmin4:6.20
