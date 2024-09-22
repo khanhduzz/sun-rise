@@ -2,6 +2,7 @@ package com.fjb.sunrise.controllers;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CreateAndEditUserByAdminDTO;
+import com.fjb.sunrise.dtos.responses.ErrorVm;
 import com.fjb.sunrise.dtos.responses.UserFullPageResponse;
 import com.fjb.sunrise.dtos.responses.UserResponseDTO;
 import com.fjb.sunrise.models.User;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/edit-infor")
@@ -55,6 +60,46 @@ public class UserController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping("/change-password")
+    public ModelAndView changePassword(
+        @RequestParam("password") String oldPassword,
+        @RequestParam("newPassword") String newPassword) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
+        User currentUser = userService.getUserByEmailOrPhone(currentUsername);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(Constants.ApiConstant.USER_INFORMATION);
+
+        if (currentUser == null) {
+            ModelAndView errorView = new ModelAndView("error");
+            ErrorVm error = new ErrorVm("404", "Đổi mật khẩu thất bại", "Không tìm thấy người dùng");
+            errorView.addObject("error", error);
+            return errorView;
+        }
+
+        if (!passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
+            ModelAndView errorView = new ModelAndView("error");
+            ErrorVm error = new ErrorVm("400", "Đổi mật khẩu thất bại", "Mật khẩu cũ không đúng");
+            errorView.addObject("error", error);
+            return  errorView;
+        }
+
+        String result = userService.changePassword(currentUsername, newPassword);
+        if (result != null) {
+            ModelAndView errorView = new ModelAndView("error");
+            ErrorVm error = new ErrorVm("500", "Thất bại", "Đổi mật khẩu thất bại");
+            errorView.addObject("error", error);
+            return  errorView;
+        } else {
+            modelAndView.addObject("message", "Success!");
+            modelAndView.setViewName(Constants.ApiConstant.USER_CHANGE_PASSWORD_SUCCESS);
+        }
+        return modelAndView;
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin-page")
     public ModelAndView adminDashboard(Authentication authentication) {
@@ -67,7 +112,6 @@ public class UserController {
         modelAndView.setViewName(Constants.ApiConstant.ADMIN_VIEW);
         return modelAndView;
     }
-
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/add-user-by-admin")
