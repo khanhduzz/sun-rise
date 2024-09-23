@@ -5,6 +5,7 @@ import com.fjb.sunrise.dtos.requests.CreateAndEditUserByAdminDTO;
 import com.fjb.sunrise.dtos.responses.UserFullPageResponse;
 import com.fjb.sunrise.dtos.responses.UserResponseDTO;
 import com.fjb.sunrise.models.User;
+import com.fjb.sunrise.services.impl.FirebaseStorageService;
 import com.fjb.sunrise.services.UserService;
 import com.fjb.sunrise.utils.Constants;
 import lombok.RequiredArgsConstructor;
@@ -14,27 +15,25 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
+
     private final UserService userService;
+    private final FirebaseStorageService firebaseStorageService;
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/edit-infor")
     public ModelAndView getUserInfo() {
         ModelAndView modelAndView = new ModelAndView();
         UserResponseDTO userResponseDTO = userService.getInfor();
-        modelAndView.addObject("userInfor", new UserResponseDTO());
         modelAndView.addObject("userInfor", userResponseDTO);
         modelAndView.setViewName(Constants.ApiConstant.USER_INFORMATION);
         return modelAndView;
@@ -42,15 +41,30 @@ public class UserController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/edit-infor")
-    public ModelAndView editUserInfo(@ModelAttribute("userInfor") UserResponseDTO userResponseDTO) {
+    public ModelAndView editUserInfo(
+            @ModelAttribute("userInfor") UserResponseDTO userResponseDTO,
+            @RequestParam(value = "avatar", required = false) MultipartFile avatarFile) {
+
         ModelAndView modelAndView = new ModelAndView();
-        userService.getInfor();
-        boolean editInfor = userService.editUser(userResponseDTO);
-        if (editInfor) {
-            modelAndView.setViewName(Constants.ApiConstant.TRANSACTION_INDEX);
-        } else {
-            modelAndView.addObject("error", "Failed to update user");
+
+        try {
+            // Kiểm tra và upload ảnh đại diện
+            if (avatarFile != null && !avatarFile.isEmpty()) {
+                String avatarUrl = firebaseStorageService.uploadFile(avatarFile, userResponseDTO.getId());
+                userResponseDTO.setAvatarUrl(avatarUrl); // Cập nhật URL ảnh đại diện
+            }
+
+            // Cập nhật thông tin người dùng
+            boolean editInfor = userService.editUser(userResponseDTO, avatarFile); // Truyền avatarFile
+            if (editInfor) {
+                modelAndView.setViewName(Constants.ApiConstant.TRANSACTION_INDEX);
+            } else {
+                modelAndView.addObject("error", "Failed to update user");
+            }
+        } catch (IOException e) {
+            modelAndView.addObject("error", "Failed to upload avatar: " + e.getMessage());
         }
+
         modelAndView.setViewName(Constants.ApiConstant.USER_REDIRECT);
         return modelAndView;
     }
@@ -67,7 +81,6 @@ public class UserController {
         modelAndView.setViewName(Constants.ApiConstant.ADMIN_VIEW);
         return modelAndView;
     }
-
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/add-user-by-admin")
@@ -101,7 +114,6 @@ public class UserController {
         return modelAndView;
     }
 
-
     @PostMapping("/page")
     @ResponseBody
     public UserFullPageResponse getPage(@RequestBody DataTableInputDTO payload) {
@@ -128,9 +140,12 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/detail-and-edit/{id}")
-    public ModelAndView doEditUserByAdmin(@PathVariable("id") Long id,
-                                          @ModelAttribute("userDetail")CreateAndEditUserByAdminDTO editUserByAdminDTO,
-                                          BindingResult bindingResult) {
+    public ModelAndView doEditUserByAdmin(
+            @PathVariable("id") Long id,
+            @ModelAttribute("userDetail") CreateAndEditUserByAdminDTO editUserByAdminDTO,
+            BindingResult bindingResult,
+            @RequestParam(value = "avatar", required = false) MultipartFile avatarFile) { // Thêm tham số avatarFile
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.ADMIN_DETAILS_AND_EDIT);
 
@@ -143,6 +158,12 @@ public class UserController {
             if (existingUser == null) {
                 modelAndView.addObject("error", "User not found");
                 return modelAndView;
+            }
+
+            // Cập nhật avatar nếu có
+            if (avatarFile != null && !avatarFile.isEmpty()) {
+                String avatarUrl = firebaseStorageService.uploadFile(avatarFile, existingUser.getId());
+                editUserByAdminDTO.setAvatarUrl(avatarUrl); // Cập nhật URL ảnh đại diện
             }
 
             editUserByAdminDTO.setId(id);

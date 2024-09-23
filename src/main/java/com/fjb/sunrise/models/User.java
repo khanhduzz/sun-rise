@@ -53,10 +53,14 @@ public class User extends AuditEntity<String> implements Serializable, UserDetai
 
     @Enumerated(EnumType.STRING)
     private ERole role;
+
     private EStatus status;
 
     @Column(name = "verification_code")
     private String verificationCode;
+
+    @Column(name = "avatar_url")  // Thêm cột avatarUrl
+    private String avatarUrl;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -5,6 +5,7 @@ import com.fjb.sunrise.dtos.requests.CreateAndEditUserByAdminDTO;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.responses.UserResponseDTO;
 import com.fjb.sunrise.models.User;
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import org.springframework.data.domain.Page;
 
@@ -31,12 +32,11 @@ public interface UserService {
 
     UserResponseDTO getInfor();
 
-    boolean editUser(UserResponseDTO userResponseDTO);
+    boolean editUser(UserResponseDTO userResponseDTO, MultipartFile avatarFile);  // Cập nhật thêm tham số MultipartFile
 
     boolean checkIsEmailDuplicate(String email);
 
     boolean checkPhoneIsDuplicate(String phone);
 
     User getUserByEmailOrPhone(String emailOrPhone);
-
 }

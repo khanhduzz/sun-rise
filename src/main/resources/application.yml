@@ -1,6 +1,7 @@
 spring:
   application:
     name: sun-rise
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -36,6 +37,9 @@ spring:
         springframework:
           security: DEBUG
           aop: DEBUG
+      com:
+        fjb:
+          sunrise: DEBUG
 
 server:
   port: ${SERVER_LOCAL_PORT}
@@ -43,12 +47,6 @@ server:
     context-path: /sun
     session:
       timeout: 30s
-
-logging:
-  level:
-    org:
-      springframework:
-        security: INFO
 
 application:
   admin:

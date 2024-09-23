@@ -13,9 +13,6 @@ import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.UserService;
 import com.fjb.sunrise.utils.Constants;
-import java.util.List;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,29 +24,37 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.RequiredArgsConstructor;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
-    @Value("${default.admin-create-key}")
-    private String key;
-    private final UserMapper mapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FirebaseStorageService firebaseStorageService;  // Inject FirebaseStorageService
+
+    @Value("${default.admin-create-key}")
+    private String key;
 
     @Override
     public String checkRegister(RegisterRequest registerRequest) {
-        //check already exist email or phone
+        // Check email or phone exists
         if (userRepository.existsUserByEmailOrPhone(registerRequest.getEmail(), registerRequest.getPhone())) {
             throw new DuplicatedException("Email hoặc số điện thoại đã được đăng ký!");
         }
 
-        User user = mapper.toEntity(registerRequest);
+        User user = userMapper.toEntity(registerRequest);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setStatus(EStatus.ACTIVE);
 
-        // check password start with create admin key -> create with role admin
+        // Check password for admin role
         if (registerRequest.getPassword().startsWith(key)) {
             user.setRole(ERole.ADMIN);
         } else {
@@ -57,7 +62,6 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.save(user);
-
         return null;
     }
 
@@ -70,13 +74,12 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
-
         return null;
     }
 
     @Override
     public User createUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
-        User user = mapper.toEntityCreateByAdmin(byAdminDTO);
+        User user = userMapper.toEntityCreateByAdmin(byAdminDTO);
         user.setUsername(byAdminDTO.getUsername());
         user.setPassword(passwordEncoder.encode(byAdminDTO.getPassword()));
         user.setFirstname(byAdminDTO.getFirstname());
@@ -93,7 +96,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
         User user = userRepository.findById(byAdminDTO.getId())
-            .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         user.setUsername(byAdminDTO.getUsername());
         user.setFirstname(byAdminDTO.getFirstname());
@@ -151,8 +154,8 @@ public class UserServiceImpl implements UserService {
         Sort sortOpt = Sort.by(Sort.Direction.ASC, "id");
         if (!payload.getOrder().isEmpty()) {
             sortOpt = Sort.by(
-                Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
-                payload.getOrder().get(0).get("colName"));
+                    Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
+                    payload.getOrder().get(0).get("colName"));
         }
         int pageNumber = payload.getStart() / 10;
         if (payload.getStart() % 10 != 0) {
@@ -166,11 +169,11 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.hasText(keyword)) {
             String likePattern = "%" + keyword.toLowerCase() + "%";
             specs = (root, query, builder) ->
-                builder.or(
-                    builder.like(builder.lower(root.get("username")), likePattern),
-                    builder.like(builder.lower(root.get("phone")), likePattern),
-                    builder.like(builder.lower(root.get("email")), likePattern)
-                );
+                    builder.or(
+                            builder.like(builder.lower(root.get("username")), likePattern),
+                            builder.like(builder.lower(root.get("phone")), likePattern),
+                            builder.like(builder.lower(root.get("email")), likePattern)
+                    );
         }
         return userRepository.findAll(specs, pageable);
     }
@@ -183,7 +186,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean editUser(UserResponseDTO userResponseDTO) {
+    public boolean editUser(UserResponseDTO userResponseDTO, MultipartFile avatarFile) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmailOrPhone(name);
         user.setUsername(userResponseDTO.getUsername());
@@ -196,6 +199,17 @@ public class UserServiceImpl implements UserService {
         user.setLastname(userResponseDTO.getLastname());
         user.setPhone(userResponseDTO.getPhone());
         user.setEmail(userResponseDTO.getEmail());
+
+        // Handle avatar upload
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            try {
+                String avatarUrl = firebaseStorageService.uploadFile(avatarFile, user.getId());
+                user.setAvatarUrl(avatarUrl);  // Giả sử User có trường avatarUrl
+            } catch (IOException e) {
+                e.printStackTrace();  // Handle exception properly in a real application
+            }
+        }
+
         userRepository.save(user);
         return true;
     }
@@ -218,5 +232,4 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
-
 }
