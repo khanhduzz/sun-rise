@@ -34,6 +34,7 @@ public class Constants {
 
         public static final String TRANSACTION_INDEX = "transaction/index";
         public static final String CATEGORIES = "categories";
+        public static final String USERS = "users";
 
         public static final String AUTH_REDIRECT_LOGIN = "redirect:/auth/login";
         public static final String AUTH_VIEW = "auth/loginAndRegister";

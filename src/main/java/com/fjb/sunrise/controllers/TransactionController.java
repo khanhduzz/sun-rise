@@ -2,62 +2,73 @@ package com.fjb.sunrise.controllers;
 
 import static com.fjb.sunrise.utils.Constants.ApiConstant.CATEGORIES;
 import static com.fjb.sunrise.utils.Constants.ApiConstant.TRANSACTION_INDEX;
+import static com.fjb.sunrise.utils.Constants.ApiConstant.USERS;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CreateOrUpdateTransactionRequest;
-import com.fjb.sunrise.dtos.responses.StatisticResponse;
 import com.fjb.sunrise.dtos.responses.TransactionFullPageResponse;
 import com.fjb.sunrise.mappers.TransactionMapper;
 import com.fjb.sunrise.models.Transaction;
+import com.fjb.sunrise.repositories.CategoryRepository;
 import com.fjb.sunrise.services.CategoryService;
 import com.fjb.sunrise.services.TransactionService;
+import com.fjb.sunrise.services.UserService;
+import jakarta.validation.Valid;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-@RestController
+@Controller
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
 @Slf4j
 public class TransactionController {
     private final TransactionService transactionService;
     private final CategoryService categoryService;
+    private final UserService userService;
     private final TransactionMapper transactionMapper;
 
     @GetMapping("/create")
-    public ModelAndView getCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(TRANSACTION_INDEX);
-        modelAndView.addObject(CATEGORIES, categoryService.findCategoryByAdminAndUser());
-        return modelAndView;
+    public String getCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
+        model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
+        model.addAttribute(USERS, userService.findAllNormalUser());
+        return TRANSACTION_INDEX;
     }
 
     @PostMapping("/create")
-    public ModelAndView postCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request)
-        throws ParseException {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(TRANSACTION_INDEX);
-        modelAndView.addObject(CATEGORIES, categoryService.findCategoryByAdminAndUser());
+    public String postCreate(@ModelAttribute("request") @Valid CreateOrUpdateTransactionRequest request,
+                             BindingResult result, Model model)
+            throws ParseException {
+        model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
+        model.addAttribute(USERS, userService.findAllNormalUser());
+        if (result.hasErrors()) {
+            model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
+            model.addAttribute(USERS, userService.findAllNormalUser());
+            return TRANSACTION_INDEX;
+        }
         Transaction transaction = transactionService.create(request);
-        return modelAndView;
+        return "redirect:/transaction/create";
     }
 
-
-    @PostMapping("/page")
-    public TransactionFullPageResponse getPage(@RequestBody DataTableInputDTO payload) {
-        Page<Transaction> transactionPage = transactionService.getTransactionList(payload);
+    @PostMapping("/page/{email}")
+    @ResponseBody
+    public TransactionFullPageResponse getPage(@PathVariable String email, @RequestBody DataTableInputDTO payload) {
+        Page<Transaction> transactionPage = transactionService.getTransactionList(payload, email);
         TransactionFullPageResponse response = new TransactionFullPageResponse();
         response.setData(transactionMapper.listTransactionToListTransactionPageResponse(
-            transactionPage.stream().toList()
+                transactionPage.stream().toList()
         ));
         response.setDraw(payload.getDraw());
         response.setRecordsFiltered(transactionPage.getTotalElements());
@@ -66,18 +77,12 @@ public class TransactionController {
     }
 
     @PostMapping("/update/{id}")
-    public ModelAndView postUpdate(@PathVariable Long id,
+    public String postUpdate(@PathVariable Long id,
                              @ModelAttribute("request") CreateOrUpdateTransactionRequest request)
-        throws ParseException {
+            throws ParseException {
         request.setId(id);
         transactionService.update(request);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/transaction/create");
-        return modelAndView;
+        return "redirect:/transaction/create";
     }
 
-    @GetMapping("/statistic")
-    public StatisticResponse getStatistic() {
-        return transactionService.statistic();
-    }
 }
