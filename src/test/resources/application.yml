@@ -15,6 +15,15 @@ spring:
           auth: true
           starttls:
             enable: true
+  logging:
+    level:
+      org:
+        springframework:
+          security: DEBUG
+          aop: DEBUG
+      com:
+        fjb:
+          sunrise: DEBUG
 
 application:
   admin:

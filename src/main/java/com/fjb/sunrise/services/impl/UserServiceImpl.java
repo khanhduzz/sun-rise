@@ -13,7 +13,6 @@ import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.UserService;
 import com.fjb.sunrise.utils.Constants;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final FirebaseStorageService firebaseStorageService;  // Inject FirebaseStorageService
+    private final FirebaseStorageService firebaseStorageService;
 
 
 
@@ -55,7 +54,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setStatus(EStatus.ACTIVE);
 
-        // check password start with create admin key -> create with role admin
         if (registerRequest.getPassword().startsWith(key)) {
             user.setRole(ERole.ADMIN);
         } else {
