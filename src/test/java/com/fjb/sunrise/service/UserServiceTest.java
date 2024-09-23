@@ -3,13 +3,10 @@ package com.fjb.sunrise.service;
 import static org.instancio.Select.field;
 import static org.mockito.ArgumentMatchers.eq;
 
-import com.fjb.sunrise.config.ApplicationConfig;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.mappers.UserMapper;
-import com.fjb.sunrise.mappers.UserMapperImpl;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.UserService;
-import com.fjb.sunrise.services.impl.UserServiceImpl;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,8 +15,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -27,10 +22,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class UserServiceTest {
     @MockBean
     UserRepository userRepository;
-
-    @Autowired
-    UserMapper userMapper;
-
     @Autowired
     UserService userService;
 
