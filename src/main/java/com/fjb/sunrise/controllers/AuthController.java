@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class  AuthController {
 
     @Value("${default.recaptcha-site-key}")
     private String recaptchaSiteKey;
@@ -91,6 +91,7 @@ public class AuthController {
     public ModelAndView indexForgotPassword() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.VERIFICATION_BY_EMAIL_VIEW);
+        modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, null);
         modelAndView.addObject(Constants.ApiConstant.EMAIL_OBJECT, "");
         return modelAndView;
     }
@@ -124,7 +125,6 @@ public class AuthController {
         }
 
         String email = emailService.getEmailFromCode(code);
-
         modelAndView.setViewName(Constants.ApiConstant.CHANGE_PASSWORD_VIEW);
         modelAndView.addObject(Constants.ApiConstant.EMAIL_OBJECT, email);
         modelAndView.addObject(Constants.ApiConstant.NEW_PASSWORD_OBJECT, "");

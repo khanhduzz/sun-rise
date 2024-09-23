@@ -23,8 +23,9 @@ Budgeting Service System is a project provides features for tracking and managin
 
 > *_Running:_* You can run this project with Docker container
 > - Run docker on your local machine.
-> - Run `mvn clean install` to create `.jar` file
-> - Go to the project, run `docker compose build` then `docker compose up` on `terminal/command promt`, then waiting for project starting
+
+[//]: # (> - Run `mvn clean install` to create `.jar` file)
+> - Go to the project, run `docker compose pull` if you want to update images or just `docker compose up` on `terminal/command promt`, then waiting for project starting
 > - The project is run on: `localhost:8086/sun/`
 > - The postgres container is run on: `localhost:5432`\
 >   Default user:\

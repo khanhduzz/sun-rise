@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(password));
+        user.setVerificationCode(null);
         userRepository.save(user);
 
         return null;
@@ -219,9 +220,11 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+
     @Override
     public List<User> findAllNormalUser() {
         return userRepository.findAllByRole(ERole.USER);
     }
 
 }
+
