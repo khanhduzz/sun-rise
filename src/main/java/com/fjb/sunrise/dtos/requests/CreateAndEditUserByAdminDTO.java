@@ -20,4 +20,5 @@ public class CreateAndEditUserByAdminDTO {
     private LocalDateTime createdDate;
     private String lastModifiedBy;
     private LocalDateTime lastModifiedDate;
+    private String avatarUrl;
 }

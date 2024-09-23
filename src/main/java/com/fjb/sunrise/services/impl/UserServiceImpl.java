@@ -13,6 +13,8 @@ import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.UserService;
 import com.fjb.sunrise.utils.Constants;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,9 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FirebaseStorageService firebaseStorageService;  // Inject FirebaseStorageService
+
+
 
     @Override
     public String checkRegister(RegisterRequest registerRequest) {
@@ -184,7 +190,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean editUser(UserResponseDTO userResponseDTO) {
+    public boolean editUser(UserResponseDTO userResponseDTO, MultipartFile avatarFile) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmailOrPhone(name);
         user.setUsername(userResponseDTO.getUsername());
@@ -197,6 +203,16 @@ public class UserServiceImpl implements UserService {
         user.setLastname(userResponseDTO.getLastname());
         user.setPhone(userResponseDTO.getPhone());
         user.setEmail(userResponseDTO.getEmail());
+
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            try {
+                String avatarUrl = firebaseStorageService.uploadFile(avatarFile, user.getId());
+                user.setAvatarUrl(avatarUrl);  // Giả sử User có trường avatarUrl
+            } catch (IOException e) {
+                e.printStackTrace();  // Handle exception properly in a real application
+            }
+        }
+
         userRepository.save(user);
         return true;
     }
