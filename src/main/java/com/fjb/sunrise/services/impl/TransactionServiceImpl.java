@@ -154,7 +154,7 @@ public class TransactionServiceImpl implements TransactionService {
         return df.parse(money).doubleValue();
     }
 
-    private String getCurrentUserName() {
+    public String getCurrentUserName() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) auth.getPrincipal();
         return user.getUsername();

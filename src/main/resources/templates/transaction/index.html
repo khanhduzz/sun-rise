@@ -325,16 +325,15 @@
                         <input th:field="*{amount}" type="text" class="form-control" id="inputAmount"
                                aria-describedby="emailHelp"
                                placeholder="10,000,000.00">
+                        <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-
-                        <label >Loại tiền</label>
 
                         <label>Loại tiền</label>
                         <div class="form-check">
                             <input th:field="*{transactionType}" class="form-check-input" type="radio"
                                    name="exampleRadios" id="exampleRadios1"
-                                   value="IN" checked>
+                                   value="IN">
                             <label class="form-check-label" for="exampleRadios1">
                                 <i class="fas fa-arrow-right text-success"></i> Thu
                             </label>
@@ -347,6 +346,7 @@
                                 <i class="fas fa-arrow-left text-warning"></i> Chi
                             </label>
                         </div>
+                        <span th:if="${#fields.hasErrors('transactionType')}" th:errors="*{transactionType}" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="inputCategory">Danh mục</label>
