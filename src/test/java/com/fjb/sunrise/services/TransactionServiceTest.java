@@ -157,4 +157,24 @@ public class TransactionServiceTest {
 
         Assertions.assertEquals(transactionPage, page);
     }
+
+    @DisplayName("Junit test for update method")
+    @Test
+    public void updateTransaction_whenCreateOrUpdateDto_returnTransaction() throws ParseException {
+        UserDetails appUserDetails = new org.springframework.security.core.userdetails.User("an@gmail.com", "123",
+            List.of(new SimpleGrantedAuthority("ROLE_USER")));
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(appUserDetails, null);
+
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(auth);
+        SecurityContextHolder.setContext(securityContext);
+
+        Mockito.when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+        Mockito.when(userRepository.findByEmailOrPhone(anyString())).thenReturn(user);
+        Mockito.when(transactionRepository.save(any())).thenReturn(transaction);
+
+        Transaction transactionTest = transactionService.update(create);
+        Assertions.assertEquals(transactionTest, transaction);
+    }
 }

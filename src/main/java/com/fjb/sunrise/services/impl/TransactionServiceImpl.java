@@ -124,9 +124,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setUser(userRepository.findByEmailOrPhone(getCurrentUserName()));
         transaction.setCategory(categoryRepository.findById(request.getCategory()).orElse(null));
 
-        log.error("update: {}", transaction.toString());
         Transaction transaction1 = transactionRepository.save(transaction);
-        log.error("updated: {}", transaction1.toString());
         return transaction1;
     }
 
