@@ -67,3 +67,6 @@ default:
   recaptcha-site-key: ${RECAPTCHA_SITE_KEY}
   captcha-enable: ${CAPTCHA_ENABLE}
   timing-send-mail: ${TIMING_SEND_EMAIL}
+
+storage:
+  path: ${STORAGE_PATH}
