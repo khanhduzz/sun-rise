@@ -1,4 +1,4 @@
-package com.fjb.sunrise.service;
+package com.fjb.sunrise.services;
 
 import static org.instancio.Select.field;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,16 +8,16 @@ import static org.mockito.ArgumentMatchers.eq;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.exceptions.DuplicatedException;
-import com.fjb.sunrise.mappers.UserMapper;
+import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
-import com.fjb.sunrise.services.UserService;
 import org.instancio.Instancio;
 import org.instancio.Select;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +43,7 @@ public class UserServiceTest {
         request = Instancio.of(RegisterRequest.class)
             .generate(field(RegisterRequest::getEmail), x -> x.net().email()) // generate value base on Instancio library
             .supply(field(RegisterRequest::getPhone), x -> "0" + x.digits(9)) // generate value follow developer
-            .set(field(RegisterRequest::getPassword), "123456aA@") // set value into specific field. If Being list, setting all
+//            .set(field(RegisterRequest::getPassword), "123456aA@") // set value into specific field. If Being list, setting all
             .create();
     }
 
@@ -103,10 +103,32 @@ public class UserServiceTest {
     @Test
     void checkRegister_WhenRegisterWithAdminKey_ThenResultWillReturnUserHasRoleAdmin() {
         request.setPassword(Instancio.of(String.class).supply(Select.allStrings(), x-> adminCreateKey + anyString()).create());
-        Mockito.when(userRepository.findByEmailOrPhone(eq(request.getEmail()))).thenReturn(null);
+        Mockito.when(userRepository.existsUserByEmail(request.getEmail())).thenReturn(false);
 
         userService.checkRegister(request);
-        User user = userRepository.findByEmailOrPhone(eq(request.getEmail()));
-        Assertions.assertEquals(ERole.ADMIN, user.getRole());
+        Mockito.verify(userRepository).save(Mockito.argThat(user ->
+            ERole.ADMIN.equals(user.getRole())
+        ));
+    }
+
+    @Test
+    void checkRegister_WhenRegisterWithoutAdminKey_ThenResultWillReturnUserHasRoleUser() {
+        Mockito.when(userRepository.existsUserByEmail(request.getEmail())).thenReturn(false);
+
+        userService.checkRegister(request);
+        Mockito.verify(userRepository).save(Mockito.argThat(user ->
+            ERole.USER.equals(user.getRole())
+        ));
+    }
+
+    @Test
+    void changePassword_WhenEmailNotExist_ThenResultNotFoundException() {
+        String email = Instancio.of(String.class).generate(Select.allStrings(), x-> x.net().email()).create();
+        Mockito.when(userRepository.existsUserByEmail(email)).thenReturn(false);
+
+        Exception notFoundEmail = assertThrows(NotFoundException.class, () -> {
+            userService.changePassword(email, anyString());
+        });
+        Assertions.assertEquals("Email chưa được đăng ký!", notFoundEmail.getMessage());
     }
 }
