@@ -36,32 +36,23 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     @Value("${default.admin-create-key}")
     private String key;
-    private final UserMapper mapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final FirebaseStorageService firebaseStorageService;
 
-
-
     @Override
     public String checkRegister(RegisterRequest registerRequest) {
-        //check already exist email or phone
+        // Check if email or phone already exists
         if (userRepository.existsUserByEmailOrPhone(registerRequest.getEmail(), registerRequest.getPhone())) {
             throw new DuplicatedException("Email hoặc số điện thoại đã được đăng ký!");
         }
 
-        User user = mapper.toEntity(registerRequest);
+        User user = userMapper.toEntity(registerRequest);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setStatus(EStatus.ACTIVE);
-
-        if (registerRequest.getPassword().startsWith(key)) {
-            user.setRole(ERole.ADMIN);
-        } else {
-            user.setRole(ERole.USER);
-        }
+        user.setRole(registerRequest.getPassword().startsWith(key) ? ERole.ADMIN : ERole.USER);
 
         userRepository.save(user);
-
         return null;
     }
 
@@ -75,19 +66,13 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.setVerificationCode(null);
         userRepository.save(user);
-
         return null;
     }
 
     @Override
     public User createUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
-        User user = mapper.toEntityCreateByAdmin(byAdminDTO);
-        user.setUsername(byAdminDTO.getUsername());
+        User user = userMapper.toEntityCreateByAdmin(byAdminDTO);
         user.setPassword(passwordEncoder.encode(byAdminDTO.getPassword()));
-        user.setFirstname(byAdminDTO.getFirstname());
-        user.setLastname(byAdminDTO.getLastname());
-        user.setEmail(byAdminDTO.getEmail());
-        user.setPhone(byAdminDTO.getPhone());
         user.setCreatedBy(byAdminDTO.getCreatedBy());
         user.setCreatedDate(byAdminDTO.getCreatedDate());
         user.setRole(ERole.valueOf(byAdminDTO.getRole()));
@@ -98,7 +83,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
         User user = userRepository.findById(byAdminDTO.getId())
-            .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         user.setUsername(byAdminDTO.getUsername());
         user.setFirstname(byAdminDTO.getFirstname());
@@ -129,26 +114,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deactivateUserById(Long id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setStatus(EStatus.NOT_ACTIVE);
-            userRepository.save(user);
-        } else {
-            throw new NotFoundException(Constants.ErrorCode.USER_NOT_FOUND);
-        }
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Constants.ErrorCode.USER_NOT_FOUND));
+        user.setStatus(EStatus.NOT_ACTIVE);
+        userRepository.save(user);
     }
 
     @Override
     public void activateUserById(Long id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setStatus(EStatus.ACTIVE);
-            userRepository.save(user);
-        } else {
-            throw new NotFoundException("User not found");
-        }
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        user.setStatus(EStatus.ACTIVE);
+        userRepository.save(user);
     }
 
     @Override
@@ -156,14 +133,11 @@ public class UserServiceImpl implements UserService {
         Sort sortOpt = Sort.by(Sort.Direction.ASC, "id");
         if (!payload.getOrder().isEmpty()) {
             sortOpt = Sort.by(
-                Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
-                payload.getOrder().get(0).get("colName"));
-        }
-        int pageNumber = payload.getStart() / 10;
-        if (payload.getStart() % 10 != 0) {
-            pageNumber = pageNumber - 1;
+                    Sort.Direction.fromString(payload.getOrder().get(0).get("dir").toUpperCase()),
+                    payload.getOrder().get(0).get("colName"));
         }
 
+        int pageNumber = payload.getStart() / payload.getLength();
         Pageable pageable = PageRequest.of(pageNumber, payload.getLength(), sortOpt);
         final String keyword = payload.getSearch().getOrDefault("value", "");
         Specification<User> specs = null;
@@ -171,11 +145,11 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.hasText(keyword)) {
             String likePattern = "%" + keyword.toLowerCase() + "%";
             specs = (root, query, builder) ->
-                builder.or(
-                    builder.like(builder.lower(root.get("username")), likePattern),
-                    builder.like(builder.lower(root.get("phone")), likePattern),
-                    builder.like(builder.lower(root.get("email")), likePattern)
-                );
+                    builder.or(
+                            builder.like(builder.lower(root.get("username")), likePattern),
+                            builder.like(builder.lower(root.get("phone")), likePattern),
+                            builder.like(builder.lower(root.get("email")), likePattern)
+                    );
         }
         return userRepository.findAll(specs, pageable);
     }
@@ -205,9 +179,9 @@ public class UserServiceImpl implements UserService {
         if (avatarFile != null && !avatarFile.isEmpty()) {
             try {
                 String avatarUrl = firebaseStorageService.uploadFile(avatarFile, user.getId());
-                user.setAvatarUrl(avatarUrl);  // Giả sử User có trường avatarUrl
+                user.setAvatarUrl(avatarUrl); // Assuming User has an avatarUrl field
             } catch (IOException e) {
-                e.printStackTrace();  // Handle exception properly in a real application
+                e.printStackTrace(); // Handle exception properly in a real application
             }
         }
 
@@ -234,11 +208,8 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-
     @Override
     public List<User> findAllNormalUser() {
         return userRepository.findAllByRole(ERole.USER);
     }
-
 }
-
