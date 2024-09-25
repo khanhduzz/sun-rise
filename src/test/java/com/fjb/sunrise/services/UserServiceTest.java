@@ -2,7 +2,6 @@ package com.fjb.sunrise.services;
 
 import static org.instancio.Select.field;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -136,31 +134,27 @@ class UserServiceTest {
         Assertions.assertEquals("Email chưa được đăng ký!", notFoundEmail.getMessage());
     }
 
-//    @Test
-//    void changePassword_WhenEmailExisted_ThenResultChangedPassword() {
-//        // Arrange
-//        Mockito.when(userRepository.existsUserByEmail(request.getEmail())).thenReturn(true);
-//        User user = new User();
-//        user.setLastname(request.getLastname());
-//        user.setFirstname(request.getFirstname());
-//        user.setEmail(request.getEmail());
-//        user.setPassword(passwordEncoder.encode(request.getPassword())); // encode password during user creation
-//        user.setPhone(Instancio.of(String.class).supply(Select.allStrings(), x -> "0" + x.digits(9)).create());
-//
-//        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
-//
-//        String newPassword = "new_password";
-//        Mockito.when(passwordEncoder.encode(newPassword)).thenReturn("encoded_new_password");
-//
-//        // Act
-//        userService.changePassword(request.getEmail(), newPassword);
-//
-//        // Assert
-//        Mockito.verify(userRepository).save(Mockito.argThat(savedUser ->
-//            savedUser.getEmail().equals(user.getEmail()) &&
-//                passwordEncoder.matches(newPassword, savedUser.getPassword())
-//        ));
-//    }
+    @Test
+    void changePassword_WhenEmailExisted_ThenResultChangedPassword() {
+        String email = Instancio.of(String.class).generate(Select.allStrings(), x -> x.net().email()).create();
+        String newPassword = Instancio.of(String.class).supply(Select.allStrings(), x -> "NewPassword123!").create();
 
+        User user = Instancio.of(User.class)
+            .set(field(User::getEmail), email)
+            .set(field(User::getPassword), passwordEncoder.encode("OldPassword123!"))
+            .create();
+
+        Mockito.when(userRepository.findByEmailOrPhone(eq(email))).thenReturn(user);
+
+        userService.changePassword(email, newPassword);
+
+        Mockito.verify(userRepository).save(Mockito.argThat(savedUser ->
+            passwordEncoder.matches(newPassword, savedUser.getPassword())
+        ));
+
+        Mockito.verify(userRepository).save(Mockito.argThat(savedUser ->
+            savedUser.getVerificationCode() == null
+        ));
+    }
 
 }
