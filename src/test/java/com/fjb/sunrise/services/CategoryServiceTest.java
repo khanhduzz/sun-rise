@@ -261,7 +261,4 @@ class CategoryServiceTest {
         assertEquals(1, result.size());
         assertEquals("Category-Test", result.get(0).getName());
     }
-
-
-
 }

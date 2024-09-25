@@ -18,6 +18,5 @@ public class DataTableInputDTO {
     private Map<String, String> search;
 
     public DataTableInputDTO() {
-
     }
 }
