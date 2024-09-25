@@ -19,7 +19,6 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
@@ -30,6 +29,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +45,6 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto createCategory(CategoryCreateDto categoryCreateDto) {
         Category category = categoryMapper.toCategory(categoryCreateDto);
         category.setStatus(EStatus.ACTIVE);
-//        category.setOwner(userRepository.findById(getCurrentUserId()).orElseThrow(() -> new NoSuchElementException("Owner not found"));
         User owner = userRepository.findById(getCurrentUserId())
                 .orElseThrow(() -> new NoSuchElementException("Owner not found"));
         category.setOwner(owner);
@@ -167,14 +168,6 @@ public class CategoryServiceImpl implements CategoryService {
             return builder.or(hasRoleAdmin, isOwner);
         });
     }
-
-//    public Long getCurrentUserId() {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        org.springframework.security.core.userdetails.User user =
-//                (org.springframework.security.core.userdetails.User) auth.getPrincipal();
-//        User dbUser = userRepository.findByEmailOrPhone(user.getUsername());
-//        return dbUser.getId();
-//    }
 
     public Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
