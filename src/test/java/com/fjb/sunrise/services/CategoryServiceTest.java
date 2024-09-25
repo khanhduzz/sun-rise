@@ -45,12 +45,13 @@ class CategoryServiceTest {
     private CategoryMapper categoryMapper;
     @Mock
     private CategoryRepository categoryRepository;
-    @Mock
+
 
     // Class for re-use in test
     private Category category;
     private CategoryResponseDto categoryResponseDto;
 
+    private DataTableInputDTO dataTableInputDTO;
     private CategoryCreateDto categoryCreateDto;
 
     private CategoryUpdateDto categoryUpdateDto;
@@ -79,6 +80,13 @@ class CategoryServiceTest {
         categoryUpdateDto = new CategoryUpdateDto();
         categoryUpdateDto.setId(1L);
         categoryUpdateDto.setName("Category-Test");
+
+        dataTableInputDTO = new DataTableInputDTO();
+        dataTableInputDTO.setStart(0);
+        dataTableInputDTO.setLength(10);
+        dataTableInputDTO.setSearch(Map.of("value", "Category-Test"));
+        dataTableInputDTO.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
+
     }
 
 
@@ -213,18 +221,12 @@ class CategoryServiceTest {
 
     @Test
     public void testGetCategoryList() {
-        DataTableInputDTO payload = new DataTableInputDTO();
-        payload.setStart(0);
-        payload.setLength(10);
-        payload.setSearch(Map.of("value", "Category-Test"));
-        payload.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
-
         // Giả lập hành vi cho repository
         when(categoryRepository.findAll(any(Specification.class), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(List.of(category)));
 
         // Gọi phương thức
-        Page<Category> result = categoryService.getCategoryList(payload);
+        Page<Category> result = categoryService.getCategoryList(dataTableInputDTO);
 
         // Kiểm tra kết quả
         assertNotNull(result);
