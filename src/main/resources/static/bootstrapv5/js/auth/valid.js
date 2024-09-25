@@ -20,6 +20,7 @@ const username = document.getElementById("username");
 const passwordLogin = document.getElementById("password-login");
 const buttonSubmitLogin = document.getElementById("submit-button-login");
 const buttonSendMail = document.getElementById("btn-sendMail");
+const buttonChangePassword = document.getElementById("submit-new-password");
 
 function addValidationListeners(inputElement, validationFunction) {
     if (inputElement != null) {
@@ -230,6 +231,9 @@ buttonSubmitLogin?.addEventListener("mouseover", () => changeTypeSubmit(buttonSu
     validUsername(username) && checkBlank(passwordLogin.value) && validReCaptcha(1)));
 
 buttonSendMail?.addEventListener("mouseover", () => changeTypeSubmit(buttonSendMail, validEmail(email)));
+
+buttonChangePassword?.addEventListener("mouseover", () =>
+    changeTypeSubmit(buttonChangePassword, validPassword(passwordRegister) && validRePassword(passwordRegister, rePasswordRegister)));
 
 function changeTypeSubmit(element, isValid) {
     if(isValid) {
