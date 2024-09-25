@@ -30,6 +30,17 @@ public class FileSystemStorageService implements StorageService {
             throw new BadRequestException("File upload location can not be empty");
         }
         this.rootLocation = Paths.get(properties.getLocation());
+        createDirectoryIfNotExists(this.rootLocation);
+    }
+
+    private void createDirectoryIfNotExists(Path path) {
+        try {
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Could not create directory: " + path, e);
+        }
     }
 
     @Override

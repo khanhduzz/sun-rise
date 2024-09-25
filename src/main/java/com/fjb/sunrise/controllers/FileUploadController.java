@@ -1,10 +1,15 @@
 package com.fjb.sunrise.controllers;
 
+import com.fjb.sunrise.exceptions.BadRequestException;
 import com.fjb.sunrise.services.StorageService;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,13 +48,25 @@ public class FileUploadController {
             "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
+    @GetMapping("/image/{filename:.+}")
+    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+        Resource image = storageService.loadAsResource(filename);
+
+        try {
+            MediaType mediaType = MediaType.parseMediaType(Files.probeContentType(image.getFile().toPath()));
+            return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + image.getFilename() + "\"")
+                .body(image);
+        } catch (IOException e) {
+            throw new BadRequestException("Could not read file: " + filename, e);
+        }
+    }
+
     @PostMapping
-    public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file,
+    public void handleFileUpload(@RequestParam("file") MultipartFile file,
                                          RedirectAttributes redirectAttributes) {
-        ModelAndView modelAndView = new ModelAndView();
         storageService.store(file);
-        redirectAttributes.addFlashAttribute("message", "Uploaded " + file.getOriginalFilename());
-        modelAndView.setViewName("redirect:/images");
-        return modelAndView;
+        redirectAttributes.addFlashAttribute("imageName", file.getOriginalFilename());
     }
 }

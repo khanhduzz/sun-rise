@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FileSystemStorageService fileSystemStorageService;
 
     @Override
     public String checkRegister(RegisterRequest registerRequest) {
@@ -96,6 +97,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(byAdminDTO.getId())
             .orElseThrow(() -> new NotFoundException("User not found"));
 
+        if (byAdminDTO.getImageName() != null) {
+            fileSystemStorageService.store(byAdminDTO.getImageName());
+            user.setImageName(byAdminDTO.getImageName().getOriginalFilename());
+        }
+        System.out.println("This is file name" + byAdminDTO.getImageName().getOriginalFilename());
         user.setUsername(byAdminDTO.getUsername());
         user.setFirstname(byAdminDTO.getFirstname());
         user.setLastname(byAdminDTO.getLastname());
