@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
@@ -13,6 +14,7 @@ import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
+import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.impl.CategoryServiceImpl;
@@ -22,7 +24,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 class CategoryServiceTest {
@@ -41,6 +49,7 @@ class CategoryServiceTest {
 
     // Class for re-use in test
     private Category category;
+    private User currentUser;
     private CategoryResponseDto categoryResponseDto;
 
     private CategoryCreateDto categoryCreateDto;
@@ -67,6 +76,8 @@ class CategoryServiceTest {
 
         categoryCreateDto = new CategoryCreateDto();
         categoryCreateDto.setName("Category-Test");
+
+
 
         categoryUpdateDto = new CategoryUpdateDto();
         categoryUpdateDto.setId(1L);
@@ -101,27 +112,6 @@ class CategoryServiceTest {
             assertThrows(NotFoundException.class, () -> categoryService.getCategoryById(1L));
         }
     }
-
-//    @Nested
-//    class CreateCategoryTests {
-//        @Test
-//        void createCategory_shouldReturnCategoryResponseDto() {
-//            // Giả lập chuyển đổi từ DTO sang Category
-//            when(categoryMapper.toCategory(categoryCreateDto)).thenReturn(category);
-//            // Giả lập lưu Category vào repository
-//            when(categoryRepository.save(any(Category.class))).thenReturn(category);
-//            // Giả lập chuyển đổi từ Category sang CategoryResponseDto
-//            when(categoryMapper.toCategoryResponseDto(category)).thenReturn(categoryResponseDto);
-//
-//            // Thực hiện gọi phương thức
-//            CategoryResponseDto result = categoryService.createCategory(categoryCreateDto);
-//
-//            // Kiểm tra kết quả
-//            assertEquals(categoryResponseDto.getName(), result.getName());
-//            verify(categoryRepository).save(any(Category.class));
-//        }
-//    }
-
 
 
     @Nested
@@ -223,5 +213,59 @@ class CategoryServiceTest {
             verify(categoryRepository, never()).save(any(Category.class));
         }
     }
+
+    @Test
+    public void testGetCategoryList() {
+        DataTableInputDTO payload = new DataTableInputDTO();
+        payload.setStart(0);
+        payload.setLength(10);
+        payload.setSearch(Map.of("value", "Category-Test"));
+        payload.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
+
+        // Giả lập hành vi cho repository
+        when(categoryRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of(category)));
+
+        // Gọi phương thức
+        Page<Category> result = categoryService.getCategoryList(payload);
+
+        // Kiểm tra kết quả
+        assertNotNull(result);
+        assertEquals(1, result.getContent().size());
+        assertEquals("Category-Test", result.getContent().get(0).getName());
+    }
+
+    private void assertNotNull(Page<Category> result) {
+
+    }
+
+    @Test
+    public void testGetAllCategories() {
+        List<Category> categories = List.of(category);
+        when(categoryRepository.findAll()).thenReturn(categories);
+        when(categoryMapper.toCategoryResponseDto(any(Category.class))).thenReturn(categoryResponseDto);
+
+        // Gọi phương thức
+        List<CategoryResponseDto> result = categoryService.getAllCategories();
+
+        // Kiểm tra kết quả
+        assertEquals(1, result.size());
+        assertEquals("Category-Test", result.get(0).getName());
+    }
+
+    @Test
+    public void testFindCategoryByAdminAndUser() {
+        List<Category> categories = List.of(category);
+        when(categoryRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(categories);
+
+        // Gọi phương thức
+        List<Category> result = categoryService.findCategoryByAdminAndUser();
+
+        // Kiểm tra kết quả
+        assertEquals(1, result.size());
+        assertEquals("Category-Test", result.get(0).getName());
+    }
+
+
 
 }

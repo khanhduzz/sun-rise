@@ -16,4 +16,8 @@ public class DataTableInputDTO {
     private Integer start;
     private Integer length;
     private Map<String, String> search;
+
+    public DataTableInputDTO() {
+
+    }
 }
