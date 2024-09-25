@@ -39,7 +39,7 @@
                         </h6>
                     </div>
                     <div class="card-body">
-                        <form id="editUserForm" th:action="@{/user/detail-and-edit/{id}(id=${userDetail.id})}" th:object="${userDetail}" method="post">
+                        <form id="editUserForm" enctype="multipart/form-data" th:action="@{/user/detail-and-edit/{id}(id=${userDetail.id})}" th:object="${userDetail}" method="post">
                             <input type="hidden" th:field="*{id}">
 
                             <div class="row">
@@ -87,6 +87,11 @@
                                         <option value="NOT_ACTIVE" th:selected="${userDetail.status == 'NOT_ACTIVE'}">Không hoạt động</option>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <table>
+                                    <tr><td>Image: </td><td><input type="file" id="imageName" name="imageName" th:field="*{imageName}" /></td></tr>
+                                </table>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">

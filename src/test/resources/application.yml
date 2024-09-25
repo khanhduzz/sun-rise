@@ -37,3 +37,6 @@ default:
   type-encode: AES #gitleaks:allow
   captcha-enable: false
   timing-send-mail: 30000
+
+storage:
+  path: /resources
