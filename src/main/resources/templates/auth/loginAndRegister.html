@@ -79,11 +79,17 @@
             <h2>ĐĂNG KÝ</h2>
             <form id="formm-register" th:method="POST" th:object="${register}" th:action="@{/auth/register}" class="register-form">
                 <input th:field="*{firstname}" id="firstname" type="text" class="field-custom" placeholder="Vui lòng nhập tên">
+                <div id="message-firstname" class="popover"></div>
                 <input th:field="*{lastname}" id="lastname" type="text" class="field-custom" placeholder="Vui lòng nhập họ">
+                <div id="message-lastname" class="popover"></div>
                 <input th:field="*{email}" id="email" type="email" class="field-custom" placeholder="Địa chỉ Email">
+                <div id="message-email" class="popover"></div>
                 <input th:field="*{phone}" id="phone" type="tel" class="field-custom" placeholder="Số điện thoại">
+                <div id="message-phone" class="popover"></div>
                 <input th:field="*{password}" id="password-register" type="password" class="field-custom" placeholder="Nhập mật khẩu">
+                <div id="message-password-register" class="popover"></div>
                 <input id="re-password-register" type="password" class="field-custom" placeholder="Nhập lại mật khẩu">
+                <div id="message-re-password-register" class="popover"></div>
                 <div id="recaptcha-register" class="areaCaptcha  w-100 d-flex justify-content-center"></div>
                 <button id="submit-button-register" type="submit">Đăng ký</button>
             </form>
@@ -114,7 +120,9 @@
             <h2>ĐĂNG NHẬP</h2>
             <form id="formm-login" th:method="POST" th:object="${login}" th:action="@{/auth/login}" class="login-form">
                 <input th:field="*{username}" id="username" type="text" class="field-custom" placeholder="Nhập email hoặc số điện thoại">
+                <div id="message-username" class="popover"></div>
                 <input th:field="*{password}" id="password-login" type="password" class="field-custom" placeholder="Nhập mật khẩu">
+                <div id="message-password-login" class="popover"></div>
 
                 <div id="recaptcha-login" class="areaCaptcha w-100 d-flex justify-content-center"></div>
 
