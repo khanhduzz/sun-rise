@@ -121,13 +121,9 @@
             <h2>ĐĂNG NHẬP</h2>
             <form id="formm-login" th:method="POST" th:object="${login}" th:action="@{/auth/login}" class="login-form">
                 <input th:field="*{username}" id="username" type="text" class="field-custom" placeholder="Nhập email hoặc số điện thoại">
-                <div id="message-username" class="popover">
-                    <p>This is a custom popover!</p>
-                </div>
+                <div id="message-username" class="popover"></div>
                 <input th:field="*{password}" id="password-login" type="password" class="field-custom" placeholder="Nhập mật khẩu">
-                <div id="message-password-login" class="popover">
-                    <p>This is a custom popover!</p>
-                </div>
+                <div id="message-password-login" class="popover"></div>
 
                 <div id="recaptcha-login" class="areaCaptcha w-100 d-flex justify-content-center"></div>
 
