@@ -4,9 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
-import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.enums.EStatus;
@@ -14,7 +15,6 @@ import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.repositories.CategoryRepository;
-import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -22,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import java.util.Optional;
 
 class CategoryServiceTest {
@@ -36,14 +35,15 @@ class CategoryServiceTest {
     private CategoryMapper categoryMapper;
     @Mock
     private CategoryRepository categoryRepository;
-    @Mock
-    private UserRepository userRepository;
+
 
     // Class for re-use in test
     private Category category;
+
+//    private CategoryCreateDto categoryCreateDto;
     private CategoryResponseDto categoryResponseDto;
 
-    private CategoryCreateDto categoryCreateDto;
+//    private DataTableInputDTO dataTableInputDTO;
 
     private CategoryUpdateDto categoryUpdateDto;
 
@@ -65,12 +65,19 @@ class CategoryServiceTest {
             .status(EStatus.ACTIVE)
             .build();
 
-        categoryCreateDto = new CategoryCreateDto();
-        categoryCreateDto.setName("Category-Test");
+//        categoryCreateDto = new CategoryCreateDto();
+//        categoryCreateDto.setName("Category-Test");
 
         categoryUpdateDto = new CategoryUpdateDto();
         categoryUpdateDto.setId(1L);
         categoryUpdateDto.setName("Category-Test");
+
+//        dataTableInputDTO = new DataTableInputDTO();
+//        dataTableInputDTO.setStart(0);
+//        dataTableInputDTO.setLength(10);
+//        dataTableInputDTO.setSearch(Map.of("value", "Category-Test"));
+//        dataTableInputDTO.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
+
     }
 
 
@@ -101,27 +108,6 @@ class CategoryServiceTest {
             assertThrows(NotFoundException.class, () -> categoryService.getCategoryById(1L));
         }
     }
-
-//    @Nested
-//    class CreateCategoryTests {
-//        @Test
-//        void createCategory_shouldReturnCategoryResponseDto() {
-//            // Giả lập chuyển đổi từ DTO sang Category
-//            when(categoryMapper.toCategory(categoryCreateDto)).thenReturn(category);
-//            // Giả lập lưu Category vào repository
-//            when(categoryRepository.save(any(Category.class))).thenReturn(category);
-//            // Giả lập chuyển đổi từ Category sang CategoryResponseDto
-//            when(categoryMapper.toCategoryResponseDto(category)).thenReturn(categoryResponseDto);
-//
-//            // Thực hiện gọi phương thức
-//            CategoryResponseDto result = categoryService.createCategory(categoryCreateDto);
-//
-//            // Kiểm tra kết quả
-//            assertEquals(categoryResponseDto.getName(), result.getName());
-//            verify(categoryRepository).save(any(Category.class));
-//        }
-//    }
-
 
 
     @Nested
@@ -223,5 +209,6 @@ class CategoryServiceTest {
             verify(categoryRepository, never()).save(any(Category.class));
         }
     }
+
 
 }

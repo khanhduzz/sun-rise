@@ -39,7 +39,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             if (Objects.requireNonNull(VerificationByEmail.fromString(encoder.decode(user.getVerificationCode())))
                 .getRequestTime().plusSeconds(time).isAfter(LocalDateTime.now())) {
-                return "Vui lòng không spam!";
+                return "Email đang được gửi, vui lòng đợi 30 giây!";
             }
         } catch (Exception e) {
             return "Lỗi hệ thống";

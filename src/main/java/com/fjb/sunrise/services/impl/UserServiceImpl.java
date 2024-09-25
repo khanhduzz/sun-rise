@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     public String changePassword(String email, String password) {
         User user = userRepository.findByEmailOrPhone(email);
         if (user == null) {
-            return "Email chưa được đăng ký!";
+            throw new NotFoundException("Email chưa được đăng ký!");
         }
 
         user.setPassword(passwordEncoder.encode(password));
