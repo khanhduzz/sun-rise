@@ -53,7 +53,7 @@ class UserServiceTest {
     @Test
     void checkRegister_WhenDataIsNormal_ThenResultWillReturn200WithResponse(){
         Mockito
-            .when(userRepository.existsUserByEmailOrPhone(request.getEmail(), eq(request.getPhone())))
+            .when(userRepository.existsUserByEmailOrPhone(eq(request.getEmail()), eq(request.getPhone())))
             .thenReturn(false);
 
         final String actualResult = userService.checkRegister(request);
@@ -72,7 +72,7 @@ class UserServiceTest {
 
         Mockito.when(userRepository.save(user)).thenReturn(user);
         Mockito
-            .when(userRepository.existsUserByEmailOrPhone(request.getEmail(), eq(request.getPhone())))
+            .when(userRepository.existsUserByEmailOrPhone(eq(request.getEmail()), eq(request.getPhone())))
             .thenReturn(true);
 
         Exception duplicatedException = assertThrows(DuplicatedException.class, () -> {
@@ -93,7 +93,7 @@ class UserServiceTest {
         Mockito.when(userRepository.save(user)).thenReturn(user);
 
         Mockito
-            .when(userRepository.existsUserByEmailOrPhone(request.getEmail(), eq(request.getPhone())))
+            .when(userRepository.existsUserByEmailOrPhone(eq(request.getEmail()), eq(request.getPhone())))
             .thenReturn(true);
 
         Exception duplicatedException = assertThrows(DuplicatedException.class, () -> {
@@ -144,7 +144,7 @@ class UserServiceTest {
             .set(field(User::getPassword), passwordEncoder.encode("OldPassword123!"))
             .create();
 
-        Mockito.when(userRepository.findByEmailOrPhone(email)).thenReturn(user);
+        Mockito.when(userRepository.findByEmailOrPhone(eq(email))).thenReturn(user);
 
         userService.changePassword(email, newPassword);
 
