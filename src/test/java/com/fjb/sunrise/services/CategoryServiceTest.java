@@ -3,9 +3,7 @@ package com.fjb.sunrise.services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
@@ -20,6 +18,7 @@ import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
+import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -70,13 +69,6 @@ class CategoryServiceTest {
 
 
     // Class for re-use in test
-    private Category category;
-
-//    private CategoryCreateDto categoryCreateDto;
-    private CategoryResponseDto categoryResponseDto;
-
-//    private DataTableInputDTO dataTableInputDTO;
-
 
     private CategoryUpdateDto categoryUpdateDto;
 
@@ -332,7 +324,4 @@ class CategoryServiceTest {
         assertEquals(1, result.size());
         assertEquals("Category-Test", result.get(0).getName());
     }
-
-
-
 }
