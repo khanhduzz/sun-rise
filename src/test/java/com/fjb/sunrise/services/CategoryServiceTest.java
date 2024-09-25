@@ -3,19 +3,20 @@ package com.fjb.sunrise.services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
+import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
+import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
+import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -28,10 +29,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 class CategoryServiceTest {
 
@@ -45,10 +48,13 @@ class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private UserRepository userRepository;
 
     // Class for re-use in test
     private Category category;
 
+    private com.fjb.sunrise.models.User user;
     private CategoryCreateDto categoryCreateDto;
     private CategoryResponseDto categoryResponseDto;
 
@@ -74,8 +80,20 @@ class CategoryServiceTest {
             .status(EStatus.ACTIVE)
             .build();
 
-//        categoryCreateDto = new CategoryCreateDto();
-//        categoryCreateDto.setName("Category-Test");
+        categoryCreateDto = new CategoryCreateDto();
+        categoryCreateDto.setName("Category-Test");
+
+        user = new User();
+        user.setId(1L);
+        user.setRole(ERole.USER);
+
+        UserDetails securityUser = new org.springframework.security.core.userdetails.User("user@example.com", "password", new ArrayList<>());
+        Authentication auth = mock(Authentication.class);
+        when(auth.getPrincipal()).thenReturn(securityUser);
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(auth);
+        SecurityContextHolder.setContext(securityContext);
 
         categoryUpdateDto = new CategoryUpdateDto();
         categoryUpdateDto.setId(1L);
@@ -118,6 +136,31 @@ class CategoryServiceTest {
         }
     }
 
+    @Test
+    void getCurrentUserId_shouldThrowException_whenUserNotFound() {
+        // Mô phỏng Authentication
+        Authentication auth = mock(Authentication.class);
+        UserDetails securityUser =
+                new org.springframework.security.core.userdetails.User("user@example.com", "password", new ArrayList<>());
+        when(auth.getPrincipal()).thenReturn(securityUser);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        // Mô phỏng repository không tìm thấy người dùng
+        when(userRepository.findByEmailOrPhone(securityUser.getUsername())).thenReturn(null);
+
+        // Kiểm tra ngoại lệ
+        assertThrows(NoSuchElementException.class, () -> categoryService.getCurrentUserId());
+    }
+
+
+    @Test
+    void createCategory_shouldThrowException_whenMapperFails() {
+        // Mô phỏng lỗi khi mapper không thành công
+        when(categoryMapper.toCategory(categoryCreateDto)).thenThrow(new RuntimeException("Mapping error"));
+
+        // Kiểm tra ngoại lệ
+        assertThrows(RuntimeException.class, () -> categoryService.createCategory(categoryCreateDto));
+    }
 
     @Nested
     class UpdateCategoryTests {
@@ -260,5 +303,6 @@ class CategoryServiceTest {
         assertEquals(1, result.size());
         assertEquals("Category-Test", result.get(0).getName());
     }
+
 
 }

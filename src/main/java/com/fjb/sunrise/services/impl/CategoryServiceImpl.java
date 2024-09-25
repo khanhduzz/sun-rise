@@ -18,6 +18,8 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
@@ -41,7 +43,10 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto createCategory(CategoryCreateDto categoryCreateDto) {
         Category category = categoryMapper.toCategory(categoryCreateDto);
         category.setStatus(EStatus.ACTIVE);
-        category.setOwner(userRepository.findById(getCurrentUserId()).orElseThrow());
+//        category.setOwner(userRepository.findById(getCurrentUserId()).orElseThrow(() -> new NoSuchElementException("Owner not found"));
+        User owner = userRepository.findById(getCurrentUserId())
+                .orElseThrow(() -> new NoSuchElementException("Owner not found"));
+        category.setOwner(owner);
         category = categoryRepository.save(category);
         return categoryMapper.toCategoryResponseDto(category);
     }
@@ -163,11 +168,25 @@ public class CategoryServiceImpl implements CategoryService {
         });
     }
 
-    private Long getCurrentUserId() {
+//    public Long getCurrentUserId() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        org.springframework.security.core.userdetails.User user =
+//                (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+//        User dbUser = userRepository.findByEmailOrPhone(user.getUsername());
+//        return dbUser.getId();
+//    }
+
+    public Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        org.springframework.security.core.userdetails.User user =
+        org.springframework.security.core.userdetails.User securityUser =
                 (org.springframework.security.core.userdetails.User) auth.getPrincipal();
-        User dbUser = userRepository.findByEmailOrPhone(user.getUsername());
+
+        User dbUser = userRepository.findByEmailOrPhone(securityUser.getUsername());
+
+        if (dbUser == null) {
+            throw new NoSuchElementException("User not found");
+        }
+
         return dbUser.getId();
     }
 
