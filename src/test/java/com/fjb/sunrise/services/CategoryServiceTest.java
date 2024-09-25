@@ -52,7 +52,6 @@ class CategoryServiceTest {
     private CategoryResponseDto categoryResponseDto;
 
     private DataTableInputDTO dataTableInputDTO;
-    private CategoryCreateDto categoryCreateDto;
 
     private CategoryUpdateDto categoryUpdateDto;
 
@@ -74,8 +73,8 @@ class CategoryServiceTest {
             .status(EStatus.ACTIVE)
             .build();
 
-        categoryCreateDto = new CategoryCreateDto();
-        categoryCreateDto.setName("Category-Test");
+//        categoryCreateDto = new CategoryCreateDto();
+//        categoryCreateDto.setName("Category-Test");
 
         categoryUpdateDto = new CategoryUpdateDto();
         categoryUpdateDto.setId(1L);
