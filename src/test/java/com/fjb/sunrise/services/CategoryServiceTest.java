@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
+import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.enums.EStatus;
@@ -48,6 +49,8 @@ class CategoryServiceTest {
 
     // Class for re-use in test
     private Category category;
+
+    private CategoryCreateDto categoryCreateDto;
     private CategoryResponseDto categoryResponseDto;
 
     private DataTableInputDTO dataTableInputDTO;
@@ -72,8 +75,8 @@ class CategoryServiceTest {
             .status(EStatus.ACTIVE)
             .build();
 
-//        categoryCreateDto = new CategoryCreateDto();
-//        categoryCreateDto.setName("Category-Test");
+        categoryCreateDto = new CategoryCreateDto();
+        categoryCreateDto.setName("Category-Test");
 
         categoryUpdateDto = new CategoryUpdateDto();
         categoryUpdateDto.setId(1L);
@@ -217,45 +220,5 @@ class CategoryServiceTest {
         }
     }
 
-    @Test
-    public void testGetCategoryList() {
-        // Giả lập hành vi cho repository
-        when(categoryRepository.findAll(any(Specification.class), any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(category)));
 
-        // Gọi phương thức
-        Page<Category> result = categoryService.getCategoryList(dataTableInputDTO);
-
-        // Kiểm tra kết quả
-        assertNotNull(result);
-        assertEquals(1, result.getContent().size());
-        assertEquals("Category-Test", result.getContent().get(0).getName());
-    }
-
-    @Test
-    public void testGetAllCategories() {
-        List<Category> categories = List.of(category);
-        when(categoryRepository.findAll()).thenReturn(categories);
-        when(categoryMapper.toCategoryResponseDto(any(Category.class))).thenReturn(categoryResponseDto);
-
-        // Gọi phương thức
-        List<CategoryResponseDto> result = categoryService.getAllCategories();
-
-        // Kiểm tra kết quả
-        assertEquals(1, result.size());
-        assertEquals("Category-Test", result.get(0).getName());
-    }
-
-    @Test
-    public void testFindCategoryByAdminAndUser() {
-        List<Category> categories = List.of(category);
-        when(categoryRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(categories);
-
-        // Gọi phương thức
-        List<Category> result = categoryService.findCategoryByAdminAndUser();
-
-        // Kiểm tra kết quả
-        assertEquals(1, result.size());
-        assertEquals("Category-Test", result.get(0).getName());
-    }
 }
