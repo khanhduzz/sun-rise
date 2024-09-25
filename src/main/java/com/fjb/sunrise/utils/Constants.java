@@ -51,7 +51,10 @@ public class Constants {
         public static final String ADMIN_DETAILS_AND_EDIT = "user/detail-and-edit-by-admin";
         public static final String ADMIN_REDIRECT = "redirect:/user/admin-page";
         public static final String USER_INFORMATION = "user/edit-infor";
-        public static final String USER_REDIRECT = "redirect:/health";
+        public static final String USER_CHANGE_INFO_SUCCESS = "redirect:/user/edit-infor?message=SuccessInfo";
+        public static final String USER_CHANGE_PASSWORD_SUCCESS = "redirect:/user/edit-infor?message=SuccessPassword";
+        public static final String USER_CHANGE_PASSWORD_FAIL = "redirect:/user/edit-infor";
+        public static final String USER_REDIRECT = "redirect:/user/edit-infor";
 
         public static final String MESSAGE = "message";
         public static final String VALUE = "value";
