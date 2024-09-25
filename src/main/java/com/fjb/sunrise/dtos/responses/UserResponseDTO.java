@@ -14,4 +14,5 @@ public class UserResponseDTO {
     private String phone;
     private String avatarUrl;
     private MultipartFile avatar;
+    private String role;
 }

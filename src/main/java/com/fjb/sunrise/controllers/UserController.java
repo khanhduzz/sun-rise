@@ -41,7 +41,6 @@ public class UserController {
     public ModelAndView getUserInfo() {
         ModelAndView modelAndView = new ModelAndView();
         UserResponseDTO userResponseDTO = userService.getInfor();
-        modelAndView.addObject("userInfor", new UserResponseDTO());
         modelAndView.addObject("userInfor", userResponseDTO);
         modelAndView.setViewName(Constants.ApiConstant.USER_INFORMATION);
         return modelAndView;
@@ -73,6 +72,40 @@ public class UserController {
         }
 
         modelAndView.setViewName(Constants.ApiConstant.USER_REDIRECT);
+        boolean editInfor = userService.editUser(userResponseDTO);
+        if (editInfor) {
+            modelAndView.setViewName(Constants.ApiConstant.USER_REDIRECT);
+        } else {
+            modelAndView.addObject("error", "Failed to update user");
+        }
+        return modelAndView;
+    }
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/change-password")
+    public ModelAndView changePassword() {
+        ModelAndView modelAndView = new ModelAndView();
+        UserResponseDTO userResponseDTO = userService.getInfor();
+        modelAndView.addObject("userInfor", new UserResponseDTO());
+        modelAndView.addObject("userInfor", userResponseDTO);
+        modelAndView.setViewName(Constants.ApiConstant.USER_INFORMATION);
+        return modelAndView;
+    }
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping("/change-password")
+    public ModelAndView changePassword(@RequestParam("oldPassword") String oldPassword,
+                                       @RequestParam("newPassword") String newPassword) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(Constants.ApiConstant.USER_INFORMATION);
+        String message = userService.processPasswordChange(oldPassword, newPassword);
+        if (message != null) {
+            modelAndView.setViewName(Constants.ApiConstant.USER_CHANGE_PASSWORD_FAIL);
+            modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, message);
+            return modelAndView;
+        } else {
+            modelAndView.setViewName(Constants.ApiConstant.USER_CHANGE_PASSWORD_SUCCESS);
+        }
         return modelAndView;
     }
 

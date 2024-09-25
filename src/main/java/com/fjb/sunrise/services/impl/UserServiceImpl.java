@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
     public String changePassword(String email, String password) {
         User user = userRepository.findByEmailOrPhone(email);
         if (user == null) {
-            return "Email chưa được đăng ký!";
+            throw new NotFoundException("Email chưa được đăng ký!");
         }
 
         user.setPassword(passwordEncoder.encode(password));
@@ -158,19 +158,22 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO getInfor() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmailOrPhone(name);
-        return userMapper.toUserResponse(user);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        UserResponseDTO responseDTO = userMapper.toUserResponse(user);
+        responseDTO.setRole(user.getRole().toString());
+        return responseDTO;
     }
 
     @Override
     public boolean editUser(UserResponseDTO userResponseDTO, MultipartFile avatarFile) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmailOrPhone(name);
-        user.setUsername(userResponseDTO.getUsername());
-
-        if (!passwordEncoder.matches(userResponseDTO.getPassword(), user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(userResponseDTO.getPassword()));
+        if (user == null) {
+            throw new NotFoundException("User not found");
         }
-
+        user.setUsername(userResponseDTO.getUsername());
         user.setFirstname(userResponseDTO.getFirstname());
         user.setLastname(userResponseDTO.getLastname());
         user.setPhone(userResponseDTO.getPhone());
@@ -179,9 +182,9 @@ public class UserServiceImpl implements UserService {
         if (avatarFile != null && !avatarFile.isEmpty()) {
             try {
                 String avatarUrl = firebaseStorageService.uploadFile(avatarFile, user.getId());
-                user.setAvatarUrl(avatarUrl); // Assuming User has an avatarUrl field
+                user.setAvatarUrl(avatarUrl); 
             } catch (IOException e) {
-                e.printStackTrace(); // Handle exception properly in a real application
+                e.printStackTrace(); 
             }
         }
 
@@ -206,6 +209,24 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("User not found with email or phone: " + emailOrPhone);
         }
         return user;
+    }
+
+    @Override
+    public String processPasswordChange(String oldPassword, String newPassword) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByEmailOrPhone(name);
+
+        if (currentUser == null) {
+            throw new NotFoundException("Người dùng không tồn tại");
+        }
+
+        if (!passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
+            throw new DuplicatedException("Mật khẩu cũ không chính xác");
+        }
+
+        currentUser.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(currentUser);
+        return null;
     }
 
     @Override

@@ -40,5 +40,7 @@ public interface UserService {
 
     User getUserByEmailOrPhone(String emailOrPhone);
 
+    String processPasswordChange(String oldPassword, String newPassword);
+
     List<User> findAllNormalUser();
 }

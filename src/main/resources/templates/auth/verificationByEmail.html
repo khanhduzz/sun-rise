@@ -28,22 +28,42 @@
         </div>
     </div>
 </th:block>
+<div class="modal fade" id="popup" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">NHẮC NHỞ</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Vui lòng điền chính xác và đầy đủ thông tin!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="background-custom">
     <div class="box-custom forgot">
         <h2>Điền email để xác thực tài khoản của bạn!</h2>
-        <form th:method="POST" th:action="@{/auth/forgotPassword}">
-            <input id="email" th:value="${email}" name="email" type="text" class="field-custom mb-3" placeholder="Nhập Email">
+        <form class="m-3" th:method="POST" th:action="@{/auth/forgotPassword}">
+            <input id="email" th:value="${email}" name="email" type="email" class="field-custom mb-3" placeholder="Nhập địa chỉ email">
+            <div id="message-email" class="popover"></div>
             <th:block th:if="${timer != null}">
                 <div id="timer-resend"></div>
             </th:block>
-            <button id="btn-submit" type="submit">Gửi</button>
+            <button id="btn-sendMail" type="submit">Gửi</button>
         </form>
+        <a th:method="GET" th:href="@{/auth/register}">Bạn chưa có tài khoản? Tạo tài khoản!</a>
+        <a th:method="GET" th:href="@{/auth/login}">Bạn đã có tài khoản? Đăng nhập!</a>
     </div>
 </div>
 
 <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/auth/action.js}"></script>
+<script type="text/javascript" th:src="@{/js/auth/valid.js}"></script>
 <script type="text/javascript">
     const timeString = '[[${timer}]]';
 
@@ -54,7 +74,7 @@
     function countDown() {
         let time = +timeString;
         const timeView = document.getElementById("timer-resend");
-        const btn = document.getElementById("btn-submit");
+        const btn = document.getElementById("btn-sendMail");
 
         const interval = setInterval(function() {
             if (timeView != null) {
