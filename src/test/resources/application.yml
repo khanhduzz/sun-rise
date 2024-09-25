@@ -39,4 +39,4 @@ default:
   timing-send-mail: 30000
 
 storage:
-  path: /resources
+  path: /tmp/upload/
