@@ -15,6 +15,5 @@ public interface UserMapper {
     @Mapping(target = "imageName", ignore = true)
     User toEntityCreateByAdmin(CreateAndEditUserByAdminDTO byAdminDTO);
 
-    @Mapping(target = "imageName", ignore = true)
     UserResponseDTO toUserResponse(User user);
 }

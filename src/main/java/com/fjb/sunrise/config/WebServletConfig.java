@@ -52,11 +52,11 @@ public class WebServletConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-            .addResourceHandler("/webjars/**", "/img/**", "/css/**", "/js/**", "/vendor/**")
+            .addResourceHandler("/webjars/**", "/img/**", "/css/**", "/js/**", "/vendor/**", "/upload/**")
             .addResourceLocations("classpath:/META-INF/resources/webjars/",
                 "classpath:/static/img/", "classpath:/static/css/", "classpath:/static/js/",
                 "classpath:/static/bootstrapv5/css/", "classpath:/static/bootstrapv5/js/",
-                "classpath:/static/vendor/");
+                "classpath:/static/vendor/", "classpath:/static/upload/");
     }
 
     @Override

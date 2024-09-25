@@ -38,7 +38,7 @@
                         </h6>
                     </div>
                     <div class="card-body">
-                        <form id="editUserForm" th:action="@{/user/detail-and-edit/{id}(id=${userDetail.id})}" th:object="${userDetail}" method="post">
+                        <form id="editUserForm" enctype="multipart/form-data" th:action="@{/user/detail-and-edit/{id}(id=${userDetail.id})}" th:object="${userDetail}" method="post">
                             <input type="hidden" th:field="*{id}">
 
                             <div class="row">

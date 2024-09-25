@@ -52,6 +52,7 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Avatar</th>
                                     <th>Địa chỉ Email</th>
                                     <th>Trạng thái tài khoản</th>
                                     <th>Vai trò</th>
@@ -159,6 +160,15 @@
 
     const cols = [
         {"data": "id"},
+        {
+            "data": "imageName",
+            "render": function(data, type, row) {
+                const imageUrl = `/sun/images/${data}`; // Adjust the path as necessary
+                return `<div class="text-center">
+                            <img alt="profile" class="img-profile rounded-circle w-25" src="${imageUrl}" />
+                        </div>`;
+            }
+        },
         {"data": "email"},
         {"data": "status", "render": function(data, type, row) {
                 return translateStatus(data);
