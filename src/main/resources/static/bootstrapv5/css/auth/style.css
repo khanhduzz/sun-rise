@@ -165,3 +165,29 @@ h2 {
     opacity: 1;
     visibility: visible;
 }
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li.checked {
+    color: green;
+    margin-right: 8px;
+}
+
+li.checked::before {
+    content: "✓";
+    margin-right: 8px;
+}
+
+li.unchecked {
+    color: red;
+    margin-right: 8px;
+}
+
+li.unchecked::before {
+    content: "✗";
+    margin-right: 8px;
+}
+
