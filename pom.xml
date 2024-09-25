@@ -210,7 +210,10 @@
                     <excludes>
                         <exclude>**/models/**</exclude>
                         <exclude>**/dtos/**</exclude>
+                        <exclude>**/controllers/**</exclude>
+                        <exclude>**/exceptions/**</exclude>
                         <exclude>**/mappers/**</exclude>
+                        <exclude>**/utils/**</exclude>
                         <exclude>**/constants/**</exclude>
                         <exclude>**/configs/**</exclude>
                         <exclude>**/repositories/**</exclude>
