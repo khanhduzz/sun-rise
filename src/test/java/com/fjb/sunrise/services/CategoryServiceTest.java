@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
@@ -25,11 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,10 +44,10 @@ class CategoryServiceTest {
     // Class for re-use in test
     private Category category;
 
-    private CategoryCreateDto categoryCreateDto;
+//    private CategoryCreateDto categoryCreateDto;
     private CategoryResponseDto categoryResponseDto;
 
-    private DataTableInputDTO dataTableInputDTO;
+//    private DataTableInputDTO dataTableInputDTO;
 
     private CategoryUpdateDto categoryUpdateDto;
 
@@ -75,18 +69,18 @@ class CategoryServiceTest {
             .status(EStatus.ACTIVE)
             .build();
 
-        categoryCreateDto = new CategoryCreateDto();
-        categoryCreateDto.setName("Category-Test");
+//        categoryCreateDto = new CategoryCreateDto();
+//        categoryCreateDto.setName("Category-Test");
 
         categoryUpdateDto = new CategoryUpdateDto();
         categoryUpdateDto.setId(1L);
         categoryUpdateDto.setName("Category-Test");
 
-        dataTableInputDTO = new DataTableInputDTO();
-        dataTableInputDTO.setStart(0);
-        dataTableInputDTO.setLength(10);
-        dataTableInputDTO.setSearch(Map.of("value", "Category-Test"));
-        dataTableInputDTO.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
+//        dataTableInputDTO = new DataTableInputDTO();
+//        dataTableInputDTO.setStart(0);
+//        dataTableInputDTO.setLength(10);
+//        dataTableInputDTO.setSearch(Map.of("value", "Category-Test"));
+//        dataTableInputDTO.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
 
     }
 
