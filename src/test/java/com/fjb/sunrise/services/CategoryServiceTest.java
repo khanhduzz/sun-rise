@@ -95,23 +95,7 @@ class CategoryServiceTest {
             // Check test result, compare the value we faked with the value the function return
             assertEquals(categoryResponseDto.getName(), result.getName());
         }
-    }
 
-    @Nested
-    class UnHappyCase{
-        @Test
-        void getCategoryById_shouldReturn404_whenNotFound() {
-            // Simulate the repository will return nothing when try to get category
-            when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-            // Then, when we run the service, service will throw exception
-            assertThrows(NotFoundException.class, () -> categoryService.getCategoryById(1L));
-        }
-    }
-
-
-    @Nested
-    class UpdateCategoryTests {
         @Test
         void updateCategory_shouldReturnUpdatedCategoryResponseDto() {
             Long categoryId = 1L;
@@ -132,22 +116,6 @@ class CategoryServiceTest {
         }
 
         @Test
-        void updateCategory_shouldThrowNotFound_whenCategoryDoesNotExist() {
-            Long categoryId = 1L;
-
-            // Giả lập không tìm thấy danh mục
-            when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
-
-            // Kiểm tra ngoại lệ
-            assertThrows(NotFoundException.class, () -> categoryService.updateCategory(categoryId, categoryUpdateDto));
-        }
-    }
-
-
-
-    @Nested
-    class DisableCategoryTests {
-        @Test
         void disableCategory_shouldSetStatusToNotActive() {
             Long categoryId = 1L;
 
@@ -163,24 +131,6 @@ class CategoryServiceTest {
         }
 
         @Test
-        void disableCategory_shouldDoNothing_whenCategoryNotFound() {
-            Long categoryId = 1L;
-
-            // Giả lập không tìm thấy danh mục
-            when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
-
-            // Thực hiện gọi phương thức
-            categoryService.disableCategory(categoryId);
-
-            // Kiểm tra không có hành động nào được thực hiện
-            verify(categoryRepository, never()).save(any(Category.class));
-        }
-    }
-
-
-    @Nested
-    class EnableCategoryTests {
-        @Test
         void enableCategory_shouldSetStatusToActive() {
             Long categoryId = 1L;
 
@@ -193,6 +143,43 @@ class CategoryServiceTest {
             // Kiểm tra trạng thái
             assertEquals(EStatus.ACTIVE, category.getStatus());
             verify(categoryRepository).save(category);
+        }
+    }
+
+    @Nested
+    class UnHappyCase{
+        @Test
+        void getCategoryById_shouldReturn404_whenNotFound() {
+            // Simulate the repository will return nothing when try to get category
+            when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+            // Then, when we run the service, service will throw exception
+            assertThrows(NotFoundException.class, () -> categoryService.getCategoryById(1L));
+        }
+
+        @Test
+        void updateCategory_shouldThrowNotFound_whenCategoryDoesNotExist() {
+            Long categoryId = 1L;
+
+            // Giả lập không tìm thấy danh mục
+            when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+
+            // Kiểm tra ngoại lệ
+            assertThrows(NotFoundException.class, () -> categoryService.updateCategory(categoryId, categoryUpdateDto));
+        }
+
+        @Test
+        void disableCategory_shouldDoNothing_whenCategoryNotFound() {
+            Long categoryId = 1L;
+
+            // Giả lập không tìm thấy danh mục
+            when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+
+            // Thực hiện gọi phương thức
+            categoryService.disableCategory(categoryId);
+
+            // Kiểm tra không có hành động nào được thực hiện
+            verify(categoryRepository, never()).save(any(Category.class));
         }
 
         @Test
@@ -209,6 +196,4 @@ class CategoryServiceTest {
             verify(categoryRepository, never()).save(any(Category.class));
         }
     }
-
-
 }
