@@ -143,3 +143,51 @@ h2 {
     border-top-right-radius: 200px 200px;
     border-bottom-right-radius: 200px 200px;
 }
+
+.popover {
+    display: none;
+    z-index: 100;
+    width: 100px;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.popover.show {
+    display: flex;
+    position: fixed;
+    z-index: 200;
+    opacity: 1;
+    visibility: visible;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li.checked {
+    color: green;
+    margin-right: 8px;
+}
+
+li.checked::before {
+    content: "✓";
+    margin-right: 8px;
+}
+
+li.unchecked {
+    color: red;
+    margin-right: 8px;
+}
+
+li.unchecked::before {
+    content: "✗";
+    margin-right: 8px;
+}
+
