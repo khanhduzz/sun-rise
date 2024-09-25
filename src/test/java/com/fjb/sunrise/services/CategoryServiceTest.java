@@ -48,11 +48,9 @@ class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
     @Mock
-    private UserRepository userRepository;
 
     // Class for re-use in test
     private Category category;
-    private User currentUser;
     private CategoryResponseDto categoryResponseDto;
 
     private CategoryCreateDto categoryCreateDto;
