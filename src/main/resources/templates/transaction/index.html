@@ -461,6 +461,11 @@
 
     let table;
 
+    $('#users').focus(function() {
+        const user = $('#users option:selected').text();
+        table = installTable('transactionTable', `/sun/transaction/page/${user}`, cols2)
+    })
+
     if($('#users').length==0) {
         table = installTable('transactionTable', '/sun/transaction/page/null', cols1)
     } else {
