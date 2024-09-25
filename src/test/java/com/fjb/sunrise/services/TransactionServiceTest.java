@@ -2,6 +2,7 @@ package com.fjb.sunrise.services;
 
 import static org.instancio.Select.field;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -170,11 +171,12 @@ public class TransactionServiceTest {
         Mockito.when(securityContext.getAuthentication()).thenReturn(auth);
         SecurityContextHolder.setContext(securityContext);
 
+        Mockito.when(transactionRepository.getReferenceById(anyLong())).thenReturn(transaction);
         Mockito.when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
         Mockito.when(userRepository.findByEmailOrPhone(anyString())).thenReturn(user);
         Mockito.when(transactionRepository.save(any())).thenReturn(transaction);
 
-        Transaction transactionTest = transactionService.update(create);
+        Transaction transactionTest = transactionService.update(update);
         Assertions.assertEquals(transactionTest, transaction);
     }
 }
