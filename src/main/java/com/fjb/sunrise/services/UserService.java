@@ -7,6 +7,7 @@ import com.fjb.sunrise.dtos.responses.UserResponseDTO;
 import com.fjb.sunrise.models.User;
 import java.util.List;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     String checkRegister(RegisterRequest registerRequest);
@@ -31,7 +32,7 @@ public interface UserService {
 
     UserResponseDTO getInfor();
 
-    boolean editUser(UserResponseDTO userResponseDTO);
+    boolean editUser(UserResponseDTO userResponseDTO, MultipartFile avatarFile);
 
     boolean checkIsEmailDuplicate(String email);
 
