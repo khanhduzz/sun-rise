@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
@@ -78,8 +79,6 @@ class CategoryServiceTest {
 
         categoryCreateDto = new CategoryCreateDto();
         categoryCreateDto.setName("Category-Test");
-
-
 
         categoryUpdateDto = new CategoryUpdateDto();
         categoryUpdateDto.setId(1L);
@@ -237,9 +236,6 @@ class CategoryServiceTest {
         assertEquals("Category-Test", result.getContent().get(0).getName());
     }
 
-    private void assertNotNull(Page<Category> result) {
-
-    }
 
     @Test
     public void testGetAllCategories() {
