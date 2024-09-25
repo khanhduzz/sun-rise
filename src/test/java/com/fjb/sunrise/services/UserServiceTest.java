@@ -2,6 +2,7 @@ package com.fjb.sunrise.services;
 
 import static org.instancio.Select.field;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -23,11 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class UserServiceTest {
+class UserServiceTest {
     @MockBean
     UserRepository userRepository;
     @Autowired
@@ -37,6 +39,8 @@ public class UserServiceTest {
     private String adminCreateKey;
 
     private RegisterRequest request;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void init() {
@@ -131,4 +135,32 @@ public class UserServiceTest {
         });
         Assertions.assertEquals("Email chưa được đăng ký!", notFoundEmail.getMessage());
     }
+
+//    @Test
+//    void changePassword_WhenEmailExisted_ThenResultChangedPassword() {
+//        // Arrange
+//        Mockito.when(userRepository.existsUserByEmail(request.getEmail())).thenReturn(true);
+//        User user = new User();
+//        user.setLastname(request.getLastname());
+//        user.setFirstname(request.getFirstname());
+//        user.setEmail(request.getEmail());
+//        user.setPassword(passwordEncoder.encode(request.getPassword())); // encode password during user creation
+//        user.setPhone(Instancio.of(String.class).supply(Select.allStrings(), x -> "0" + x.digits(9)).create());
+//
+//        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
+//
+//        String newPassword = "new_password";
+//        Mockito.when(passwordEncoder.encode(newPassword)).thenReturn("encoded_new_password");
+//
+//        // Act
+//        userService.changePassword(request.getEmail(), newPassword);
+//
+//        // Assert
+//        Mockito.verify(userRepository).save(Mockito.argThat(savedUser ->
+//            savedUser.getEmail().equals(user.getEmail()) &&
+//                passwordEncoder.matches(newPassword, savedUser.getPassword())
+//        ));
+//    }
+
+
 }
