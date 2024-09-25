@@ -16,14 +16,17 @@ const buttonSubmitRegister = document.getElementById("submit-button-register");
 const username = document.getElementById("username");
 const passwordLogin = document.getElementById("password-login");
 const buttonSubmitLogin = document.getElementById("submit-button-login");
+const buttonSendMail = document.getElementById("btn-sendMail");
 
 function addValidationListeners(inputElement, validationFunction) {
-    inputElement.addEventListener("focus", () => changeStyle(inputElement, validationFunction(inputElement)));
-    inputElement.addEventListener("focus", () => showMessage(inputElement));
-    inputElement.addEventListener("input", () => changeStyle(inputElement, validationFunction(inputElement)));
-    inputElement.addEventListener("input", () => showMessage(inputElement));
-    inputElement.addEventListener("blur", () => resetStyle(inputElement));
-    inputElement.addEventListener("blur", () => hideMessage(inputElement));
+    if (inputElement != null) {
+        inputElement.addEventListener("focus", () => changeStyle(inputElement, validationFunction(inputElement)));
+        inputElement.addEventListener("focus", () => showMessage(inputElement));
+        inputElement.addEventListener("input", () => changeStyle(inputElement, validationFunction(inputElement)));
+        inputElement.addEventListener("input", () => showMessage(inputElement));
+        inputElement.addEventListener("blur", () => resetStyle(inputElement));
+        inputElement.addEventListener("blur", () => hideMessage(inputElement));
+    }
 }
 
 addValidationListeners(firstname, validName);
@@ -77,8 +80,11 @@ function validEmail(element) {
     }
 
     const [name, domainPart] = value.split("@");
+    const noDiacritics = name && name.normalize('NFD').replace(/[\u0300-\u036f]/g, "") === name;
+
     const validFormat = value.includes("@") && value.includes(".") &&
         name && domainPart &&
+        noDiacritics &&
         !containsSpecialCharacter(name) &&
         domainPart.split(".").every(part => part && !containsSpecialCharacter(part));
 
@@ -159,7 +165,6 @@ function validRePassword(passwordElement, rePasswordElement) {
     return !contentMes.includes("unchecked");
 }
 
-
 function showMessage(inputField) {
     const popover = document.getElementById(`message-${inputField.id}`);
     const rect = inputField.getBoundingClientRect();
@@ -177,14 +182,15 @@ function hideMessage(inputField) {
         popover.classList.remove('show');
     }
 }
+buttonSubmitRegister?.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitRegister,
+    validName(firstname) && validName(lastname) && validEmail(email)
+    && validPhone(phone) && validPassword(passwordRegister)
+    && validRePassword(passwordRegister, rePasswordRegister) && validReCaptcha(0)));
 
-buttonSubmitRegister.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitRegister,
-    validName(firstname.value) && validName(lastname.value) && validEmail(email.value)
-    && validPhone(phone.value) && validPassword(passwordRegister.value)
-    && validRePassword(passwordRegister.value, rePasswordRegister.value) && validReCaptcha(0)));
+buttonSubmitLogin?.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitLogin,
+    (validEmail(username) || validPhone(username)) && validPassword(passwordLogin) && validReCaptcha(1)));
 
-buttonSubmitLogin.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitLogin,
-    (validEmail(username.value) || validPhone(username.value)) && validPassword(passwordLogin.value) && validReCaptcha(1)));
+buttonSendMail?.addEventListener("mouseover", () => changeTypeSubmit(buttonSendMail, validEmail(email)));
 
 function changeTypeSubmit(element, isValid) {
     if(isValid) {
