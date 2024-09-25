@@ -21,8 +21,7 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.mail.username}")
     private String emailServer;
 
-    @Value("${default.timing-send-mail}")
-    private Integer time;
+    private static final int TIME = 300;
 
     private final UserRepository userRepository;
     private final Encoder encoder;
@@ -38,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
 
         try {
             if (Objects.requireNonNull(VerificationByEmail.fromString(encoder.decode(user.getVerificationCode())))
-                .getRequestTime().plusSeconds(time).isAfter(LocalDateTime.now())) {
+                .getRequestTime().plusSeconds(TIME).isAfter(LocalDateTime.now())) {
                 return "Email đang được gửi, vui lòng đợi 30 giây!";
             }
         } catch (Exception e) {
@@ -96,7 +95,7 @@ public class EmailServiceImpl implements EmailService {
             return "Lỗi trong quá trình xác thực!";
         }
 
-        if (verification.getRequestTime().plusSeconds(time).isBefore(LocalDateTime.now())) {
+        if (verification.getRequestTime().plusSeconds(TIME).isBefore(LocalDateTime.now())) {
             return "Vượt quá thời gian xác thực!";
         }
 
@@ -106,7 +105,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public String getEmailFromCode(String code) {
         try {
-            return VerificationByEmail.fromString(encoder.decode(code)).getEmail();
+            return Objects.requireNonNull(VerificationByEmail.fromString(encoder.decode(code))).getEmail();
         } catch (Exception e) {
             return null;
         }
