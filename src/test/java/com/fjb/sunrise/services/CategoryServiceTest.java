@@ -3,10 +3,14 @@ package com.fjb.sunrise.services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
+
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
 import com.fjb.sunrise.enums.ERole;
@@ -16,7 +20,6 @@ import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
-import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -24,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +39,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
+
+import java.util.Optional;
+
 
 class CategoryServiceTest {
 
@@ -48,6 +55,7 @@ class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+
     @Mock
     private UserRepository userRepository;
 
@@ -59,6 +67,16 @@ class CategoryServiceTest {
     private CategoryResponseDto categoryResponseDto;
 
     private DataTableInputDTO dataTableInputDTO;
+
+
+    // Class for re-use in test
+    private Category category;
+
+//    private CategoryCreateDto categoryCreateDto;
+    private CategoryResponseDto categoryResponseDto;
+
+//    private DataTableInputDTO dataTableInputDTO;
+
 
     private CategoryUpdateDto categoryUpdateDto;
 
@@ -99,11 +117,19 @@ class CategoryServiceTest {
         categoryUpdateDto.setId(1L);
         categoryUpdateDto.setName("Category-Test");
 
+
         dataTableInputDTO = new DataTableInputDTO();
         dataTableInputDTO.setStart(0);
         dataTableInputDTO.setLength(10);
         dataTableInputDTO.setSearch(Map.of("value", "Category-Test"));
         dataTableInputDTO.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
+
+        dataTableInputDTO = new DataTableInputDTO();
+        dataTableInputDTO.setStart(0);
+        dataTableInputDTO.setLength(10);
+        dataTableInputDTO.setSearch(Map.of("value", "Category-Test"));
+        dataTableInputDTO.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
+
 
     }
 
@@ -136,6 +162,7 @@ class CategoryServiceTest {
         }
     }
 
+
     @Test
     void getCurrentUserId_shouldThrowException_whenUserNotFound() {
         // Mô phỏng Authentication
@@ -161,6 +188,7 @@ class CategoryServiceTest {
         // Kiểm tra ngoại lệ
         assertThrows(RuntimeException.class, () -> categoryService.createCategory(categoryCreateDto));
     }
+
 
     @Nested
     class UpdateCategoryTests {
@@ -262,6 +290,7 @@ class CategoryServiceTest {
         }
     }
 
+
     @Test
     public void testGetCategoryList() {
         // Giả lập hành vi cho repository
@@ -303,6 +332,7 @@ class CategoryServiceTest {
         assertEquals(1, result.size());
         assertEquals("Category-Test", result.get(0).getName());
     }
+
 
 
 }
