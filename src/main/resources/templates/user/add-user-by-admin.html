@@ -160,6 +160,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="d-flex justify-content-center mt-3">
                                 <button type="submit" id="createUserBtn" class="btn btn-success flex-fill mx-3">Khởi tạo</button>
                                 <button type="reset" class="btn btn-secondary flex-fill mx-3"
@@ -177,109 +179,8 @@
 </div>
 
 <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
-<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}" type="application/javascript"></script>
-<script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
-
-<script>
-    const password = document.getElementById('password');
-    const confirmPassword = document.getElementById('confirmPassword');
-    const passwordError = document.getElementById('passwordError');
-    const createUserForm = document.getElementById('createUserForm');
-    const inputs = document.querySelectorAll('input, textarea, select');
-    const emailInput = document.getElementById('email');
-    const phoneInput = document.getElementById('phone');
-    const emailError = document.getElementById('emailError');
-    const phoneError = document.getElementById('phoneError');
-    const requiredInputs = document.querySelectorAll('input[required]');
-
-    function checkPasswordMatch() {
-        if (password.value !== confirmPassword.value) {
-            confirmPassword.classList.add('is-invalid');
-            passwordError.style.display = 'block';
-            return false;
-        } else {
-            confirmPassword.classList.remove('is-invalid');
-            passwordError.style.display = 'none';
-            return true;
-        }
-    }
-
-    createUserForm.addEventListener('reset', () => {
-        inputs.forEach(input => {
-            input.classList.remove('valid-input', 'invalid-input');
-        });
-    });
-
-    createUserForm.addEventListener('submit', function(event) {
-        if (!checkPasswordMatch()) {
-            event.preventDefault();
-        }
-    });
-
-    confirmPassword.addEventListener('input', checkPasswordMatch);
-
-    requiredInputs.forEach(input => {
-        input.addEventListener('invalid', function() {
-            if (this.type === 'email') {
-                if (this.value === "") {
-                    this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
-                } else if (!this.value.includes('@')) {
-                    this.setCustomValidity('Vui lòng bao gồm ký tự \'@\' trong địa chỉ email.');
-                } else {
-                    this.setCustomValidity('Vui lòng hoàn thiện email theo định dạng: example@example.com');
-                }
-            } else if (this.id === 'phone') {
-                const phonePattern = /^\d+$/;
-                if (this.value === "") {
-                    this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
-                } else if (!phonePattern.test(this.value)) {
-                    this.setCustomValidity('Số điện thoại chỉ được chứa các chữ số.');
-                } else if (this.value.length >= 10) {
-                    this.setCustomValidity('Số điện thoại không được quá 9 chữ số.');
-                } else {
-                    this.setCustomValidity('');
-                }
-            } else if (this.value === "") {
-                this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
-            }
-        });
-
-        input.addEventListener('input', function() {
-            this.setCustomValidity('');
-        });
-    });
-
-    inputs.forEach(input => {
-        input.addEventListener('focus', () => {
-            input.classList.add('focus-input');
-        });
-
-        input.addEventListener('blur', () => {
-            if (input.value === '') {
-                input.classList.remove('valid-input', 'focus-input');
-            } else {
-                input.classList.add('valid-input');
-            }
-        });
-    });
-
-    function checkValidation(input, errorElement) {
-        if (!input.checkValidity()) {
-            errorElement.style.display = 'block';
-        } else {
-            errorElement.style.display = 'none';
-        }
-    }
-
-    emailInput.addEventListener('input', () => checkValidation(emailInput, emailError));
-    phoneInput.addEventListener('input', () => checkValidation(phoneInput, phoneError));
-
-    emailInput.addEventListener('focus', () => emailError.style.display = 'none');
-    phoneInput.addEventListener('focus', () => phoneError.style.display = 'none');
-
-</script>
+<script th:src="@{/js/user/user.js}" type="application/javascript"></script>
 </body>
 </html>

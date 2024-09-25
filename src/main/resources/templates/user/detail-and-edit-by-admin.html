@@ -18,7 +18,8 @@
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
 </head>
 
 <body id="page-top">
@@ -119,129 +120,8 @@
 </div>
 
 <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
-<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}" type="application/javascript"></script>
-<script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
-
-<!-- Custom JavaScript for validation -->
-<script>
-    const submitBtn = document.getElementById('submitBtn');
-    const editUserForm = document.getElementById('editUserForm');
-    const emailInput = document.getElementById('email');
-    const phoneInput = document.getElementById('phone');
-    const emailError = document.getElementById('emailError');
-    const phoneError = document.getElementById('phoneError');
-    let initialData = {};
-
-    // Lưu giá trị ban đầu của các trường nhập liệu
-    document.querySelectorAll('input, select').forEach(input => {
-        initialData[input.id] = input.value;
-    });
-
-    // Kiểm tra xem có thay đổi nào không
-    function checkIfChanged() {
-        let isChanged = false;
-
-        document.querySelectorAll('input, select').forEach(input => {
-            if (input.value !== initialData[input.id]) {
-                isChanged = true;
-            }
-        });
-
-        // Bật sáng nút submit nếu có thay đổi, ngược lại thì tắt
-        if (isChanged) {
-            submitBtn.removeAttribute('disabled');
-        } else {
-            submitBtn.setAttribute('disabled', true);
-        }
-    }
-
-    // Theo dõi sự thay đổi của tất cả các input, select
-    document.querySelectorAll('input, select').forEach(input => {
-        input.addEventListener('input', checkIfChanged);
-    });
-
-    // Kiểm tra tính hợp lệ của các trường nhập liệu
-    function checkValidation(input, errorElement) {
-        if (!input.checkValidity()) {
-            input.classList.add('is-invalid');
-            errorElement.style.display = 'block';
-        } else {
-            input.classList.remove('is-invalid');
-            errorElement.style.display = 'none';
-        }
-    }
-
-    // Kiểm tra email và số điện thoại khi nhập
-    emailInput.addEventListener('input', () => checkValidation(emailInput, emailError));
-    phoneInput.addEventListener('input', () => checkValidation(phoneInput, phoneError));
-
-    // Theo dõi sự thay đổi của các trường để bật/tắt nút submit
-    emailInput.addEventListener('input', checkIfChanged);
-    phoneInput.addEventListener('input', checkIfChanged);
-
-    // Reset form về trạng thái ban đầu và disable nút submit
-    editUserForm.addEventListener('reset', () => {
-        document.querySelectorAll('input, select').forEach(input => {
-            input.value = initialData[input.id];
-            input.classList.remove('is-invalid');
-        });
-        submitBtn.setAttribute('disabled', true); // Tắt nút submit khi reset
-    });
-
-    // Kiểm tra sự thay đổi trước khi submit
-    editUserForm.addEventListener('submit', function(event) {
-        let isChanged = false;
-
-        document.querySelectorAll('input, select').forEach(input => {
-            if (input.value !== initialData[input.id]) {
-                isChanged = true;
-            }
-        });
-
-        // Nếu không có gì thay đổi, ngăn việc submit form
-        if (!isChanged) {
-            event.preventDefault();
-            alert('Không có gì thay đổi!');
-        }
-    });
-
-    // Xác thực email và số điện thoại với các thông báo lỗi tùy chỉnh
-    const requiredInputs = [emailInput, phoneInput];
-
-    requiredInputs.forEach(input => {
-        input.addEventListener('invalid', function() {
-            if (this.id === 'email') {
-                if (this.value === "") {
-                    this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
-                } else if (!this.value.includes('@')) {
-                    this.setCustomValidity('Vui lòng bao gồm ký tự \'@\' trong địa chỉ email.');
-                } else {
-                    this.setCustomValidity('Vui lòng hoàn thiện email theo định dạng: example@example.com');
-                }
-            } else if (this.id === 'phone') {
-                phoneInput.addEventListener('invalid', function() {
-                    const phonePattern = /^[0-9]{1,9}$/;
-                    if (this.value === "") {
-                        this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
-                    } else if (!phonePattern.test(this.value)) {
-                        this.setCustomValidity('Số điện thoại chỉ được chứa tối đa 9 chữ số từ 0 đến 9.');
-                    } else {
-                        this.setCustomValidity('');
-                    }
-                });
-
-            }
-        });
-
-        input.addEventListener('input', function() {
-            this.setCustomValidity('');
-        });
-    });
-
-</script>
-
+<script th:src="@{/js/user/user.js}" type="application/javascript"></script>
 </body>
 </html>
