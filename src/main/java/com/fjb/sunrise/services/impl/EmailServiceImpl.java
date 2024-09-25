@@ -38,7 +38,8 @@ public class EmailServiceImpl implements EmailService {
 
         try {
             if (user.getVerificationCode() != null) {
-                if ((Objects.requireNonNull(VerificationByEmail.fromString(encoder.decode(user.getVerificationCode()))))
+                if ((Objects.requireNonNull(VerificationByEmail.fromString(encoder
+                    .decode(user.getVerificationCode()))))
                     .getRequestTime().plusSeconds(TIME).isAfter(LocalDateTime.now())) {
                     return "Email đang được gửi, vui lòng đợi 30 giây!";
                 }
@@ -64,7 +65,11 @@ public class EmailServiceImpl implements EmailService {
             String htmlMsg = "<h3>Thay đổi mật khẩu</h3>"
                 + "<p>Nhấn vào nút dưới đây để thay đổi mật khẩu:</p>"
                 + "<a href=\"http://localhost:8086/sun/auth/verify?code=" + code + "\" "
-                + "style=\"display:inline-block;padding:10px 20px;background-color:#4CAF50;color:white;text-decoration:none;border-radius:5px;\">"
+                + "style=\"display:inline-block;"
+                + "padding:10px 20px;"
+                + "background-color:#4CAF50;"
+                + "color:white;"
+                + "text-decoration:none;border-radius:5px;\">"
                 + "Thay đổi mật khẩu</a>";
 
             try {
