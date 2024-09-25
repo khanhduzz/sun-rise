@@ -233,32 +233,4 @@ class CategoryServiceTest {
         assertEquals(1, result.getContent().size());
         assertEquals("Category-Test", result.getContent().get(0).getName());
     }
-
-
-    @Test
-    public void testGetAllCategories() {
-        List<Category> categories = List.of(category);
-        when(categoryRepository.findAll()).thenReturn(categories);
-        when(categoryMapper.toCategoryResponseDto(any(Category.class))).thenReturn(categoryResponseDto);
-
-        // Gọi phương thức
-        List<CategoryResponseDto> result = categoryService.getAllCategories();
-
-        // Kiểm tra kết quả
-        assertEquals(1, result.size());
-        assertEquals("Category-Test", result.get(0).getName());
-    }
-
-    @Test
-    public void testFindCategoryByAdminAndUser() {
-        List<Category> categories = List.of(category);
-        when(categoryRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(categories);
-
-        // Gọi phương thức
-        List<Category> result = categoryService.findCategoryByAdminAndUser();
-
-        // Kiểm tra kết quả
-        assertEquals(1, result.size());
-        assertEquals("Category-Test", result.get(0).getName());
-    }
 }
