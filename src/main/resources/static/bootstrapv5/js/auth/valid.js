@@ -1,10 +1,13 @@
 const MESSAGE = {
     name: ["Không được để trống", "Không chứa kí tự đặc biệt", "Viết hoa chữ cái đầu"],
     email: ["Không được để trống", "Đúng định dạng: name@domain"],
-    phone: ["Không được để trống", "Đúng định dạng: 0xxxxxxxxx"],
-    password: ["Không được để trống"],
+    phone: ["Không được để trống", "Có 10 chữ số", "Đúng đầu số Việt Nam"],
+    password: ["Không được để trống", "Có it nhất 8 kí tự", "Có it nhất 1 kí tự viết hoa", "Có ít nhât 1 kí tự viết thường",
+                "Có ít nhất 1 kí tự đặc biệt"],
     rePassword: ["Không được để trống","Trùng với mật khẩu đã nhập"]
 }
+const PREFIX_PHONE = ["032", "033", "034", "035", "036", "037", "038", "039", "081", "082", "083", "084", "085",
+                            "070", "076", "077", "078", "079", "056", "058", "059"];
 
 const firstname = document.getElementById("firstname");
 const lastname = document.getElementById("lastname");
@@ -35,9 +38,7 @@ addValidationListeners(email, validEmail);
 addValidationListeners(phone, validPhone);
 addValidationListeners(passwordRegister, validPassword);
 addValidationListeners(rePasswordRegister, (element) => validRePassword(passwordRegister, element));
-addValidationListeners(username, (element) => validEmail(element) || validPhone(element));
-addValidationListeners(passwordLogin, validPassword);
-
+addValidationListeners(username, validUsername);
 
 function validName(element) {
     const value = element.value;
@@ -81,7 +82,6 @@ function validEmail(element) {
 
     const [name, domainPart] = value.split("@");
     const noDiacritics = name && name.normalize('NFD').replace(/[\u0300-\u036f]/g, "") === name;
-
     const validFormat = value.includes("@") && value.includes(".") &&
         name && domainPart &&
         noDiacritics &&
@@ -118,6 +118,12 @@ function validPhone(element) {
         contentMes += "<li class=\"checked\">" + MESSAGE.phone[1] + "</li>";
     }
 
+    if (PREFIX_PHONE.some(prefix => value.startsWith(prefix))) {
+        contentMes += "<li class=\"checked\">" + MESSAGE.phone[2] + "</li>";
+    } else {
+        contentMes += "<li class=\"unchecked\">" + MESSAGE.phone[2] + "</li>";
+    }
+
     contentMes += "</ul>";
     eleMes.innerHTML = contentMes;
 
@@ -133,6 +139,30 @@ function validPassword(element) {
         contentMes += "<li class=\"unchecked\">" + MESSAGE.password[0] + "</li>";
     } else {
         contentMes += "<li class=\"checked\">" + MESSAGE.password[0] + "</li>";
+    }
+
+    if (value.length <= 8) {
+        contentMes += "<li class=\"unchecked\">" + MESSAGE.password[1] + "</li>";
+    } else {
+        contentMes += "<li class=\"checked\">" + MESSAGE.password[1] + "</li>";
+    }
+
+    if (!/[A-Z]/.test(value)) {
+        contentMes += "<li class=\"unchecked\">" + MESSAGE.password[2] + "</li>";
+    } else {
+        contentMes += "<li class=\"checked\">" + MESSAGE.password[2] + "</li>";
+    }
+
+    if (!/[a-z]/.test(value)) {
+        contentMes += "<li class=\"unchecked\">" + MESSAGE.password[3] + "</li>";
+    } else {
+        contentMes += "<li class=\"checked\">" + MESSAGE.password[3] + "</li>";
+    }
+
+    if (!containsSpecialCharacter(value)) {
+        contentMes += "<li class=\"unchecked\">" + MESSAGE.password[4] + "</li>";
+    } else {
+        contentMes += "<li class=\"checked\">" + MESSAGE.password[4] + "</li>";
     }
 
     contentMes += "</ul>";
@@ -165,6 +195,15 @@ function validRePassword(passwordElement, rePasswordElement) {
     return !contentMes.includes("unchecked");
 }
 
+function validUsername(element) {
+    const value = element.value.trim();
+    if (/[^0-9]/.test(value)) {
+        return validEmail(element);
+    } else {
+        return validPhone(element);
+    }
+}
+
 function showMessage(inputField) {
     const popover = document.getElementById(`message-${inputField.id}`);
     const rect = inputField.getBoundingClientRect();
@@ -188,7 +227,7 @@ buttonSubmitRegister?.addEventListener("mouseover", () => changeTypeSubmit(butto
     && validRePassword(passwordRegister, rePasswordRegister) && validReCaptcha(0)));
 
 buttonSubmitLogin?.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitLogin,
-    (validEmail(username) || validPhone(username)) && validPassword(passwordLogin) && validReCaptcha(1)));
+    validUsername(username) && checkBlank(passwordLogin.value) && validReCaptcha(1)));
 
 buttonSendMail?.addEventListener("mouseover", () => changeTypeSubmit(buttonSendMail, validEmail(email)));
 
