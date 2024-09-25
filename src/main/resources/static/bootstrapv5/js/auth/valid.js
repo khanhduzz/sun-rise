@@ -19,8 +19,11 @@ const buttonSubmitLogin = document.getElementById("submit-button-login");
 
 function addValidationListeners(inputElement, validationFunction) {
     inputElement.addEventListener("focus", () => changeStyle(inputElement, validationFunction(inputElement.value)));
+    inputElement.addEventListener("focus", () => showMessage(inputElement));
     inputElement.addEventListener("input", () => changeStyle(inputElement, validationFunction(inputElement.value)));
+    inputElement.addEventListener("input", () => showMessage(inputElement));
     inputElement.addEventListener("blur", () => resetStyle(inputElement));
+    inputElement.addEventListener("blur", () => hideMessage(inputElement));
 }
 
 addValidationListeners(firstname, validName);
@@ -112,5 +115,23 @@ function validPassword(input) {
 
 function validRePassword(password, rePassword) {
     return rePassword !== "" && password === rePassword;
+}
+
+function showMessage(inputField) {
+    const popover = document.getElementById(`message-${inputField.id}`);
+    const rect = inputField.getBoundingClientRect();
+    popover.style.top = `${rect.bottom }px`;
+    popover.style.left = `${rect.left }px`;
+    popover.style.width = `${rect.width}px`;
+    if (!popover.classList.contains('show')) {
+        popover.classList.add('show');
+    }
+}
+
+function hideMessage(inputField) {
+    const popover = document.getElementById(`message-${inputField.id}`);
+    if (popover.classList.contains('show')) {
+        popover.classList.remove('show');
+    }
 }
 
