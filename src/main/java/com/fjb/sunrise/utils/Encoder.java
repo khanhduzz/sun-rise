@@ -38,6 +38,9 @@ public class Encoder {
     public String decode(String string)
         throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException,
         BadPaddingException {
+        if (string == null) {
+            return null;
+        }
         Cipher cipher = Cipher.getInstance(typeEncode);
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec());
 

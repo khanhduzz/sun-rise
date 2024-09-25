@@ -6,12 +6,13 @@ import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.EmailService;
 import com.fjb.sunrise.utils.Encoder;
+import jakarta.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,9 +37,11 @@ public class EmailServiceImpl implements EmailService {
         }
 
         try {
-            if (Objects.requireNonNull(VerificationByEmail.fromString(encoder.decode(user.getVerificationCode())))
-                .getRequestTime().plusSeconds(TIME).isAfter(LocalDateTime.now())) {
-                return "Email đang được gửi, vui lòng đợi 30 giây!";
+            if (user.getVerificationCode() != null) {
+                if ((Objects.requireNonNull(VerificationByEmail.fromString(encoder.decode(user.getVerificationCode()))))
+                    .getRequestTime().plusSeconds(TIME).isAfter(LocalDateTime.now())) {
+                    return "Email đang được gửi, vui lòng đợi 30 giây!";
+                }
             }
         } catch (Exception e) {
             return "Lỗi hệ thống";
@@ -55,15 +58,22 @@ public class EmailServiceImpl implements EmailService {
         userRepository.save(user);
 
         Thread thread = new Thread(() -> {
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom(emailServer);
-            simpleMailMessage.setTo(verification.getEmail());
-            simpleMailMessage.setSubject("Verification Email");
-            simpleMailMessage.setText("Click this link to change password: \n"
-                + "http://localhost:8086/sun/auth/verify?code="
-                + code);
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+            String htmlMsg = "<h3>Thay đổi mật khẩu</h3>"
+                + "<p>Nhấn vào nút dưới đây để thay đổi mật khẩu:</p>"
+                + "<a href=\"http://localhost:8086/sun/auth/verify?code=" + code + "\" "
+                + "style=\"display:inline-block;padding:10px 20px;background-color:#4CAF50;color:white;text-decoration:none;border-radius:5px;\">"
+                + "Thay đổi mật khẩu</a>";
+
             try {
-                javaMailSender.send(simpleMailMessage);
+                helper.setText(htmlMsg, true); // true để chỉ định đây là HTML
+                helper.setTo(verification.getEmail());
+                helper.setSubject("Thay đổi mật khẩu");
+                helper.setFrom(emailServer);
+
+                javaMailSender.send(mimeMessage);
             } catch (Exception e) {
                 throw new FailedSendMailException("Failed while sending email!");
             }
