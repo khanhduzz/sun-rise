@@ -44,22 +44,22 @@
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Tên người dùng</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{username}">
+                                    <label for="username" class="form-label font-weight-bold">Tên người dùng</label>
+                                    <input id="username" type="text" class="form-control border-primary" th:field="*{username}">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Họ</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{firstname}">
+                                    <label for="firstname" class="form-label font-weight-bold">Họ</label>
+                                    <input id="firstname" type="text" class="form-control border-primary" th:field="*{firstname}">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Tên</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{lastname}">
+                                    <label for="lastname" class="form-label font-weight-bold">Tên</label>
+                                    <input id="lastname" type="text" class="form-control border-primary" th:field="*{lastname}">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Địa chỉ Email</label>
+                                    <label for="email" class="form-label font-weight-bold">Địa chỉ Email</label>
                                     <input id="email" type="email" class="form-control border-primary" th:field="*{email}">
                                     <div id="emailError" class="invalid-feedback">Email không hợp lệ</div>
                                 </div>
@@ -74,15 +74,15 @@
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Vai trò</label>
-                                    <select class="form-select border-primary" th:field="*{role}">
+                                    <label for="role" class="form-label font-weight-bold">Vai trò</label>
+                                    <select id="role" class="form-select border-primary" th:field="*{role}">
                                         <option value="ADMIN" th:selected="${userDetail.role == 'ROLE_ADMIN'}">Quản trị viên</option>
                                         <option value="USER" th:selected="${userDetail.role == 'ROLE_USER'}">Người dùng</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Trạng thái tài khoản</label>
-                                    <select class="form-select border-primary" th:field="*{status}">
+                                    <label for="status" class="form-label font-weight-bold">Trạng thái tài khoản</label>
+                                    <select id="status" class="form-select border-primary" th:field="*{status}">
                                         <option value="ACTIVE" th:selected="${userDetail.status == 'ACTIVE'}">Hoạt động</option>
                                         <option value="NOT_ACTIVE" th:selected="${userDetail.status == 'NOT_ACTIVE'}">Không hoạt động</option>
                                     </select>
@@ -90,20 +90,20 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Người khởi tạo</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{createdBy}" readonly>
+                                    <label for="create" class="form-label font-weight-bold">Người khởi tạo</label>
+                                    <input id="create" type="text" class="form-control border-primary" th:field="*{createdBy}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Ngày khởi tạo</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{createdDate}" readonly>
+                                    <label for="createDate" class="form-label font-weight-bold">Ngày khởi tạo</label>
+                                    <input id="createDate" type="text" class="form-control border-primary" th:field="*{createdDate}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Chỉnh sửa lần cuối bởi</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{lastModifiedBy}" readonly>
+                                    <label for="modify" class="form-label font-weight-bold">Chỉnh sửa lần cuối bởi</label>
+                                    <input id="modify" type="text" class="form-control border-primary" th:field="*{lastModifiedBy}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Ngày chỉnh sửa lần cuối</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{lastModifiedDate}" readonly>
+                                    <label for="modifyDate" class="form-label font-weight-bold">Ngày chỉnh sửa lần cuối</label>
+                                    <input id="modifyDate" type="text" class="form-control border-primary" th:field="*{lastModifiedDate}" readonly>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mt-3">

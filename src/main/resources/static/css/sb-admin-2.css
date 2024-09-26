@@ -91,7 +91,6 @@ p {
 
 abbr[title],
 abbr[data-original-title] {
-  text-decoration: underline;
   -webkit-text-decoration: underline dotted;
   text-decoration: underline dotted;
   cursor: help;
@@ -9672,7 +9671,6 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .text-hide {
-  font: 0/0 a;
   color: transparent;
   text-shadow: none;
   background-color: transparent;
@@ -10139,7 +10137,7 @@ a:focus {
   border: 0;
   font-weight: 900;
   content: '\f105';
-  font-family: 'Font Awesome 5 Free';
+  font-family: 'Font Awesome 5 Free', Arial, sans-serif;
 }
 
 .sidebar .nav-item.dropdown.show .dropdown-toggle::after,
@@ -10440,7 +10438,7 @@ a:focus {
 
 .sidebar.toggled #sidebarToggle::after {
   content: '\f105';
-  font-family: 'Font Awesome 5 Free';
+  font-family: 'Font Awesome 5 Free', Arial, sans-serif;
   margin-left: 0.25rem;
 }
 
@@ -10536,7 +10534,6 @@ a:focus {
     width: 100%;
     text-align: left;
     padding: 1rem;
-    width: 14rem;
   }
   .sidebar .nav-item .nav-link i {
     font-size: 0.85rem;
@@ -10554,7 +10551,7 @@ a:focus {
     border: 0;
     font-weight: 900;
     content: '\f107';
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 5 Free', Arial, sans-serif;
   }
   .sidebar .nav-item .nav-link[data-toggle="collapse"].collapsed::after {
     content: '\f105';
@@ -10812,7 +10809,7 @@ a:focus {
   line-height: 51px;
   font-weight: 900;
   content: '\f107';
-  font-family: 'Font Awesome 5 Free';
+  font-family: 'Font Awesome 5 Free', Arial, sans-serif;
   color: #d1d3e2;
 }
 
