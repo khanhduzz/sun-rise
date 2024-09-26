@@ -21,10 +21,6 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -59,12 +55,6 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public Transaction findById(Long id) {
-        return transactionRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("Invalid transaction id")
-        );
-    }
-
     @Override
     public Page<Transaction> getTransactionList(DataTableInputDTO payload, String email) {
         Sort sortOpt = Sort.by(Sort.Direction.ASC, "id");
@@ -95,14 +85,12 @@ public class TransactionServiceImpl implements TransactionService {
             specs = specs.and(((root, query, builder) -> {
                 Join<Transaction, Category> categoryJoin = root.join("category");
                 String search = payload.getSearch().getOrDefault("value", "").toLowerCase();
-                if(search.equals("thu")) {
+                if (search.equals("thu")) {
                     search = "IN";
-                } else if(search.equals("chi")) {
+                } else if (search.equals("chi")) {
                     search = "OUT";
                 }
                 Predicate predictTransactionType =
-//                        builder.like(builder.lower(root.get("transactionType")), String.format("%%%s%%",
-//                                payload.getSearch().getOrDefault("value", "").toLowerCase()));
                         builder.like(builder.lower(root.get("transactionType")), String.format("%%%s%%",
                                 search.toLowerCase()));
                 Predicate predictCategory = builder.like(builder.lower(categoryJoin.get("name")),
@@ -123,7 +111,6 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setUpdatedAt(request.getCreatedAt());
         transaction.setTransactionType(request.getTransactionType());
         transaction.setAmount(convertMoneyStringWithCommaToDouble(request.getAmount()));
-//        transaction.setUser(userRepository.findByEmailOrPhone(getCurrentUserName()));
         transaction.setCategory(categoryRepository.findById(request.getCategory()).orElse(null));
 
         log.error("update: {}", transaction.toString());

@@ -9,6 +9,7 @@ import com.fjb.sunrise.repositories.CategoryRepository;
 import com.fjb.sunrise.services.CategoryService;
 import com.fjb.sunrise.services.TransactionService;
 import com.fjb.sunrise.services.UserService;
+import com.fjb.sunrise.utils.Constants;
 import jakarta.validation.Valid;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import static com.fjb.sunrise.utils.Constants.ApiConstant.*;
-
 @Controller
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
@@ -40,24 +39,24 @@ public class TransactionController {
 
     @GetMapping("/create")
     public String getCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
-        model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
-        model.addAttribute(USERS, userService.findAllNormalUser());
-        model.addAttribute(STATISTIC, transactionService.statistic());
-        return TRANSACTION_INDEX;
+        model.addAttribute(Constants.ApiConstant.CATEGORIES, categoryService.findCategoryByAdminAndUser());
+        model.addAttribute(Constants.ApiConstant.USERS, userService.findAllNormalUser());
+        model.addAttribute(Constants.ApiConstant.STATISTIC, transactionService.statistic());
+        return Constants.ApiConstant.TRANSACTION_INDEX;
     }
 
     @PostMapping("/create")
     public String postCreate(@ModelAttribute("request") @Valid CreateOrUpdateTransactionRequest request,
                              BindingResult result, Model model)
             throws ParseException {
-        model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
-        model.addAttribute(USERS, userService.findAllNormalUser());
-        model.addAttribute(STATISTIC, transactionService.statistic());
+        model.addAttribute(Constants.ApiConstant.CATEGORIES, categoryService.findCategoryByAdminAndUser());
+        model.addAttribute(Constants.ApiConstant.USERS, userService.findAllNormalUser());
+        model.addAttribute(Constants.ApiConstant.STATISTIC, transactionService.statistic());
         if (result.hasErrors()) {
-            model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
-            model.addAttribute(USERS, userService.findAllNormalUser());
-            model.addAttribute(STATISTIC, transactionService.statistic());
-            return TRANSACTION_INDEX;
+            model.addAttribute(Constants.ApiConstant.CATEGORIES, categoryService.findCategoryByAdminAndUser());
+            model.addAttribute(Constants.ApiConstant.USERS, userService.findAllNormalUser());
+            model.addAttribute(Constants.ApiConstant.STATISTIC, transactionService.statistic());
+            return Constants.ApiConstant.TRANSACTION_INDEX;
         }
         Transaction transaction = transactionService.create(request);
         return "redirect:/transaction/create";

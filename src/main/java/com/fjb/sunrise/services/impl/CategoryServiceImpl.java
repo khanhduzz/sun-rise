@@ -173,7 +173,7 @@ public class CategoryServiceImpl implements CategoryService {
             Predicate hasRoleAdmin = builder.equal(userJoin.get("role"), "ADMIN");
             Predicate isOwner = builder.equal(userJoin.get("id"), getCurrentUserId());
             Predicate active = builder.equal(root.get("status"), EStatus.ACTIVE);
-            Predicate or = builder.or(hasRoleAdmin,isOwner);
+            Predicate or = builder.or(hasRoleAdmin, isOwner);
             return builder.and(or, active);
         });
     }

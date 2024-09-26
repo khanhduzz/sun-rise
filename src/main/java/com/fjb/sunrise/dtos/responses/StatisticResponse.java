@@ -1,9 +1,9 @@
 package com.fjb.sunrise.dtos.responses;
 
+import java.io.Serializable;
 import lombok.Data;
 
-import java.io.Serializable;
-import java.util.List;
+
 
 @Data
 public class StatisticResponse implements Serializable {

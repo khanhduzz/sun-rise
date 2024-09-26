@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.util.StringUtils;
 
 public class StringMustBeDigitWithFractionValidator
-    implements ConstraintValidator<StringMustBeDigitWithFraction, String> {
+        implements ConstraintValidator<StringMustBeDigitWithFraction, String> {
     private int fraction = 0;
 
     @Override
@@ -22,7 +22,7 @@ public class StringMustBeDigitWithFractionValidator
         if (ignoreDot.chars().allMatch(Character::isDigit)) {
             if (fraction > 0) {
                 int startOfFraction = ignoreComma.indexOf(".");
-                if(startOfFraction==-1) {
+                if (startOfFraction == -1) {
                     return true;
                 }
                 if (ignoreComma.length() - startOfFraction - 1 > fraction) {
