@@ -54,7 +54,8 @@
                         <label for="users">Chọn 1 người dùng:</label>
 
                         <select id="users">
-                            <option th:each="user:${users}" th:value="${user.id}"
+                            <option th:value="${#authentication.principal.username}">Mặc định</option>
+                            <option th:each="user:${users}" th:value="${user.email}"
                                     th:text="${user.email}"></option>
                         </select>
                     </div>
@@ -395,7 +396,7 @@
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
 
 <!-- Page level custom scripts -->
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
     const installTable = (id, url, cols) => {
         return $(`#${id}`).DataTable({
             "language": {
@@ -459,17 +460,22 @@
 
     let table;
 
-    $('#users').focus(function() {
-        const user = $('#users option:selected').text();
-        table = installTable('transactionTable', `/sun/transaction/page/${user}`, cols2)
+    $(document).ready(function () {
+        var currentUserName = [[${#authentication.principal.username}]];
+        table = installTable('transactionTable', `/sun/transaction/page/${currentUserName}`, cols1)
     })
+
+    // $('#users').focus(function() {
+    //     var currentUserName = [[${#authentication.principal.username}]];
+    //     table = installTable('transactionTable', `/sun/transaction/page/${currentUserName}`, cols1)
+    // })
 
     if($('#users').length==0) {
         table = installTable('transactionTable', '/sun/transaction/page/null', cols1)
     } else {
         $('#users').on('change',function() {
-            const user = $('#users option:selected').text();
-            table = installTable('transactionTable', `/sun/transaction/page/${user}`, cols2)
+            const user = $('#users option:selected').val();
+            table = installTable('transactionTable', `/sun/transaction/page/${user}`, cols1)
         })
     }
 

@@ -129,7 +129,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setUpdatedAt(request.getCreatedAt());
         transaction.setTransactionType(request.getTransactionType());
         transaction.setAmount(convertMoneyStringWithCommaToDouble(request.getAmount()));
-        transaction.setUser(userRepository.findByEmailOrPhone(getCurrentUserName()));
+//        transaction.setUser(userRepository.findByEmailOrPhone(getCurrentUserName()));
         transaction.setCategory(categoryRepository.findById(request.getCategory()).orElse(null));
 
         log.error("update: {}", transaction.toString());
