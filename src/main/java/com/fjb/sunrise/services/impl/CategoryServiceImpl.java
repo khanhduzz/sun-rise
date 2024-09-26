@@ -142,11 +142,28 @@ public class CategoryServiceImpl implements CategoryService {
         List<Sort.Order> orders = new ArrayList<>();
         orders.add(Sort.Order.asc("owner.role"));
         Sort sortOpt = Sort.by(orders);
-        Specification<Category> specs = findAllByUser();
+        Specification<Category> specs = findAllForTransaction();
         return categoryRepository.findAll(specs, sortOpt);
     }
 
     private Specification<Category> findAllByUser() {
+        return Specification.where((root, query, builder) -> {
+            Join<Category, User> userJoin = root.join("owner");
+            User dbUser = userRepository.findById(getCurrentUserId()).orElseThrow();
+            if (dbUser.getRole() == ERole.ADMIN) {
+                Predicate activeStatus = builder.equal(root.get("status"), EStatus.ACTIVE);
+                Predicate notActiveStatus = builder.equal(root.get("status"), EStatus.NOT_ACTIVE);
+
+                return builder.or(activeStatus, notActiveStatus);
+            }
+            Predicate hasRoleAdmin = builder.equal(userJoin.get("role"), "ADMIN");
+            Predicate isOwner = builder.equal(userJoin.get("id"), getCurrentUserId());
+
+            return builder.or(hasRoleAdmin, isOwner);
+        });
+    }
+
+    private Specification<Category> findAllForTransaction() {
         return Specification.where((root, query, builder) -> {
             Join<Category, User> userJoin = root.join("owner");
             User dbUser = userRepository.findById(getCurrentUserId()).orElseThrow();

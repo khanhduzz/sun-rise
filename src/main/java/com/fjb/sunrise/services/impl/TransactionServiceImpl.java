@@ -2,6 +2,7 @@ package com.fjb.sunrise.services.impl;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CreateOrUpdateTransactionRequest;
+import com.fjb.sunrise.dtos.responses.StatisticResponse;
 import com.fjb.sunrise.enums.ETrans;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.models.Transaction;
@@ -11,8 +12,6 @@ import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.TransactionService;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Subquery;
 import jakarta.transaction.Transactional;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -21,16 +20,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -136,6 +130,29 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction1 = transactionRepository.save(transaction);
         log.error("updated: {}", transaction1.toString());
         return transaction1;
+    }
+
+    @Override
+    public StatisticResponse statistic() {
+        StatisticResponse response = new StatisticResponse();
+        final LocalDateTime firstDay = getFirstOrLastDateOfThisYear(false);
+        final LocalDateTime lastDay = getFirstOrLastDateOfThisYear(true);
+        final LocalDateTime firstDayOfThisMonth = getFirstDayOfThisMonth();
+
+
+        response.setTotalThisMonth(
+                convertDoubleWithScientificNotationToDouble(
+                        transactionRepository.sumAmountInRange(firstDayOfThisMonth, lastDay)
+                ));
+
+        response.setTotalThisYear(
+                convertDoubleWithScientificNotationToDouble(
+                        transactionRepository.sumAmountInRange(firstDay, lastDay)
+                ));
+        response.setTotalInputThisYear(convertDoubleWithScientificNotationToDouble(
+                transactionRepository.sumTransactionTypeINInThisYear(ETrans.IN, firstDay, lastDay)
+        ));
+        return response;
     }
 
     private String changeFormatFromFullDateToMonthDate(LocalDateTime dateTime) throws ParseException {

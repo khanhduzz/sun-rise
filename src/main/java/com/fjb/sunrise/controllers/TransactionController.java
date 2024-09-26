@@ -1,9 +1,5 @@
 package com.fjb.sunrise.controllers;
 
-import static com.fjb.sunrise.utils.Constants.ApiConstant.CATEGORIES;
-import static com.fjb.sunrise.utils.Constants.ApiConstant.TRANSACTION_INDEX;
-import static com.fjb.sunrise.utils.Constants.ApiConstant.USERS;
-
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CreateOrUpdateTransactionRequest;
 import com.fjb.sunrise.dtos.responses.TransactionFullPageResponse;
@@ -30,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import static com.fjb.sunrise.utils.Constants.ApiConstant.*;
+
 @Controller
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
@@ -44,6 +42,7 @@ public class TransactionController {
     public String getCreate(@ModelAttribute("request") CreateOrUpdateTransactionRequest request, Model model) {
         model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
         model.addAttribute(USERS, userService.findAllNormalUser());
+        model.addAttribute(STATISTIC, transactionService.statistic());
         return TRANSACTION_INDEX;
     }
 
@@ -53,9 +52,11 @@ public class TransactionController {
             throws ParseException {
         model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
         model.addAttribute(USERS, userService.findAllNormalUser());
+        model.addAttribute(STATISTIC, transactionService.statistic());
         if (result.hasErrors()) {
             model.addAttribute(CATEGORIES, categoryService.findCategoryByAdminAndUser());
             model.addAttribute(USERS, userService.findAllNormalUser());
+            model.addAttribute(STATISTIC, transactionService.statistic());
             return TRANSACTION_INDEX;
         }
         Transaction transaction = transactionService.create(request);
