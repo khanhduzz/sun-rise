@@ -123,6 +123,11 @@
             <version>4.0.0</version>
         </dependency>
         <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>8.1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.instancio</groupId>
             <artifactId>instancio-junit</artifactId>
             <version>5.0.2</version>

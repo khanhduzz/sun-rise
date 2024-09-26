@@ -16,10 +16,11 @@
 
     <!-- Custom styles for this template-->
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet" type="text/css">
-
-    <!-- Bootstrap 5 -->
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
+
+    <!-- External styles -->
+    <link th:href="@{/css/admin.css}" rel="stylesheet" type="text/css">
 </head>
 
 <body id="page-top">
@@ -38,29 +39,43 @@
                             Chỉnh sửa thông tin người dùng
                         </h6>
                     </div>
-                    <div class="card-body">
-                        <form id="editUserForm" th:action="@{/user/detail-and-edit/{id}(id=${userDetail.id})}" th:object="${userDetail}" method="post">
-                            <input type="hidden" th:field="*{id}">
+                    <div class="card-body edit-info-container">
+                        <h2 class="edit-info-title">Chỉnh sửa thông tin</h2>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="username" class="form-label font-weight-bold">Tên người dùng</label>
-                                    <input id="username" type="text" class="form-control border-primary" th:field="*{username}">
+                        <form id="editUserForm" th:action="@{/user/detail-and-edit/{id}(id=${userDetail.id})}" th:object="${userDetail}" method="post" enctype="multipart/form-data">
+                            <input type="hidden" th:field="*{id}">
+                            <input type="hidden" id="avatarUrl" name="avatarUrl" th:field="*{avatarUrl}">
+
+                            <!-- Avatar Upload -->
+                            <div class="form-group">
+                                <label for="avatar">Avatar (Tối đa 2MB, PNG, WEBP, RAW, JPG, JPEG):</label>
+                                <input type="file" class="form-control-file" id="avatar" name="avatar" accept=".png,.jpg,.jpeg,.webp,.raw" onchange="previewAvatar()">
+                                <div>
+                                    <img id="avatarPreview"
+                                         th:src="${userDetail.avatarUrl != null ? userDetail.avatarUrl : '/sun/img/undraw_profile.svg'}"
+                                         alt="User Avatar" class="img-thumbnail" width="150">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="firstname" class="form-label font-weight-bold">Họ</label>
-                                    <input id="firstname" type="text" class="form-control border-primary" th:field="*{firstname}">
+                                    <label class="form-label font-weight-bold">Tên người dùng</label>
+                                    <input type="text" class="form-control border-primary" th:field="*{username}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label font-weight-bold">Họ</label>
+                                    <input type="text" class="form-control border-primary" th:field="*{firstname}" placeholder="Nhập họ">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="lastname" class="form-label font-weight-bold">Tên</label>
-                                    <input id="lastname" type="text" class="form-control border-primary" th:field="*{lastname}">
+                                    <label class="form-label font-weight-bold">Tên</label>
+                                    <input type="text" class="form-control border-primary" th:field="*{lastname}" placeholder="Nhập tên">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label font-weight-bold">Địa chỉ Email</label>
-                                    <input id="email" type="email" class="form-control border-primary" th:field="*{email}">
+                                    <label class="form-label font-weight-bold">Địa chỉ Email</label>
+                                    <input id="email" type="email" class="form-control border-primary" th:field="*{email}" placeholder="Nhập email">
                                     <div id="emailError" class="invalid-feedback">Email không hợp lệ</div>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -69,59 +84,103 @@
                                            pattern="^[0-9]{1,9}$" title="Số điện thoại chỉ được chứa tối đa 9 chữ số từ 0 đến 9.">
                                     <div id="phoneError" class="invalid-feedback">Số điện thoại chỉ được chứa tối đa 9 chữ số từ 0 đến 9.</div>
                                 </div>
-
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="role" class="form-label font-weight-bold">Vai trò</label>
-                                    <select id="role" class="form-select border-primary" th:field="*{role}">
+                                    <label class="form-label font-weight-bold">Vai trò</label>
+                                    <select class="form-select border-primary" th:field="*{role}">
                                         <option value="ADMIN" th:selected="${userDetail.role == 'ROLE_ADMIN'}">Quản trị viên</option>
                                         <option value="USER" th:selected="${userDetail.role == 'ROLE_USER'}">Người dùng</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="status" class="form-label font-weight-bold">Trạng thái tài khoản</label>
-                                    <select id="status" class="form-select border-primary" th:field="*{status}">
+                                    <label class="form-label font-weight-bold">Trạng thái tài khoản</label>
+                                    <select class="form-select border-primary" th:field="*{status}">
                                         <option value="ACTIVE" th:selected="${userDetail.status == 'ACTIVE'}">Hoạt động</option>
                                         <option value="NOT_ACTIVE" th:selected="${userDetail.status == 'NOT_ACTIVE'}">Không hoạt động</option>
                                     </select>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="create" class="form-label font-weight-bold">Người khởi tạo</label>
-                                    <input id="create" type="text" class="form-control border-primary" th:field="*{createdBy}" readonly>
+                                    <label class="form-label font-weight-bold">Người khởi tạo</label>
+                                    <input type="text" class="form-control border-primary" th:field="*{createdBy}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="createDate" class="form-label font-weight-bold">Ngày khởi tạo</label>
-                                    <input id="createDate" type="text" class="form-control border-primary" th:field="*{createdDate}" readonly>
+                                    <label class="form-label font-weight-bold">Ngày khởi tạo</label>
+                                    <input type="text" class="form-control border-primary" th:field="*{createdDate}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="modify" class="form-label font-weight-bold">Chỉnh sửa lần cuối bởi</label>
-                                    <input id="modify" type="text" class="form-control border-primary" th:field="*{lastModifiedBy}" readonly>
+                                    <label class="form-label font-weight-bold">Chỉnh sửa lần cuối bởi</label>
+                                    <input type="text" class="form-control border-primary" th:field="*{lastModifiedBy}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="modifyDate" class="form-label font-weight-bold">Ngày chỉnh sửa lần cuối</label>
-                                    <input id="modifyDate" type="text" class="form-control border-primary" th:field="*{lastModifiedDate}" readonly>
+                                    <label class="form-label font-weight-bold">Ngày chỉnh sửa lần cuối</label>
+                                    <input type="text" class="form-control border-primary" th:field="*{lastModifiedDate}" readonly>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-center mt-3">
-                                <button id="submitBtn" type="submit" class="btn btn-success me-2" disabled>Lưu thay đổi</button>
-                                <button type="reset" class="btn btn-secondary">Hủy bỏ</button>
+
+                            <!-- Submit Button -->
+                            <div class="row">
+                                <div class="col-md-12 mb-3 text-center">
+                                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
+            <div th:replace="~{footer :: footer}"></div>
         </div>
-        <div th:replace="~{footer :: footer}"></div>
     </div>
 </div>
 
-<!-- Scripts -->
-<script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
-<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
-<script th:src="@{/js/user/user.js}" type="application/javascript"></script>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
+
+<script>
+    function previewAvatar() {
+        const file = document.getElementById('avatar').files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('avatarPreview').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+        uploadToFirebase(file);
+    }
+
+    function uploadToFirebase(file) {
+        // Ensure Firebase is initialized properly
+        let firebase; // Add your firebase initialization here
+        const storageRef = firebase.storage().ref();
+
+        const avatarRef = storageRef.child('avatars/' + file.name);
+
+        const uploadTask = avatarRef.put(file);
+        uploadTask.on('state_changed',
+            function(snapshot) {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+            },
+            function(error) {
+                console.error('Upload failed:', error);
+            },
+            function() {
+                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    document.getElementById("avatarPreview").src = downloadURL;
+                    document.getElementById("avatarUrl").value = downloadURL;
+                });
+            }
+        );
+    }
+</script>
+
 </body>
+
 </html>

@@ -58,6 +58,9 @@ public class User extends AuditEntity<String> implements Serializable, UserDetai
     @Column(name = "verification_code")
     private String verificationCode;
 
+    @Column(name = "avatar_url")  // Thêm cột avatarUrl
+    private String avatarUrl;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
