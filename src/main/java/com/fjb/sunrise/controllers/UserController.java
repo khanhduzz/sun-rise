@@ -72,11 +72,11 @@ public class UserController {
         modelAndView.setViewName(Constants.ApiConstant.USER_INFORMATION);
         String message = userService.processPasswordChange(oldPassword, newPassword);
         if (message != null) {
-            modelAndView.setViewName(Constants.ApiConstant.USER_CHANGE_PASSWORD_FAIL);
+            modelAndView.setViewName(Constants.ApiConstant.USER_CHANGE_PASS_WORD_FAIL);
             modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, message);
             return modelAndView;
         } else {
-            modelAndView.setViewName(Constants.ApiConstant.USER_CHANGE_PASSWORD_SUCCESS);
+            modelAndView.setViewName(Constants.ApiConstant.USER_CHANGE_PASS_WORD_SUCCESS);
         }
         return modelAndView;
     }

@@ -216,7 +216,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmailOrPhone(String emailOrPhone) {
         User user = userRepository.findByEmailOrPhone(emailOrPhone);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with email or phone: " + emailOrPhone);
+            throw new UsernameNotFoundException(String.format("User not found with email or phone: %s", emailOrPhone));
         }
         return user;
     }
