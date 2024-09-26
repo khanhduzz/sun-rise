@@ -58,6 +58,12 @@ public class EmailServiceImpl implements EmailService {
         user.setVerificationCode(code);
         userRepository.save(user);
 
+        endMailAsync(verification, code);
+
+        return "Gửi mail thành công! \nVui lòng kiểm tra email của bạn!";
+    }
+
+    private void endMailAsync(VerificationByEmail verification, String code) {
         Thread thread = new Thread(() -> {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -84,8 +90,6 @@ public class EmailServiceImpl implements EmailService {
             }
         });
         thread.start();
-
-        return "Gửi mail thành công! \nVui lòng kiểm tra email của bạn!";
     }
 
     @Override
