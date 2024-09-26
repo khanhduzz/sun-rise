@@ -28,6 +28,7 @@ public class Constants {
         private ApiConstant() {}
 
         public static final String HEALTH_URL = "/health";
+        public static final String REDIRECT_HEALTH_URL = "redirect:/health";
 
         public static final String CATEGORY_INDEX = "category/index";
         public static final String CATEGORY_REDIRECT = "redirect:/category/index";

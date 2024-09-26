@@ -1,20 +1,24 @@
 package com.fjb.sunrise.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+
+
+import com.fjb.sunrise.dtos.base.DataTableInputDTO;
+import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
+import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.mappers.CategoryMapper;
 import com.fjb.sunrise.models.Category;
+import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
+import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.services.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -22,7 +26,21 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.*;
+
 import java.util.Optional;
+
 
 class CategoryServiceTest {
 
@@ -37,13 +55,20 @@ class CategoryServiceTest {
     private CategoryRepository categoryRepository;
 
 
+    @Mock
+    private UserRepository userRepository;
+
     // Class for re-use in test
     private Category category;
 
-//    private CategoryCreateDto categoryCreateDto;
+    private com.fjb.sunrise.models.User user;
+    private CategoryCreateDto categoryCreateDto;
     private CategoryResponseDto categoryResponseDto;
 
-//    private DataTableInputDTO dataTableInputDTO;
+    private DataTableInputDTO dataTableInputDTO;
+
+
+    // Class for re-use in test
 
     private CategoryUpdateDto categoryUpdateDto;
 
@@ -65,18 +90,38 @@ class CategoryServiceTest {
             .status(EStatus.ACTIVE)
             .build();
 
-//        categoryCreateDto = new CategoryCreateDto();
-//        categoryCreateDto.setName("Category-Test");
+        categoryCreateDto = new CategoryCreateDto();
+        categoryCreateDto.setName("Category-Test");
+
+        user = new User();
+        user.setId(1L);
+        user.setRole(ERole.USER);
+
+        UserDetails securityUser = new org.springframework.security.core.userdetails.User("user@example.com", "password", new ArrayList<>());
+        Authentication auth = mock(Authentication.class);
+        when(auth.getPrincipal()).thenReturn(securityUser);
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(auth);
+        SecurityContextHolder.setContext(securityContext);
 
         categoryUpdateDto = new CategoryUpdateDto();
         categoryUpdateDto.setId(1L);
         categoryUpdateDto.setName("Category-Test");
 
-//        dataTableInputDTO = new DataTableInputDTO();
-//        dataTableInputDTO.setStart(0);
-//        dataTableInputDTO.setLength(10);
-//        dataTableInputDTO.setSearch(Map.of("value", "Category-Test"));
-//        dataTableInputDTO.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
+
+        dataTableInputDTO = new DataTableInputDTO();
+        dataTableInputDTO.setStart(0);
+        dataTableInputDTO.setLength(10);
+        dataTableInputDTO.setSearch(Map.of("value", "Category-Test"));
+        dataTableInputDTO.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
+
+        dataTableInputDTO = new DataTableInputDTO();
+        dataTableInputDTO.setStart(0);
+        dataTableInputDTO.setLength(10);
+        dataTableInputDTO.setSearch(Map.of("value", "Category-Test"));
+        dataTableInputDTO.setOrder(List.of(Map.of("colName", "name", "dir", "asc")));
+
 
     }
 
@@ -107,6 +152,33 @@ class CategoryServiceTest {
             // Then, when we run the service, service will throw exception
             assertThrows(NotFoundException.class, () -> categoryService.getCategoryById(1L));
         }
+    }
+
+
+    @Test
+    void getCurrentUserId_shouldThrowException_whenUserNotFound() {
+        // Mô phỏng Authentication
+        Authentication auth = mock(Authentication.class);
+        UserDetails securityUser =
+                new org.springframework.security.core.userdetails.User("user@example.com", "password", new ArrayList<>());
+        when(auth.getPrincipal()).thenReturn(securityUser);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        // Mô phỏng repository không tìm thấy người dùng
+        when(userRepository.findByEmailOrPhone(securityUser.getUsername())).thenReturn(null);
+
+        // Kiểm tra ngoại lệ
+        assertThrows(NoSuchElementException.class, () -> categoryService.getCurrentUserId());
+    }
+
+
+    @Test
+    void createCategory_shouldThrowException_whenMapperFails() {
+        // Mô phỏng lỗi khi mapper không thành công
+        when(categoryMapper.toCategory(categoryCreateDto)).thenThrow(new RuntimeException("Mapping error"));
+
+        // Kiểm tra ngoại lệ
+        assertThrows(RuntimeException.class, () -> categoryService.createCategory(categoryCreateDto));
     }
 
 
@@ -211,4 +283,45 @@ class CategoryServiceTest {
     }
 
 
+    @Test
+    public void testGetCategoryList() {
+        // Giả lập hành vi cho repository
+        when(categoryRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of(category)));
+
+        // Gọi phương thức
+        Page<Category> result = categoryService.getCategoryList(dataTableInputDTO);
+
+        // Kiểm tra kết quả
+        assertNotNull(result);
+        assertEquals(1, result.getContent().size());
+        assertEquals("Category-Test", result.getContent().get(0).getName());
+    }
+
+    @Test
+    public void testGetAllCategories() {
+        List<Category> categories = List.of(category);
+        when(categoryRepository.findAll()).thenReturn(categories);
+        when(categoryMapper.toCategoryResponseDto(any(Category.class))).thenReturn(categoryResponseDto);
+
+        // Gọi phương thức
+        List<CategoryResponseDto> result = categoryService.getAllCategories();
+
+        // Kiểm tra kết quả
+        assertEquals(1, result.size());
+        assertEquals("Category-Test", result.get(0).getName());
+    }
+
+    @Test
+    public void testFindCategoryByAdminAndUser() {
+        List<Category> categories = List.of(category);
+        when(categoryRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(categories);
+
+        // Gọi phương thức
+        List<Category> result = categoryService.findCategoryByAdminAndUser();
+
+        // Kiểm tra kết quả
+        assertEquals(1, result.size());
+        assertEquals("Category-Test", result.get(0).getName());
+    }
 }
