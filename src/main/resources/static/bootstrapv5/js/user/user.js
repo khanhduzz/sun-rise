@@ -25,11 +25,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (password && confirmPassword) {
             if (password.value !== confirmPassword.value) {
                 confirmPassword.classList.add('is-invalid');
-                passwordError.style.display = 'block';
+//                passwordError.style.display = 'block';
+                passwordError.classList.remove('hidden');
                 return false;
             } else {
                 confirmPassword.classList.remove('is-invalid');
-                passwordError.style.display = 'none';
+//                passwordError.style.display = 'none';
+                passwordError.classList.add('hidden');
                 return true;
             }
         }

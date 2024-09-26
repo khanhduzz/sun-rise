@@ -134,16 +134,16 @@ public class  AuthController {
         }
 
         String email = emailService.getEmailFromCode(code);
-        modelAndView.setViewName(Constants.ApiConstant.CHANGE_PASSWORD_VIEW);
+        modelAndView.setViewName(Constants.ApiConstant.CHANGE_PASS_WORD_VIEW);
         modelAndView.addObject(Constants.ApiConstant.EMAIL_OBJECT, email);
-        modelAndView.addObject(Constants.ApiConstant.NEW_PASSWORD_OBJECT, "");
+        modelAndView.addObject(Constants.ApiConstant.NEW_PASS_WORD_OBJECT, "");
         return modelAndView;
     }
 
 
     @PostMapping("/changePassword")
     public ModelAndView doChangePassword(@ModelAttribute(Constants.ApiConstant.EMAIL_OBJECT) String email,
-                                         @ModelAttribute(Constants.ApiConstant.NEW_PASSWORD_OBJECT) String password) {
+                                         @ModelAttribute(Constants.ApiConstant.NEW_PASS_WORD_OBJECT) String password) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.AUTH_REDIRECT_LOGIN);
 
