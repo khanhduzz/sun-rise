@@ -33,12 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -261,7 +255,7 @@ class UserServiceTest {
 
         Mockito.when(userRepository.findByEmailOrPhone(emailOrPhone)).thenReturn(null);
 
-        assertThrows(UsernameNotFoundException.class, () -> userService.getUserByEmailOrPhone(emailOrPhone));
+        assertThrows(NotFoundException.class, () -> userService.getUserByEmailOrPhone(emailOrPhone));
     }
 
     @Test
