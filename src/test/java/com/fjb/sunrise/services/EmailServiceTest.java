@@ -1,11 +1,9 @@
 package com.fjb.sunrise.services;
 
 import static org.instancio.Select.field;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
 import com.fjb.sunrise.dtos.requests.VerificationByEmail;
-import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
 import com.fjb.sunrise.utils.Encoder;
@@ -20,12 +18,10 @@ import org.instancio.Select;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
