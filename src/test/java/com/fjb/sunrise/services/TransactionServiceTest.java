@@ -211,6 +211,7 @@ public class TransactionServiceTest {
                 .thenReturn(100000.0);
         Mockito.when(transactionRepository.sumTransactionTypeINInThisYear(any(ETrans.class), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(200000.0);
+        Mockito.when(transactionRepository.count()).thenReturn(1l);
         StatisticResponse response = transactionService.statistic();
         Assertions.assertEquals(statisticResponse, response);
     }
