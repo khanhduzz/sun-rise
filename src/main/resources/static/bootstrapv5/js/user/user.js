@@ -198,3 +198,11 @@ function changeVietnamese() {
 document.addEventListener('DOMContentLoaded', function() {
     changeVietnamese(); // Gọi hàm khi trang đã sẵn sàng
 });
+
+function togglePasswordVisibility(fieldId, eyeButton) {
+    var field = document.getElementById(fieldId);
+    field.type = (field.type === "password") ? "text" : "password";
+    eyeButton.innerHTML = (field.type === "password")
+        ? '<i class="fas fa-eye"></i>'
+        : '<i class="fas fa-eye-slash"></i>';
+}
