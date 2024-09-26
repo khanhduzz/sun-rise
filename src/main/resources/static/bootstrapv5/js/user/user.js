@@ -172,3 +172,29 @@ document.addEventListener("DOMContentLoaded", function () {
         $('#popup-failed-change-password').modal('show');
     }
 });
+
+function changeVietnamese() {
+    // Lấy phần tử với id "changeVietnamese"
+    var element = document.getElementById('changeVietnamese');
+
+    // Kiểm tra nếu phần tử tồn tại
+    if (element) {
+        var role = 'ROLE_ADMIN'; // Hoặc lấy giá trị role từ đâu đó
+        var displayRole = '';
+
+        // Kiểm tra giá trị role
+        if (role === 'ROLE_ADMIN') {
+            displayRole = 'Quản trị viên';
+        } else if (role === 'ROLE_USER') {
+            displayRole = 'Người dùng';
+        }
+
+        // Cập nhật nội dung của phần tử với id "changeVietnamese"
+        element.textContent = displayRole;
+    }
+}
+
+// Gọi hàm sau khi DOM đã tải xong
+document.addEventListener('DOMContentLoaded', function() {
+    changeVietnamese(); // Gọi hàm khi trang đã sẵn sàng
+});
