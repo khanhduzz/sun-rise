@@ -465,11 +465,6 @@
         table = installTable('transactionTable', `/sun/transaction/page/${currentUserName}`, cols1)
     })
 
-    // $('#users').focus(function() {
-    //     var currentUserName = [[${#authentication.principal.username}]];
-    //     table = installTable('transactionTable', `/sun/transaction/page/${currentUserName}`, cols1)
-    // })
-
     if($('#users').length==0) {
         table = installTable('transactionTable', '/sun/transaction/page/null', cols1)
     } else {
@@ -479,6 +474,11 @@
         })
     }
 
+    $('#createIncomeAndExpensesModal').on('hidden.bs.modal', function () {
+        $('#inputAmount').val('')
+        $('#inputCategory').val('')
+        $('#inputDatetime').val('')
+    })
 
     $('#transactionTable tbody').on('click', 'tr', function () {
         console.log(table.row(this).data());
