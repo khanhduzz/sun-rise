@@ -100,9 +100,17 @@ public class TransactionServiceImpl implements TransactionService {
             // "%" + keyword + "%"
             specs = specs.and(((root, query, builder) -> {
                 Join<Transaction, Category> categoryJoin = root.join("category");
+                String search = payload.getSearch().getOrDefault("value", "").toLowerCase();
+                if(search.equals("thu")) {
+                    search = "IN";
+                } else if(search.equals("chi")) {
+                    search = "OUT";
+                }
                 Predicate predictTransactionType =
+//                        builder.like(builder.lower(root.get("transactionType")), String.format("%%%s%%",
+//                                payload.getSearch().getOrDefault("value", "").toLowerCase()));
                         builder.like(builder.lower(root.get("transactionType")), String.format("%%%s%%",
-                                payload.getSearch().getOrDefault("value", "").toLowerCase()));
+                                search.toLowerCase()));
                 Predicate predictCategory = builder.like(builder.lower(categoryJoin.get("name")),
                         String.format("%%%s%%",
                                 payload.getSearch().getOrDefault("value", "").toLowerCase()
