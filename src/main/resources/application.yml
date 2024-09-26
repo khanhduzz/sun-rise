@@ -36,6 +36,9 @@ spring:
         springframework:
           security: DEBUG
           aop: DEBUG
+      com:
+        fjb:
+          sunrise: DEBUG
 
 server:
   port: ${SERVER_LOCAL_PORT}

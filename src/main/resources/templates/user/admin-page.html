@@ -52,12 +52,16 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Avatar</th>
                                     <th>Địa chỉ Email</th>
                                     <th>Trạng thái tài khoản</th>
                                     <th>Vai trò</th>
                                     <th>Hành động</th>
                                 </tr>
                                 </thead>
+                                <tbody>
+                                <!-- DataTables will populate this -->
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -108,8 +112,6 @@
 <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}" type="application/javascript"></script>
 <script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/chart.js/Chart.min.js}" type="application/javascript"></script>
-<script th:src="@{/js/demo/chart-area-demo.js}" type="application/javascript"></script>
-<script th:src="@{/js/demo/chart-pie-demo.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
 
@@ -129,7 +131,7 @@
                 }
             },
             "serverSide": true,
-            "order": [1, "desc"],
+            "order": [0, "desc"],  // Changed to 0 to sort by ID
             "ajax": {
                 "url": url,
                 "type": "POST",
@@ -146,60 +148,62 @@
     };
 
     const translateStatus = (status) => {
-        if (status === 'ACTIVE') return 'Hoạt Động';
-        if (status === 'NOT_ACTIVE') return 'Không Hoạt Động';
-        return status;
+        return status === 'ACTIVE' ? 'Hoạt Động' : 'Không Hoạt Động';
     };
 
     const translateRole = (role) => {
-        if (role === 'USER') return 'Người Dùng';
-        if (role === 'ADMIN') return 'Quản Trị Viên';
-        return role;
+        return role === 'USER' ? 'Người Dùng' : 'Quản Trị Viên';
     };
 
     const cols = [
         {"data": "id"},
+        {"data": "avatarUrl", "render": function(data) {
+                console.log(data); // Kiểm tra giá trị URL trong console
+                // Kiểm tra xem data có hợp lệ không, nếu không thì sử dụng ảnh mặc định
+                return `<img src="${data && data.startsWith('http') ? data : '/sun/img/undraw_profile.svg'}" alt="Avatar" style="width: 50px; height: 50px; border-radius: 50%;">`;
+            }},
+
         {"data": "email"},
-        {"data": "status", "render": function(data, type, row) {
+        {"data": "status", "render": function(data) {
                 return translateStatus(data);
-            }
-        },
-        {"data": "role", "render": function(data, type, row) {
+            }},
+        {"data": "role", "render": function(data) {
                 return translateRole(data);
-            }
-        },
+            }},
         {"data": null, "render": function(data, type, row) {
                 if (row.id === currentUserId) {
                     return `
-                        <div class="btn-group" role="group" aria-label="User Actions">
-                            <button class="btn btn-outline-info" disabled>
-                                <i class="fas fa-info-circle"></i>
-                            </button>
-                            <button class="btn btn-outline-danger" disabled>
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                            <button class="btn btn-outline-warning" disabled>
-                                <i class="fas fa-ban"></i>
-                            </button>
-                        </div>`;
+                    <div class="btn-group" role="group" aria-label="User Actions">
+                        <button class="btn btn-outline-info" disabled>
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="btn btn-outline-danger" disabled>
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button class="btn btn-outline-warning" disabled>
+                            <i class="fas fa-ban"></i>
+                        </button>
+                    </div>`;
                 } else {
                     return `
-                        <div class="btn-group" role="group" aria-label="User Actions">
-                            <button class="btn btn-outline-info" onclick="viewUserDetail(${row.id})">
-                                <i class="fas fa-info-circle"></i>
-                            </button>
-                            <button class="btn btn-outline-danger" onclick="deleteUser(${row.id})">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                            <button class="btn ${row.status === 'ACTIVE' ? 'btn-outline-warning' : 'btn-outline-success'}"
-                                onclick="changeUserStatus(${row.id}, '${row.status === 'ACTIVE' ? 'deactivate' : 'activate'}')">
-                                <i class="fas ${row.status === 'ACTIVE' ? 'fa-ban' : 'fa-check-circle'}"></i>
-                            </button>
-                        </div>`;
+                    <div class="btn-group" role="group" aria-label="User Actions">
+                        <button class="btn btn-outline-info" onclick="viewUserDetail(${row.id})">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="deleteUser(${row.id})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button class="${row.status === 'ACTIVE' ? 'btn-outline-warning' : 'btn-outline-success'}"
+                            onclick="changeUserStatus(${row.id}, '${row.status === 'ACTIVE' ? 'deactivate' : 'activate'}')">
+                            <i class="fas ${row.status === 'ACTIVE' ? 'fa-ban' : 'fa-check-circle'}"></i>
+                        </button>
+                    </div>`;
                 }
-            }
-        }
+            }}
     ];
+
+    // Lấy ID người dùng hiện tại từ backend
+    const currentUserId = /*[[${currentUserId}]]*/ 0; // Thay đổi đoạn này để lấy ID từ backend
 
     function viewUserDetail(userId) {
         window.location.href = `/sun/user/detail-and-edit/${userId}`;
@@ -207,21 +211,40 @@
 
     function deleteUser(userId) {
         if (confirm('Bạn có chắc muốn XÓA BỎ người dùng này?')) {
-            window.location.href = `/sun/user/delete/${userId}`;
+            $.ajax({
+                type: "DELETE",
+                url: `/sun/user/${userId}`,
+                success: function() {
+                    alert('Người dùng đã được xóa thành công.');
+                    $('#tableUser').DataTable().ajax.reload();
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra khi xóa người dùng.');
+                }
+            });
         }
     }
 
     function changeUserStatus(userId, action) {
         if (confirm(`Bạn có chắc muốn ${action === 'activate' ? 'KÍCH HOẠT' : 'NGỪNG KÍCH HOẠT'} trạng thái tài khoản của người dùng này?`)) {
-            let url = `/sun/user/${action}/${userId}`;
-            window.location.href = url;
+            $.ajax({
+                type: "PATCH",
+                url: `/sun/user/${action}/${userId}`,
+                success: function() {
+                    alert(`Người dùng đã được ${action === 'activate' ? 'kích hoạt' : 'ngừng kích hoạt'} thành công.`);
+                    $('#tableUser').DataTable().ajax.reload();
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra khi thay đổi trạng thái người dùng.');
+                }
+            });
         }
     }
 
-    const currentUserId = [[${currentUserId}]];
-    const tableUsers = installTable('tableUser', '/sun/user/page', cols, currentUserId);
+    $(document).ready(function() {
+        installTable("tableUser", "/sun/user/page", cols, currentUserId);
+    });
 </script>
 
 </body>
-
 </html>
