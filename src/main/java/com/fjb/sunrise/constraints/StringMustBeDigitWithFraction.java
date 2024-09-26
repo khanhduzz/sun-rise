@@ -7,12 +7,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = AfterAndUntilNowValidator.class)
+@Constraint(validatedBy = StringMustBeDigitWithFractionValidator.class)
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AfterAndUntilNow {
-    String message() default "Thời gian tạo phải sau 01/01/2020 và trước hiện tại";
+public @interface StringMustBeDigitWithFraction {
+    String message() default "Số tiền phải là chữ số với số thập phân là {fraction}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
-    String value();
+
+    int fraction();
 }

@@ -18,6 +18,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +45,9 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto createCategory(CategoryCreateDto categoryCreateDto) {
         Category category = categoryMapper.toCategory(categoryCreateDto);
         category.setStatus(EStatus.ACTIVE);
-        category.setOwner(userRepository.findById(getCurrentUserId()).orElseThrow());
+        User owner = userRepository.findById(getCurrentUserId())
+                .orElseThrow(() -> new NoSuchElementException("Owner not found"));
+        category.setOwner(owner);
         category = categoryRepository.save(category);
         return categoryMapper.toCategoryResponseDto(category);
     }
@@ -142,7 +148,7 @@ public class CategoryServiceImpl implements CategoryService {
         List<Sort.Order> orders = new ArrayList<>();
         orders.add(Sort.Order.asc("owner.role"));
         Sort sortOpt = Sort.by(orders);
-        Specification<Category> specs = findAllByUser();
+        Specification<Category> specs = findAllForTransaction();
         return categoryRepository.findAll(specs, sortOpt);
     }
 
@@ -163,11 +169,32 @@ public class CategoryServiceImpl implements CategoryService {
         });
     }
 
-    private Long getCurrentUserId() {
+    private Specification<Category> findAllForTransaction() {
+        return Specification.where((root, query, builder) -> {
+            Join<Category, User> userJoin = root.join("owner");
+            User dbUser = userRepository.findById(getCurrentUserId()).orElseThrow();
+            if (dbUser.getRole() == ERole.ADMIN) {
+                return builder.equal(root.get("status"), EStatus.ACTIVE);
+            }
+            Predicate hasRoleAdmin = builder.equal(userJoin.get("role"), "ADMIN");
+            Predicate isOwner = builder.equal(userJoin.get("id"), getCurrentUserId());
+            Predicate active = builder.equal(root.get("status"), EStatus.ACTIVE);
+            Predicate or = builder.or(hasRoleAdmin, isOwner);
+            return builder.and(or, active);
+        });
+    }
+
+    public Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        org.springframework.security.core.userdetails.User user =
+        org.springframework.security.core.userdetails.User securityUser =
                 (org.springframework.security.core.userdetails.User) auth.getPrincipal();
-        User dbUser = userRepository.findByEmailOrPhone(user.getUsername());
+
+        User dbUser = userRepository.findByEmailOrPhone(securityUser.getUsername());
+
+        if (dbUser == null) {
+            throw new NoSuchElementException("User not found");
+        }
+
         return dbUser.getId();
     }
 

@@ -28,6 +28,7 @@ public class Constants {
         private ApiConstant() {}
 
         public static final String HEALTH_URL = "/health";
+        public static final String REDIRECT_HEALTH_URL = "redirect:/health";
 
         public static final String CATEGORY_INDEX = "category/index";
         public static final String CATEGORY_REDIRECT = "redirect:/category/index";
@@ -35,6 +36,7 @@ public class Constants {
         public static final String TRANSACTION_INDEX = "transaction/index";
         public static final String CATEGORIES = "categories";
         public static final String USERS = "users";
+        public static final String STATISTIC = "statistic";
 
         public static final String AUTH_REDIRECT_LOGIN = "redirect:/auth/login";
         public static final String AUTH_VIEW = "auth/loginAndRegister";
@@ -42,9 +44,9 @@ public class Constants {
         public static final String LOGIN_OBJECT = "login";
         public static final String ERROR_MESSAGE_OBJECT = "errorMessage";
         public static final String EMAIL_OBJECT = "email";
-        public static final String NEW_PASSWORD_OBJECT = "newPassword";
+        public static final String NEW_PASS_WORD_OBJECT = "newPassword";
         public static final String VERIFICATION_BY_EMAIL_VIEW = "auth/verificationByEmail";
-        public static final String CHANGE_PASSWORD_VIEW = "auth/changePassword";
+        public static final String CHANGE_PASS_WORD_VIEW = "auth/changePassword";
 
         public static final String ADMIN_VIEW = "user/admin-page";
         public static final String ADMIN_ADD_NEW_USER = "user/add-user-by-admin";
@@ -52,8 +54,8 @@ public class Constants {
         public static final String ADMIN_REDIRECT = "redirect:/user/admin-page";
         public static final String USER_INFORMATION = "user/edit-infor";
         public static final String USER_CHANGE_INFO_SUCCESS = "redirect:/user/edit-infor?message=SuccessInfo";
-        public static final String USER_CHANGE_PASSWORD_SUCCESS = "redirect:/user/edit-infor?message=SuccessPassword";
-        public static final String USER_CHANGE_PASSWORD_FAIL = "redirect:/user/edit-infor";
+        public static final String USER_CHANGE_PASS_WORD_SUCCESS = "redirect:/user/edit-infor?message=SuccessPassword";
+        public static final String USER_CHANGE_PASS_WORD_FAIL = "redirect:/user/edit-infor";
         public static final String USER_REDIRECT = "redirect:/user/edit-infor";
 
         public static final String MESSAGE = "message";

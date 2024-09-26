@@ -51,10 +51,11 @@
                     <h1 class="h3 mb-0 text-gray-800">Tổng quan</h1>
                     <!--                    <div sec:authorize="hasRole('ROLE_USER')">Text visible to user.</div>-->
                     <div sec:authorize="hasRole('ROLE_ADMIN')">
-                        <label for="users">Choose a user:</label>
+                        <label for="users">Chọn 1 người dùng:</label>
 
                         <select id="users">
-                            <option th:each="user:${users}" th:value="${user.id}"
+                            <option th:value="${#authentication.principal.username}">Mặc định</option>
+                            <option th:each="user:${users}" th:value="${user.email}"
                                     th:text="${user.email}"></option>
                         </select>
                     </div>
@@ -64,173 +65,88 @@
                 </div>
 
                 <!-- Content Row -->
-                <div class="row">
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <div class="row">
 
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Thu nhập (Tháng Này)
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">20,000,000 VNĐ</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-inbox fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-success shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            Thu nhập (Năm nay)
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">240,000,000 VNĐ</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-info shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tổng chi
-                                            (Tháng này)
-                                        </div>
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">12,000,000
-                                                    VNĐ
-                                                </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Thu nhập (Tháng Này)
                                             </div>
-
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${statistic.getTotalThisMonth()} + ' VNĐ'"></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-inbox fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Thu nhập (Năm nay)
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${statistic.getTotalThisYear()} + ' VNĐ'"></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Tổng chi (Tháng này)
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${statistic.getTotalThisMonth()} + ' VNĐ'"></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pending Requests Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Tổng nợ (Tháng này)
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">0 VNĐ</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Pending Requests Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Tổng nợ (Tháng này)
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0 VNĐ</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
                 <!-- Content Row -->
 
                 <div class="row">
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-8 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Biểu đồ thu nhập (Tháng này)</h6>
-                                <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onkeydown="">
-                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                         aria-labelledby="dropdownMenuLink">
-                                        <div class="dropdown-header">Dropdown Header:</div>
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="myAreaChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pie Chart -->
-                    <div class="col-xl-4 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Thu nhập theo danh mục (Tháng này)
-                                </h6>
-                                <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onkeydown="">
-                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                         aria-labelledby="dropdownMenuLink">
-                                        <div class="dropdown-header">Dropdown Header:</div>
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-pie pt-4 pb-2">
-                                    <canvas id="myPieChart"></canvas>
-                                </div>
-                                <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Lương
-                                        </span>
-                                    <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Chứng khoán
-                                        </span>
-                                    <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Bitcoin
-                                        </span>
-                                    <span class="mr-2">
-                                            <i class="fas fa-circle"></i> Khác
-                                        </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
                 <div class="card shadow mb-4">
@@ -318,23 +234,24 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form id="addOrUpdateTransaction" th:object="${request}" th:action="@{/transaction/create}" method="POST">
+            <form id="addOrUpdateTransaction" th:object="${request}" th:action="@{/transaction/create}"
+                  method="POST">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputAmount">Nhập số tiền</label>
                         <input th:field="*{amount}" type="text" class="form-control" id="inputAmount"
                                aria-describedby="emailHelp"
                                placeholder="10,000,000.00">
+                        <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"
+                              class="text-danger"></span>
                     </div>
                     <div class="form-group">
 
-                        <label >Loại tiền</label>
-
-                        <label>Loại tiền</label>
-                        <div class="form-check">
+                        <label for="currency">Loại tiền</label>
+                        <div class="form-check" id="currency">
                             <input th:field="*{transactionType}" class="form-check-input" type="radio"
                                    name="exampleRadios" id="exampleRadios1"
-                                   value="IN" checked>
+                                   value="IN" th:checked="true">
                             <label class="form-check-label" for="exampleRadios1">
                                 <i class="fas fa-arrow-right text-success"></i> Thu
                             </label>
@@ -362,7 +279,8 @@
                         <input th:field="*{createdAt}" type="datetime-local" class="form-control" id="inputDatetime"
                                placeholder="dd-mm-yyyy"
                                min="1997-01-01" max="2030-12-31">
-                        <span th:if="${#fields.hasErrors('createdAt')}" th:errors="*{createdAt}" class="text-danger"></span>
+                        <span th:if="${#fields.hasErrors('createdAt')}" th:errors="*{createdAt}"
+                              class="text-danger"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -385,18 +303,11 @@
 <script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
 
 <!-- Page level plugins -->
-<script th:src="@{/vendor/chart.js/Chart.min.js}" type="application/javascript"></script>
-
-<!-- Page level custom scripts -->
-<script th:src="@{/js/demo/chart-area-demo.js}" type="application/javascript"></script>
-<script th:src="@{/js/demo/chart-pie-demo.js}" type="application/javascript"></script>
-
-<!-- Page level plugins -->
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
 
 <!-- Page level custom scripts -->
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
     const installTable = (id, url, cols) => {
         return $(`#${id}`).DataTable({
             "language": {
@@ -433,60 +344,77 @@
         {"data": "createdAt"},
         {"data": "id"},
         {"data": "category"},
-        {"data": "transactionType",
-            "render": function (data,type,row,meta) {
-                return row.transactionType === 'IN'?'THU':'CHI';
-            }},
+        {
+            "data": "transactionType",
+            "render": function (data, type, row, meta) {
+                return row.transactionType === 'IN' ? 'THU' : 'CHI';
+            }
+        },
         {"data": "amount"},
         {"data": "note"},
-        {"data": null, "defaultContent": "<button class=\"btn btn-outline-danger\" data-toggle='modal' data-target='#createIncomeAndExpensesModal'><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-pencil-square\" viewBox=\"0 0 16 16\">\n" +
+        {
+            "data": null,
+            "defaultContent": "<button class=\"btn btn-outline-danger\" data-toggle='modal' data-target='#createIncomeAndExpensesModal'><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-pencil-square\" viewBox=\"0 0 16 16\">\n" +
                 "  <path d=\"M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z\"/>\n" +
                 "  <path fill-rule=\"evenodd\" d=\"M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z\"/>\n" +
-                "</svg></button>"}
+                "</svg></button>"
+        }
     ];
 
     const cols2 = [
         {"data": "createdAt"},
         {"data": "id"},
         {"data": "category"},
-        {"data": "transactionType",
-            "render": function (data,type,row,meta) {
-                return row.transactionType === 'IN'?'THU':'CHI';
-            }},
+        {
+            "data": "transactionType",
+            "render": function (data, type, row, meta) {
+                return row.transactionType === 'IN' ? 'THU' : 'CHI';
+            }
+        },
         {"data": "amount"},
         {"data": "note"},
-        {"data": null, "defaultContent":""}
+        {"data": null, "defaultContent": ""}
     ];
 
     let table;
 
-    if($('#users').length==0) {
+    $(document).ready(function () {
+        var currentUserName = [[${#authentication.principal.username}]];
+        table = installTable('transactionTable', `/sun/transaction/page/${currentUserName}`, cols1)
+    })
+
+    if ($('#users').length == 0) {
         table = installTable('transactionTable', '/sun/transaction/page/null', cols1)
     } else {
-        $('#users').on('change',function() {
-            const user = $('#users option:selected').text();
-            table = installTable('transactionTable', `/sun/transaction/page/${user}`, cols2)
+        $('#users').on('change', function () {
+            const user = $('#users option:selected').val();
+            table = installTable('transactionTable', `/sun/transaction/page/${user}`, cols1)
         })
     }
 
+    $('#createIncomeAndExpensesModal').on('hidden.bs.modal', function () {
+        $('#inputAmount').val('')
+        $('#inputCategory').val('')
+        $('#inputDatetime').val('')
+    })
 
     $('#transactionTable tbody').on('click', 'tr', function () {
         console.log(table.row(this).data());
         const data = table.row(this).data();
         const amount = $(`#inputAmount`).val(data.amount);
 
-        if(data.transactionType===`IN`) {
-            $(`#exampleRadios1`).prop("checked",true);
+        if (data.transactionType === `IN`) {
+            $(`#exampleRadios1`).prop("checked", true);
         } else {
-            $(`#exampleRadios2`).prop("checked",true);
+            $(`#exampleRadios2`).prop("checked", true);
         }
 
         $(`#inputCategory option`).each(function (i, obj) {
-            if(obj.text === data.category) {
+            if (obj.text === data.category) {
                 obj.selected = true;
             }
         })
-        $('#inputDatetime').val(data.createdAt.slice(0,data.createdAt.length-3));
+        $('#inputDatetime').val(data.createdAt.slice(0, data.createdAt.length - 3));
         $('#addOrUpdateTransaction').attr('action', `/sun/transaction/update/${data.id}`);
     });
 
@@ -502,8 +430,6 @@
     //     this.selectionEnd = curCursor;
     //     console.log(this.selectionStart + "," + this.selectionEnd)
     // })
-
-
 
 
 </script>

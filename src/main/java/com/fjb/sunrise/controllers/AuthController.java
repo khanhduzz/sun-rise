@@ -31,19 +31,20 @@ public class  AuthController {
     @Value("${default.captcha-enable}")
     private String captchaEnable;
 
-    @Value("${default.timing-send-mail}")
-    private Integer timer;
-
     private final UserService userService;
     private final EmailService emailService;
     private final ReCaptchaService reCaptchaService;
 
+    private static boolean checkSession() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated()
+            && !(authentication.getPrincipal() instanceof String);
+    }
+
     @GetMapping({"/login", "/register"})
     public ModelAndView indexLogin(@RequestParam(value = "error", required = false) String error) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()
-            && !(authentication.getPrincipal() instanceof String)) {
-            return new ModelAndView("redirect:/health");
+        if (checkSession()) {
+            return new ModelAndView(Constants.ApiConstant.REDIRECT_HEALTH_URL);
         }
 
         ModelAndView modelAndView = new ModelAndView();
@@ -89,6 +90,10 @@ public class  AuthController {
 
     @GetMapping("/forgotPassword")
     public ModelAndView indexForgotPassword() {
+        if (checkSession()) {
+            return new ModelAndView(Constants.ApiConstant.REDIRECT_HEALTH_URL);
+        }
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.VERIFICATION_BY_EMAIL_VIEW);
         modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, null);
@@ -107,13 +112,17 @@ public class  AuthController {
 
         modelAndView.setViewName(Constants.ApiConstant.VERIFICATION_BY_EMAIL_VIEW);
         modelAndView.addObject(Constants.ApiConstant.ERROR_MESSAGE_OBJECT, message);
-        modelAndView.addObject("timer", timer);
+        modelAndView.addObject("timer", 30);
 
         return modelAndView;
     }
 
     @GetMapping("/verify")
     public ModelAndView doVerify(@RequestParam("code") String code) {
+        if (checkSession()) {
+            return new ModelAndView(Constants.ApiConstant.REDIRECT_HEALTH_URL);
+        }
+
         ModelAndView modelAndView = new ModelAndView();
 
         String message = emailService.checkCode(code);
@@ -125,16 +134,16 @@ public class  AuthController {
         }
 
         String email = emailService.getEmailFromCode(code);
-        modelAndView.setViewName(Constants.ApiConstant.CHANGE_PASSWORD_VIEW);
+        modelAndView.setViewName(Constants.ApiConstant.CHANGE_PASS_WORD_VIEW);
         modelAndView.addObject(Constants.ApiConstant.EMAIL_OBJECT, email);
-        modelAndView.addObject(Constants.ApiConstant.NEW_PASSWORD_OBJECT, "");
+        modelAndView.addObject(Constants.ApiConstant.NEW_PASS_WORD_OBJECT, "");
         return modelAndView;
     }
 
 
     @PostMapping("/changePassword")
     public ModelAndView doChangePassword(@ModelAttribute(Constants.ApiConstant.EMAIL_OBJECT) String email,
-                                         @ModelAttribute(Constants.ApiConstant.NEW_PASSWORD_OBJECT) String password) {
+                                         @ModelAttribute(Constants.ApiConstant.NEW_PASS_WORD_OBJECT) String password) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Constants.ApiConstant.AUTH_REDIRECT_LOGIN);
 
