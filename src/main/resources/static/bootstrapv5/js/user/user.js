@@ -57,14 +57,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function togglePasswordVisibility(fieldId, eyeButton) {
-        const field = document.getElementById(fieldId);
-        field.type = (field.type === "password") ? "text" : "password";
-        eyeButton.innerHTML = (field.type === "password")
-            ? '<i class="fas fa-eye"></i>'
-            : '<i class="fas fa-eye-slash"></i>';
-    }
-
     // Event listeners
     if (createUserForm) {
         createUserForm.addEventListener('reset', () => {
@@ -86,7 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 input.value = initialData[input.id];
                 input.classList.remove('is-invalid');
             });
-            submitBtn.setAttribute('disabled', true);
         });
 
         editUserForm.addEventListener('submit', function (event) {
@@ -129,34 +120,43 @@ document.addEventListener("DOMContentLoaded", function () {
     // Required inputs validation
     requiredInputs.forEach(input => {
         input.addEventListener('invalid', function () {
-            if (this.type === 'email') {
+            // Phần xử lý cho email (type="email")
+            if (this.id === 'email') {
                 if (this.value === "") {
-                    this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
+                    this.setCustomValidity('Xin vui lòng nhập địa chỉ email.');
                 } else if (!this.value.includes('@')) {
-                    this.setCustomValidity('Vui lòng bao gồm ký tự \'@\' trong địa chỉ email.');
-                } else if (!this.value.includes('@.')) {
-                    this.setCustomValidity('Vui lòng hoàn thiện email theo định dạng: example@example.com');
-                } else if (!this.value.includes('.com')) {
-                    this.setCustomValidity('Vui lòng hoàn thiện email theo định dạng: example@example.com');
+                    this.setCustomValidity('Địa chỉ email phải bao gồm ký tự \'@\'.');
+                } else if (!this.value.match(/^[^@]+@[^@]+\.[^@]+$/)) {
+                    this.setCustomValidity('Vui lòng hoàn thiện địa chỉ email theo định dạng: example@example.com');
+                } else {
+                    this.setCustomValidity(''); // Xóa thông báo lỗi khi giá trị hợp lệ
                 }
-            } else if (this.id === 'phone') {
+            }
+
+            // Phần xử lý cho số điện thoại (id="phone")
+            else if (this.id === 'phone') {
                 const phonePattern = /^\d+$/;
                 if (this.value === "") {
-                    this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
+                    this.setCustomValidity('Xin vui lòng nhập số điện thoại.');
                 } else if (!phonePattern.test(this.value)) {
                     this.setCustomValidity('Số điện thoại chỉ được chứa các chữ số.');
                 } else if (this.value.length > 10) {
                     this.setCustomValidity('Số điện thoại không được quá 10 chữ số.');
                 } else {
-                    this.setCustomValidity('');
+                    this.setCustomValidity(''); // Xóa thông báo lỗi khi giá trị hợp lệ
                 }
-            } else if (this.value === "") {
-                this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin');
+            }
+
+            // Phần xử lý cho các trường khác
+            else if (this.required && this.value === "") {
+                this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin.');
+            } else {
+                this.setCustomValidity(''); // Xóa thông báo lỗi khi giá trị hợp lệ
             }
         });
 
         input.addEventListener('input', function () {
-            this.setCustomValidity('');
+            this.setCustomValidity(''); // Xóa thông báo khi người dùng bắt đầu nhập liệu
         });
     });
 

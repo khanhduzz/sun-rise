@@ -46,7 +46,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         boolean editInfor = userService.editUser(userResponseDTO);
         if (editInfor) {
-            modelAndView.setViewName(Constants.ApiConstant.USER_REDIRECT);
+            modelAndView.setViewName(Constants.ApiConstant.USER_CHANGE_INFO_SUCCESS);
         } else {
             modelAndView.addObject("error", "Failed to update user");
         }
