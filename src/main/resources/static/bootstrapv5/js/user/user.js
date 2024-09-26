@@ -128,8 +128,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     this.setCustomValidity('Xin vui lòng nhập địa chỉ email.');
                 } else if (!this.value.includes('@')) {
                     this.setCustomValidity('Địa chỉ email phải bao gồm ký tự \'@\'.');
-                } else if (!this.value.match(/^[^@]+@[^@]+\.[^@]+$/)) {
-                    this.setCustomValidity('Vui lòng hoàn thiện địa chỉ email theo định dạng: example@example.com');
                 } else {
                     this.setCustomValidity(''); // Xóa thông báo lỗi khi giá trị hợp lệ
                 }
