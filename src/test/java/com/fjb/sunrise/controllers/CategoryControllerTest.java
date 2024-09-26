@@ -36,7 +36,7 @@ class CategoryControllerTest {
     // This test is assumed that, the user did not log in, so redirect to login page
     @Test
     void goCategoryIndex_shouldRedirectToLogin_ifNotAuthenticated() throws Exception {
-        this.mockMvc.perform(get("/category/index"))
+        this.mockMvc.perform(get("/sun/category/index"))
             .andDo(print())
             .andExpect(status().is3xxRedirection());
     }
