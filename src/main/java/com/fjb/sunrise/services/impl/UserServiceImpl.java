@@ -23,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -216,7 +215,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmailOrPhone(String emailOrPhone) {
         User user = userRepository.findByEmailOrPhone(emailOrPhone);
         if (user == null) {
-            throw new UsernameNotFoundException(String.format("User not found with email or phone: %s", emailOrPhone));
+            throw new NotFoundException("User not found with email or phone: ", emailOrPhone);
         }
         return user;
     }
