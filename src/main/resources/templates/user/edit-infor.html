@@ -59,8 +59,12 @@
                                     </div>
                                     <hr>
                                     <div class="mb-3">
-                                        <label for="email">Địa chỉ Email</label>
-                                        <input id="email" type="email" class="form-control" th:field="*{email}" readonly>
+                                        <div class="input-group">
+                                            <label for="email" class="input-group-text">Địa chỉ email</label>
+                                            <div>
+                                                <input type="text" class="form-control" id="email" aria-describedby="basic-addon3 basic-addon4" th:field="*{email}" readonly>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!-- Button trigger modal -->
                                     <hr>
@@ -69,7 +73,7 @@
                                     <div class="row">
                                         <div class="mb-3">
                                             <div class="input-group">
-                                                <span class="input-group-text">Số điện thoại</span>
+                                                <label for="phone" class="input-group-text">Số điện thoại</label>
                                                 <div>
                                                     <input type="text" class="form-control" id="phone" aria-describedby="basic-addon3 basic-addon4" th:field="*{phone}" readonly>
                                                 </div>
@@ -77,9 +81,9 @@
                                         </div>
                                         <div class="mb-3">
                                             <div class="input-group">
-                                                <span class="input-group-text">Vai trò</span>
-                                                <div id="changeVietnamese" class="form-control">
-                                                    <input type="text" aria-describedby="basic-addon3 basic-addon4" id="role"  th:field="*{role}" readonly>
+                                                <label for="role" class="input-group-text">Vai trò</label>
+                                                <div id="changeVietnamese">
+                                                    <input type="text" class="form-control" id="role" aria-describedby="basic-addon3 basic-addon4" th:field="*{role}" readonly/>
                                                 </div>
                                             </div>
                                         </div>
