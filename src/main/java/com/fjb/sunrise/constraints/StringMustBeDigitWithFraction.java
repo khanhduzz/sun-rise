@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface StringMustBeDigitWithFraction {
-    String message() default "Amount must be digit with fraction {fraction}";
+    String message() default "Số tiền phải là chữ số với số thập phân là {fraction}";
 
     Class<?>[] groups() default {};
 

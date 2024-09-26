@@ -22,6 +22,9 @@ public class StringMustBeDigitWithFractionValidator
         if (ignoreDot.chars().allMatch(Character::isDigit)) {
             if (fraction > 0) {
                 int startOfFraction = ignoreComma.indexOf(".");
+                if(startOfFraction==-1) {
+                    return true;
+                }
                 if (ignoreComma.length() - startOfFraction - 1 > fraction) {
                     return false;
                 }
