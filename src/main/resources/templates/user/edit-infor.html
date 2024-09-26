@@ -41,26 +41,26 @@
                                 <form id="editUserForm" th:action="@{/user/edit-infor}" th:object="${userInfor}" method="POST">
                                     <input type="hidden" th:field="*{id}">
                                     <div class="mb-3">
-                                        <label>Tên người dùng</label>
-                                        <input type="text" class="form-control" th:field="*{username}">
+                                        <label for="username">Tên người dùng</label>
+                                        <input id="username" type="text" class="form-control" th:field="*{username}">
                                     </div>
                                     <div class="mb-3">
-                                        <label>Họ</label>
-                                        <input type="text" class="form-control" th:field="*{firstname}">
+                                        <label for="firstname">Họ</label>
+                                        <input id="firstname" type="text" class="form-control" th:field="*{firstname}">
                                     </div>
                                     <div class="mb-3">
-                                        <label>Tên</label>
-                                        <input type="text" class="form-control" th:field="*{lastname}">
+                                        <label for="lastname">Tên</label>
+                                        <input id="lastname" type="text" class="form-control" th:field="*{lastname}">
                                     </div>
                                     <div class="mb-3">
-                                        <label>Địa chỉ Email</label>
-                                        <input type="email" class="form-control" th:field="*{email}" readonly>
+                                        <label for="email">Địa chỉ Email</label>
+                                        <input id="email" type="email" class="form-control" th:field="*{email}" readonly>
                                     </div>
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-success d-block mx-auto" data-toggle="modal" data-target="#passwordModal">Đổi mật khẩu</button>
                                     <div class="mb-3">
-                                        <label>Số điện thoại</label>
-                                        <input type="text" class="form-control" th:field="*{phone}" readonly>
+                                        <label for="phone">Số điện thoại</label>
+                                        <input id="phone" type="text" class="form-control" th:field="*{phone}" readonly>
                                     </div>
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
