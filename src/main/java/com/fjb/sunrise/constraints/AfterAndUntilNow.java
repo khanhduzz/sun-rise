@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AfterAndUntilNow {
-    String message() default "Thời gian tạo phải sau 01/01/2020 and before now";
+    String message() default "Thời gian tạo phải sau 01/01/2020 và trước hiện tại";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String value();
