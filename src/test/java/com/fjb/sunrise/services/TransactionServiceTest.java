@@ -1,17 +1,14 @@
 package com.fjb.sunrise.services;
 
 import static org.instancio.Select.field;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 
 import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CategoryCreateDto;
 import com.fjb.sunrise.dtos.requests.CategoryUpdateDto;
 import com.fjb.sunrise.dtos.requests.CreateOrUpdateTransactionRequest;
 import com.fjb.sunrise.dtos.responses.CategoryResponseDto;
+import com.fjb.sunrise.dtos.responses.StatisticResponse;
 import com.fjb.sunrise.enums.ERole;
 import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.enums.ETrans;
@@ -76,6 +73,7 @@ public class TransactionServiceTest {
     private User user;
     private CreateOrUpdateTransactionRequest create;
     private CreateOrUpdateTransactionRequest update;
+    private StatisticResponse statisticResponse;
 
     @BeforeEach
     public void init() {
@@ -113,6 +111,10 @@ public class TransactionServiceTest {
         update.setCategory(1L);
         update.setTransactionType(ETrans.IN);
 
+        statisticResponse = new StatisticResponse();
+        statisticResponse.setTotalThisMonth("100000");
+        statisticResponse.setTotalInputThisYear("200000");
+        statisticResponse.setTotalThisYear("100000");
     }
 
     @DisplayName("Junit test for createTransaction method")
@@ -178,5 +180,16 @@ public class TransactionServiceTest {
 
         Transaction transactionTest = transactionService.update(update);
         Assertions.assertEquals(transactionTest, transaction);
+    }
+
+    @DisplayName("Junit test for statistic method")
+    @Test
+    public void statistic_returnStatisticResponse() throws ParseException {
+        Mockito.when(transactionRepository.sumAmountInRange(any(LocalDateTime.class),any(LocalDateTime.class)))
+                        .thenReturn(100000.0);
+        Mockito.when(transactionRepository.sumTransactionTypeINInThisYear(any(ETrans.class),any(LocalDateTime.class),any(LocalDateTime.class)))
+                        .thenReturn(200000.0);
+        StatisticResponse response = transactionService.statistic();
+        Assertions.assertEquals(statisticResponse, response);
     }
 }
