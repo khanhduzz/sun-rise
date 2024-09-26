@@ -155,16 +155,6 @@ public class TransactionServiceImpl implements TransactionService {
         return response;
     }
 
-    private String changeFormatFromFullDateToMonthDate(LocalDateTime dateTime) throws ParseException {
-        SimpleDateFormat monthDate = new SimpleDateFormat("dd-MM", Locale.ENGLISH);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-
-        Date date = sdf.parse(dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        monthDate.format(date);
-        return monthDate.format(date);
-    }
-
     private String convertDoubleWithScientificNotationToDouble(Double amount) {
         DecimalFormat df = new DecimalFormat("#.###########");
         return df.format(amount);

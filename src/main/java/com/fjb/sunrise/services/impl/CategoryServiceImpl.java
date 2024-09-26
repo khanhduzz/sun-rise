@@ -168,15 +168,13 @@ public class CategoryServiceImpl implements CategoryService {
             Join<Category, User> userJoin = root.join("owner");
             User dbUser = userRepository.findById(getCurrentUserId()).orElseThrow();
             if (dbUser.getRole() == ERole.ADMIN) {
-                Predicate activeStatus = builder.equal(root.get("status"), EStatus.ACTIVE);
-                Predicate notActiveStatus = builder.equal(root.get("status"), EStatus.NOT_ACTIVE);
-
-                return builder.or(activeStatus, notActiveStatus);
+                return builder.equal(root.get("status"), EStatus.ACTIVE);
             }
             Predicate hasRoleAdmin = builder.equal(userJoin.get("role"), "ADMIN");
             Predicate isOwner = builder.equal(userJoin.get("id"), getCurrentUserId());
-
-            return builder.or(hasRoleAdmin, isOwner);
+            Predicate active = builder.equal(root.get("status"), EStatus.ACTIVE);
+            Predicate or = builder.or(hasRoleAdmin,isOwner);
+            return builder.and(or, active);
         });
     }
 
