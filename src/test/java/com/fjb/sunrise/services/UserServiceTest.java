@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 
-import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CreateAndEditUserByAdminDTO;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.responses.UserResponseDTO;
@@ -35,7 +34,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -365,6 +363,99 @@ class UserServiceTest {
         boolean result = userService.checkPhoneIsDuplicate(phone);
 
         assertFalse(result);
+    }
+
+    @Test
+    void processPasswordChange_WhenUserDoesNotExist_ShouldThrowNotFoundException() {
+        String oldPassword = "oldPassword123";
+        String newPassword = "newPassword123!";
+        String name = "nonexistent@example.com";
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(name, null));
+
+        Mockito.when(userRepository.findByEmailOrPhone(name)).thenReturn(null);
+
+        Exception notFoundException = assertThrows(NotFoundException.class, () -> {
+            userService.processPasswordChange(oldPassword, newPassword);
+        });
+
+        assertEquals("Người dùng không tồn tại", notFoundException.getMessage());
+    }
+
+    @Test
+    void processPasswordChange_WhenOldPasswordIsIncorrect_ShouldThrowDuplicatedException() {
+        String oldPassword = "incorrectOldPassword";
+        String newPassword = "newPassword123!";
+        String name = "test@example.com";
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(name, null));
+
+        User currentUser = Instancio.of(User.class)
+            .set(field(User::getEmail), name)
+            .set(field(User::getPassword), passwordEncoder.encode("correctOldPassword"))
+            .create();
+
+        Mockito.when(userRepository.findByEmailOrPhone(name)).thenReturn(currentUser);
+
+        Exception duplicatedException = assertThrows(DuplicatedException.class, () -> {
+            userService.processPasswordChange(oldPassword, newPassword);
+        });
+
+        assertEquals("Mật khẩu cũ không chính xác", duplicatedException.getMessage());
+    }
+
+    @Test
+    void processPasswordChange_WhenOldPasswordIsCorrect_ShouldChangePassword() {
+        String oldPassword = "correctOldPassword";
+        String newPassword = "newPassword123!";
+        String name = "test@example.com";
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(name, null));
+
+        User currentUser = Instancio.of(User.class)
+            .set(field(User::getEmail), name)
+            .set(field(User::getPassword), passwordEncoder.encode(oldPassword))
+            .create();
+
+        Mockito.when(userRepository.findByEmailOrPhone(name)).thenReturn(currentUser);
+
+        userService.processPasswordChange(oldPassword, newPassword);
+
+        Mockito.verify(userRepository).save(Mockito.argThat(user ->
+            passwordEncoder.matches(newPassword, user.getPassword())
+        ));
+    }
+
+    @Test
+    void findAllNormalUser_WhenThereAreUsers_ShouldReturnListOfUsers() {
+        List<User> users = Instancio.ofList(User.class)
+            .size(3)
+            .set(field(User::getRole), ERole.USER)
+            .create();
+
+        Mockito.when(userRepository.findAllByRole(ERole.USER)).thenReturn(users);
+
+        List<User> result = userService.findAllNormalUser();
+
+        assertEquals(3, result.size());
+        assertTrue(result.stream().allMatch(user -> user.getRole().equals(ERole.USER)));
+    }
+
+    @Test
+    void findAllNormalUser_WhenNoNormalUsersExist_ShouldReturnEmptyList() {
+        Mockito.when(userRepository.findAllByRole(ERole.USER)).thenReturn(Collections.emptyList());
+
+        List<User> result = userService.findAllNormalUser();
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void findAllNormalUser_WhenRepositoryThrowsException_ShouldThrowException() {
+        Mockito.when(userRepository.findAllByRole(ERole.USER)).thenThrow(new RuntimeException("Database error"));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            userService.findAllNormalUser();
+        });
+
+        assertEquals("Database error", exception.getMessage());
     }
 
 }
