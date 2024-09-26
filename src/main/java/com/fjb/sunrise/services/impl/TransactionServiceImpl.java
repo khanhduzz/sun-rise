@@ -13,6 +13,7 @@ import com.fjb.sunrise.services.TransactionService;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 import java.time.ZoneOffset;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -125,20 +127,25 @@ public class TransactionServiceImpl implements TransactionService {
         final LocalDateTime firstDay = getFirstOrLastDateOfThisYear(false);
         final LocalDateTime lastDay = getFirstOrLastDateOfThisYear(true);
         final LocalDateTime firstDayOfThisMonth = getFirstDayOfThisMonth();
+        final long count = transactionRepository.count();
+        if (count == 0) {
+            response.setTotalThisYear("0");
+            response.setTotalThisMonth("0");
+            response.setTotalInputThisYear("0");
+        } else {
+            response.setTotalThisMonth(
+                    convertDoubleWithScientificNotationToDouble(
+                            transactionRepository.sumAmountInRange(firstDayOfThisMonth, lastDay)
+                    ));
 
-
-        response.setTotalThisMonth(
-                convertDoubleWithScientificNotationToDouble(
-                        transactionRepository.sumAmountInRange(firstDayOfThisMonth, lastDay)
-                ));
-
-        response.setTotalThisYear(
-                convertDoubleWithScientificNotationToDouble(
-                        transactionRepository.sumAmountInRange(firstDay, lastDay)
-                ));
-        response.setTotalInputThisYear(convertDoubleWithScientificNotationToDouble(
-                transactionRepository.sumTransactionTypeINInThisYear(ETrans.IN, firstDay, lastDay)
-        ));
+            response.setTotalThisYear(
+                    convertDoubleWithScientificNotationToDouble(
+                            transactionRepository.sumAmountInRange(firstDay, lastDay)
+                    ));
+            response.setTotalInputThisYear(convertDoubleWithScientificNotationToDouble(
+                    transactionRepository.sumTransactionTypeINInThisYear(ETrans.IN, firstDay, lastDay)
+            ));
+        }
         return response;
     }
 
