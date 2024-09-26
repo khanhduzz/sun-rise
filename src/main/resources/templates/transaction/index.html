@@ -51,7 +51,7 @@
                     <h1 class="h3 mb-0 text-gray-800">Tổng quan</h1>
                     <!--                    <div sec:authorize="hasRole('ROLE_USER')">Text visible to user.</div>-->
                     <div sec:authorize="hasRole('ROLE_ADMIN')">
-                        <label for="users">Choose a user:</label>
+                        <label for="users">Chọn 1 người dùng:</label>
 
                         <select id="users">
                             <option th:each="user:${users}" th:value="${user.id}"
