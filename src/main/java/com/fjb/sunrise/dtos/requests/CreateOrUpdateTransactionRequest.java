@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fjb.sunrise.constraints.AfterAndUntilNow;
+import com.fjb.sunrise.constraints.StringMustBeDigitWithFraction;
 import com.fjb.sunrise.enums.ETrans;
 import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import lombok.Data;
 public class CreateOrUpdateTransactionRequest implements Serializable {
     private Long id;
     @NotBlank(message = "Amount must not be blank")
+    @StringMustBeDigitWithFraction(fraction = 2)
     private String amount;
 
     private ETrans transactionType;

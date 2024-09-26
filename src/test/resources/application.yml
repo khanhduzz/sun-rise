@@ -36,4 +36,3 @@ default:
   encode-key: abcdefghabcdefgh #gitleaks:allow
   type-encode: AES #gitleaks:allow
   captcha-enable: false
-  timing-send-mail: 30000

@@ -49,15 +49,15 @@
     <div class="box-custom forgot">
         <h2>Điền email để xác thực tài khoản của bạn!</h2>
         <form class="m-3" th:method="POST" th:action="@{/auth/forgotPassword}">
-            <input id="email" th:value="${email}" type="email" class="field-custom mb-3" placeholder="Nhập địa chỉ email">
+            <input id="email" th:value="${email}" name="email" type="email" class="field-custom mb-3" placeholder="Nhập địa chỉ email">
             <div id="message-email" class="popover"></div>
             <th:block th:if="${timer != null}">
                 <div id="timer-resend"></div>
             </th:block>
             <button id="btn-sendMail" type="submit">Gửi</button>
         </form>
-        <a th:method="GET" th:href="@{/auth/register}">Bạn chưa có tài khoản? Tạo tài khoản!</a>
-        <a th:method="GET" th:href="@{/auth/login}">Bạn đã có tài khoản? Đăng nhập!</a>
+        <a th:href="@{/auth/register}">Bạn chưa có tài khoản? Tạo tài khoản!</a>
+        <a th:href="@{/auth/login}">Bạn đã có tài khoản? Đăng nhập!</a>
     </div>
 </div>
 

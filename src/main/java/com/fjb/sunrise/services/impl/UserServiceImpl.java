@@ -23,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -65,7 +64,7 @@ public class UserServiceImpl implements UserService {
     public String changePassword(String email, String password) {
         User user = userRepository.findByEmailOrPhone(email);
         if (user == null) {
-            return "Email chưa được đăng ký!";
+            throw new NotFoundException("Email chưa được đăng ký!");
         }
 
         user.setPassword(passwordEncoder.encode(password));
@@ -216,7 +215,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmailOrPhone(String emailOrPhone) {
         User user = userRepository.findByEmailOrPhone(emailOrPhone);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with email or phone: " + emailOrPhone);
+            throw new NotFoundException("User not found with email or phone: ", emailOrPhone);
         }
         return user;
     }
