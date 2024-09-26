@@ -184,7 +184,7 @@ public class CategoryServiceImpl implements CategoryService {
         });
     }
 
-    private Long getCurrentUserId() {
+    public Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         org.springframework.security.core.userdetails.User securityUser =
                 (org.springframework.security.core.userdetails.User) auth.getPrincipal();
