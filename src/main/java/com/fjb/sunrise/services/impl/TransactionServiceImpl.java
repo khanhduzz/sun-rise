@@ -137,7 +137,7 @@ public class TransactionServiceImpl implements TransactionService {
                         transactionRepository.sumAmountInRange(firstDay, lastDay)
                 ));
         response.setTotalInputThisYear(convertDoubleWithScientificNotationToDouble(
-                transactionRepository.sumTransactionTypeINInThisYear(ETrans.IN, firstDay, lastDay)
+                transactionRepository.sumTransactionTypeINInThisYear(ETrans.OUT, firstDay, lastDay)
         ));
         return response;
     }
