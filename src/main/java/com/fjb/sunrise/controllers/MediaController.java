@@ -59,7 +59,7 @@ public class MediaController {
                 fileDownloadUri,
                 dbFile.getType(),
                 dbFile.getData().length);
-        }).collect(Collectors.toList());
+        }).toList();
 
         ModelAndView modelAndView = new ModelAndView("media/index");
 

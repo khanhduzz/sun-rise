@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
-public class MediaServiceTest {
+class MediaServiceTest {
 
     @Mock
     private MediaRepository mediaRepository;
@@ -64,7 +64,7 @@ public class MediaServiceTest {
     }
 
     @Test
-    void testStore_whenFileIsNull_thenThrowException() throws IOException {
+    void testStore_whenFileIsNull_thenThrowException() {
         mockFile = mock(MultipartFile.class);
         when(mockFile.getOriginalFilename()).thenReturn(null);
 
