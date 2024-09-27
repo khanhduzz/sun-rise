@@ -44,7 +44,7 @@ public class  AuthController {
     @GetMapping({"/login", "/register"})
     public ModelAndView indexLogin(@RequestParam(value = "error", required = false) String error) {
         if (checkSession()) {
-            return new ModelAndView(Constants.ApiConstant.CATEGORY_REDIRECT);
+            return new ModelAndView(Constants.ApiConstant.HOME_REDIRECT);
         }
 
         ModelAndView modelAndView = new ModelAndView();
@@ -91,7 +91,7 @@ public class  AuthController {
     @GetMapping("/forgotPassword")
     public ModelAndView indexForgotPassword() {
         if (checkSession()) {
-            return new ModelAndView(Constants.ApiConstant.CATEGORY_REDIRECT);
+            return new ModelAndView(Constants.ApiConstant.HOME_REDIRECT);
         }
 
         ModelAndView modelAndView = new ModelAndView();
@@ -120,7 +120,7 @@ public class  AuthController {
     @GetMapping("/verify")
     public ModelAndView doVerify(@RequestParam("code") String code) {
         if (checkSession()) {
-            return new ModelAndView(Constants.ApiConstant.CATEGORY_REDIRECT);
+            return new ModelAndView(Constants.ApiConstant.HOME_REDIRECT);
         }
 
         ModelAndView modelAndView = new ModelAndView();
