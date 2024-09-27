@@ -125,6 +125,7 @@ public class TransactionServiceImpl implements TransactionService {
         final LocalDateTime firstDay = getFirstOrLastDateOfThisYear(false);
         final LocalDateTime lastDay = getFirstOrLastDateOfThisYear(true);
         final LocalDateTime firstDayOfThisMonth = getFirstDayOfThisMonth();
+
         final long count = transactionRepository.count();
         if (count == 0) {
             response.setTotalThisYear("0");
@@ -141,7 +142,7 @@ public class TransactionServiceImpl implements TransactionService {
                             transactionRepository.sumAmountInRange(firstDay, lastDay)
                     ));
             response.setTotalInputThisYear(convertDoubleWithScientificNotationToDouble(
-                    transactionRepository.sumTransactionTypeINInThisYear(ETrans.IN, firstDay, lastDay)
+                    transactionRepository.sumTransactionTypeINInThisYear(ETrans.OUT, firstDay, lastDay)
             ));
         }
         return response;
