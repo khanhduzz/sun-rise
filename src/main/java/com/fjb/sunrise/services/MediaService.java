@@ -19,18 +19,24 @@ public class MediaService {
 
     private final MediaRepository mediaRepository;
 
-    public Media store(MultipartFile file) throws IOException {
+    @Transactional
+    public Media store(MultipartFile file) {
         if (file == null || file.getOriginalFilename() == null) {
             throw new BadRequestException("File is null");
         }
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String fileCode = UUID.randomUUID().toString();
-        Media media = Media.builder()
-            .name(fileName)
-            .type(file.getContentType())
-            .data(file.getBytes())
-            .fileCode(fileCode)
-            .build();
+        Media media;
+        try {
+            media = Media.builder()
+                .name(fileName)
+                .type(file.getContentType())
+                .data(file.getBytes())
+                .fileCode(fileCode)
+                .build();
+        } catch (IOException e) {
+            throw new BadRequestException("Error when save file");
+        }
 
         return mediaRepository.save(media);
     }
@@ -40,6 +46,7 @@ public class MediaService {
         return mediaRepository.findByFileCode(fileCode);
     }
 
+    @Transactional
     public Stream<Media> getAllMedias() {
         return mediaRepository.findAll().stream();
     }

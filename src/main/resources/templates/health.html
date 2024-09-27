@@ -42,6 +42,10 @@
                 <div class="nav-item me-3" sec:authorize="isAuthenticated()">
                     <a class="btn btn-outline-danger" style="width: 300px" th:href="@{/logout}">Logout</a>
                 </div>
+<!--                <div sec:authorize="isAuthenticated()">-->
+<!--                    Roles: <span sec:authentication="principal.authorities"></span><br>-->
+<!--                    File Code: <span th:text="${#authentication.principal.fileCode}"></span>-->
+<!--                </div>-->
             </div>
             <div th:replace="~{footer :: footer}"></div>
         </div>
@@ -57,13 +61,6 @@
 
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
-
-<!-- Page level plugins -->
-<script src="vendor/chart.js/Chart.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="js/demo/chart-area-demo.js"></script>
-<script src="js/demo/chart-pie-demo.js"></script>
 
 <!-- Page level plugins -->
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>

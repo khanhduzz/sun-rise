@@ -58,6 +58,9 @@ public class User extends AuditEntity<String> implements Serializable, UserDetai
     @Column(name = "verification_code")
     private String verificationCode;
 
+    @Column(name = "file_code")
+    private String fileCode;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));

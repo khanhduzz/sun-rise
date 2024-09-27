@@ -22,6 +22,9 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.mail.username}")
     private String emailServer;
 
+    @Value("${email.verify-link}")
+    private String emailLink;
+
     private static final int TIME = 300;
 
     private final UserRepository userRepository;
@@ -71,7 +74,7 @@ public class EmailServiceImpl implements EmailService {
 
             String htmlMsg = "<h3>Thay đổi mật khẩu</h3>"
                 + "<p>Nhấn vào nút dưới đây để thay đổi mật khẩu:</p>"
-                + "<a href=\"http://localhost:8086/sun/auth/verify?code=" + code + "\" "
+                + "<a href=\"" + emailLink + code + "\" "
                 + "style=\"display:inline-block;"
                 + "padding:10px 20px;"
                 + "background-color:#4CAF50;"
