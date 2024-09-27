@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fjb.sunrise.dtos.base.DataTableInputDTO;
 import com.fjb.sunrise.dtos.requests.CreateAndEditUserByAdminDTO;
 import com.fjb.sunrise.dtos.requests.RegisterRequest;
 import com.fjb.sunrise.dtos.responses.UserResponseDTO;
@@ -31,7 +33,6 @@ import java.util.List;
 import java.util.Optional;
 import org.instancio.Instancio;
 import org.instancio.Select;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +41,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -183,7 +188,7 @@ class UserServiceTest {
             .set(field(CreateAndEditUserByAdminDTO::getStatus), "ACTIVE")
             .create();
         User existingUser = Instancio.of(User.class).create();
-        when(userRepository.save(Mockito.any())).thenReturn(existingUser);
+        when(userRepository.save(any())).thenReturn(existingUser);
 
         User actual = userService.createUserByAdmin(dto);
 
@@ -489,7 +494,7 @@ class UserServiceTest {
         });
 
         assertEquals("User not found", exception.getMessage());
-        verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
+        verify(userRepository, Mockito.never()).save(any(User.class));
     }
 
     @Test
@@ -576,4 +581,132 @@ class UserServiceTest {
         verify(userRepository, times(1)).findAll();
     }
 
+    @Test
+    void getUserList_WhenNoSearch_ShouldReturnAllUsers() {
+        List<User> users = Instancio.ofList(User.class).size(2).create();
+        Page<User> userPage = new PageImpl<>(users);
+
+        DataTableInputDTO payload = new DataTableInputDTO();
+        payload.setStart(0);
+        payload.setLength(10);
+        payload.setOrder(Collections.emptyList());
+        payload.setSearch(Collections.singletonMap("value", ""));
+
+        when(userRepository.findAll((Specification<User>) any(), any(Pageable.class))).thenReturn(userPage);
+
+        Page<User> result = userService.getUserList(payload);
+
+        assertEquals(2, result.getTotalElements());
+        verify(userRepository).findAll((Specification<User>) any(), any(Pageable.class));
+    }
+
+    @Test
+    void getUserList_WhenSearchByUsername_ShouldReturnFilteredUsers() {
+        User user = Instancio.of(User.class)
+            .set(field(User::getUsername), "user1")
+            .create();
+
+        List<User> users = Collections.singletonList(user);
+        Page<User> userPage = new PageImpl<>(users);
+
+        DataTableInputDTO payload = new DataTableInputDTO();
+        payload.setStart(0);
+        payload.setLength(10);
+        payload.setOrder(Collections.emptyList());
+        payload.setSearch(Collections.singletonMap("value", "user1"));
+
+        when(userRepository.findAll((Specification<User>) any(), any(Pageable.class))).thenReturn(userPage);
+
+        Page<User> result = userService.getUserList(payload);
+
+        assertEquals(1, result.getTotalElements());
+        assertEquals("user1", result.getContent().get(0).getUsername());
+        verify(userRepository).findAll((Specification<User>) any(), any(Pageable.class));
+    }
+
+    @Test
+    void getUserList_WhenSearchByPhone_ShouldReturnFilteredUsers() {
+        User user = Instancio.of(User.class)
+            .set(field(User::getPhone), "0987654321")
+            .create();
+
+        List<User> users = Collections.singletonList(user);
+        Page<User> userPage = new PageImpl<>(users);
+
+        DataTableInputDTO payload = new DataTableInputDTO();
+        payload.setStart(0);
+        payload.setLength(10);
+        payload.setOrder(Collections.emptyList());
+        payload.setSearch(Collections.singletonMap("value", "0987654321"));
+
+        when(userRepository.findAll((Specification<User>) any(), any(Pageable.class))).thenReturn(userPage);
+
+        Page<User> result = userService.getUserList(payload);
+
+        assertEquals(1, result.getTotalElements());
+        assertEquals("0987654321", result.getContent().get(0).getPhone());
+        verify(userRepository).findAll((Specification<User>) any(), any(Pageable.class));
+    }
+
+    @Test
+    void getUserList_WhenSearchByEmail_ShouldReturnFilteredUsers() {
+        User user = Instancio.of(User.class)
+            .set(field(User::getEmail), "user1@example.com")
+            .create();
+
+        List<User> users = Collections.singletonList(user);
+        Page<User> userPage = new PageImpl<>(users);
+
+        DataTableInputDTO payload = new DataTableInputDTO();
+        payload.setStart(0);
+        payload.setLength(10);
+        payload.setOrder(Collections.emptyList());
+        payload.setSearch(Collections.singletonMap("value", "user1@example.com"));
+
+        when(userRepository.findAll((Specification<User>) any(), any(Pageable.class))).thenReturn(userPage);
+
+        Page<User> result = userService.getUserList(payload);
+
+        assertEquals(1, result.getTotalElements());
+        assertEquals("user1@example.com", result.getContent().get(0).getEmail());
+        verify(userRepository).findAll((Specification<User>) any(), any(Pageable.class));
+    }
+
+    @Test
+    void getUserList_WhenEmptyPayload_ShouldReturnEmptyList() {
+        DataTableInputDTO payload = new DataTableInputDTO();
+        payload.setStart(0);
+        payload.setLength(10);
+        payload.setOrder(Collections.emptyList());
+        payload.setSearch(Collections.singletonMap("value", ""));
+
+        Page<User> emptyPage = new PageImpl<>(Collections.emptyList());
+        when(userRepository.findAll((Specification<User>) any(), any(Pageable.class))).thenReturn(emptyPage);
+
+        Page<User> result = userService.getUserList(payload);
+
+        assertEquals(0, result.getTotalElements());
+        verify(userRepository).findAll((Specification<User>) any(), any(Pageable.class));
+    }
+
+    @Test
+    void getUserList_WhenInvalidPageRequest_ShouldReturnCorrectPage() {
+        // Giả sử có 3 user
+        List<User> users = Instancio.ofList(User.class).size(3).create();
+        Page<User> userPage = new PageImpl<>(users);
+
+        DataTableInputDTO payload = new DataTableInputDTO();
+        payload.setStart(15); // Bắt đầu từ bản ghi thứ 15
+        payload.setLength(10); // Số lượng bản ghi trên mỗi trang
+        payload.setOrder(Collections.emptyList());
+        payload.setSearch(Collections.singletonMap("value", ""));
+
+        when(userRepository.findAll((Specification<User>) any(), any(Pageable.class))).thenReturn(userPage);
+
+        Page<User> result = userService.getUserList(payload);
+
+        // Kiểm tra xem số lượng user có phải là 3 hay không
+        assertEquals(3, result.getTotalElements());
+        verify(userRepository).findAll((Specification<User>) any(), any(Pageable.class));
+    }
 }
