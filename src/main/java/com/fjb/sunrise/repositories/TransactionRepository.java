@@ -17,11 +17,11 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
 
     Page<Transaction> findAll(Pageable pageable);
 
-    @Query("select sum(t.amount) from Transaction t "
+    @Query("select COALESCE(sum(t.amount), 0) from Transaction t "
             + "where t.updatedAt between ?1 and ?2")
     Double sumAmountInRange(LocalDateTime start, LocalDateTime end);
 
-    @Query("select sum(t.amount) from Transaction t "
+    @Query("select COALESCE(sum(t.amount), 0) from Transaction t "
             + "where t.transactionType = ?1 and t.updatedAt between ?2 and ?3 ")
     Double sumTransactionTypeINInThisYear(ETrans transactionType, LocalDateTime start, LocalDateTime end);
 
