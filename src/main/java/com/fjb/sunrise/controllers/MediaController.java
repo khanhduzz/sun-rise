@@ -90,4 +90,19 @@ public class MediaController {
             .contentLength(media.getData().length)
             .body(resource);
     }
+
+    @GetMapping("/media/user")
+    public ResponseEntity<ByteArrayResource> getMediaUser() {
+        Media media = mediaService.getMediaOfUser();
+        if (media == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        ByteArrayResource resource = new ByteArrayResource(media.getData());
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + media.getName() + "\"")
+            .contentType(MediaType.parseMediaType(media.getType()))
+            .contentLength(media.getData().length)
+            .body(resource);
+    }
 }
