@@ -29,12 +29,13 @@
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                    onkeydown="">
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small" sec:authentication="name"></span>
-                    <div sec:authorize="!isAuthenticated()">
+                    <div sec:authorize="isAuthenticated()">
                         <img alt="profile" class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}">
                     </div>
 <!--                    <div sec:authorize="isAuthenticated()">-->
-<!--                        <img alt="profile" class="img-profile rounded-circle" th:href="@{/${#authentication.principal.fileCode}}">-->
-<!--                        File Code: <span sec:authentication="fileCode"></span>-->
+<!--                        <img alt="profile" class="img-profile rounded-circle"-->
+<!--                             th:src="@{/medias/media/${#authentication.principal.fileCode}}" />-->
+<!--                        File Code: <span th:text="${#authentication.principal.fileCode}"></span>-->
 <!--                    </div>-->
                 </a>
                 <!-- Dropdown - User Information -->
