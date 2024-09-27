@@ -99,11 +99,14 @@ class EmailServiceTest {
         InvalidKeyException {
         String code = encoder.encode("skdfjbn ưa,ẻm ndfnoewanrflsdnflskdfns");
 
-        Mockito.when(VerificationByEmail.fromString(encoder.decode(code))).thenReturn(null);
+        try (MockedStatic<VerificationByEmail> mockedVerification = Mockito.mockStatic(VerificationByEmail.class)) {
+            mockedVerification.when(() -> VerificationByEmail.fromString(encoder.decode(code)))
+                .thenReturn(null);
 
-        String actualMessage = emailService.checkCode(code);
+            String actualMessage = emailService.checkCode(code);
 
-        Assertions.assertEquals("Vui lòng thử lại!", actualMessage);
+            Assertions.assertEquals("Vui lòng thử lại!", actualMessage);
+        }
     }
 
     @Test
