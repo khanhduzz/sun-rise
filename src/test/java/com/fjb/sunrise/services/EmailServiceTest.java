@@ -18,6 +18,7 @@ import org.instancio.Select;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -67,7 +68,7 @@ class EmailServiceTest {
     }
 
     @Test
-    void sendEmail_WhenSended_ThenReturnAvoidSpam()
+    void sendEmail_WhenSendMail_ThenReturnAvoidSpam()
         throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
         InvalidKeyException {
         String email = Instancio.of(String.class).generate(Select.allStrings(), x-> x.net().email()).create();
@@ -84,12 +85,8 @@ class EmailServiceTest {
     }
 
     @Test
-    void checkCode_WhenCodeIsInvalid_ThenReturnErrorMessage()
-        throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
-        InvalidKeyException {
+    void checkCode_WhenCodeIsInvalid_ThenReturnErrorMessage() {
         String invalidCode = "invalidCode";
-
-        Mockito.when(encoder.decode(invalidCode)).thenThrow(new IllegalArgumentException());
 
         String actualMessage = emailService.checkCode(invalidCode);
 
@@ -100,11 +97,9 @@ class EmailServiceTest {
     void checkCode_WhenVerificationIsNull_ThenReturnErrorMessage()
         throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
         InvalidKeyException {
-        String code = "validCode";
+        String code = encoder.encode("skdfjbn ưa,ẻm ndfnoewanrflsdnflskdfns");
 
-        // Giả lập hành vi của encoder trả về giá trị null
-        Mockito.when(encoder.decode(code)).thenReturn("encodedVerification");
-        Mockito.when(VerificationByEmail.fromString("encodedVerification")).thenReturn(null);
+        Mockito.when(VerificationByEmail.fromString(encoder.decode(code))).thenReturn(null);
 
         String actualMessage = emailService.checkCode(code);
 
@@ -115,108 +110,112 @@ class EmailServiceTest {
     void checkCode_WhenUserNotFound_ThenReturnErrorMessage()
         throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
         InvalidKeyException {
-        String email = "test@example.com";
-        String code = "validCode";
-
+        String email = Instancio.of(String.class).generate(Select.allStrings(), x -> x.net().email()).create();
+        String code = encoder.encode("skdfjbn ưa,ẻm ndfnoewanrflsdnflskdfns");
         VerificationByEmail verification = new VerificationByEmail(email, LocalDateTime.now());
 
-        Mockito.when(encoder.decode(code)).thenReturn("encodedVerification");
-        Mockito.when(VerificationByEmail.fromString("encodedVerification")).thenReturn(verification);
-        Mockito.when(userRepository.findByEmailOrPhone(email)).thenReturn(null);
+        try (MockedStatic<VerificationByEmail> mockedVerification = Mockito.mockStatic(VerificationByEmail.class)) {
+            mockedVerification.when(() -> VerificationByEmail.fromString(encoder.decode(code)))
+                .thenReturn(verification);
 
-        String actualMessage = emailService.checkCode(code);
+            Mockito.when(userRepository.findByEmailOrPhone(eq(email))).thenReturn(null);
 
-        Assertions.assertEquals("Email chưa được đăng ký!", actualMessage);
+            String actualMessage = emailService.checkCode(code);
+
+            Assertions.assertEquals("Email chưa được đăng ký!", actualMessage);
+        }
     }
 
     @Test
     void checkCode_WhenCodeDoesNotMatch_ThenReturnErrorMessage()
         throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
         InvalidKeyException {
-        String email = "test@example.com";
-        String code = "validCode";
-        String incorrectVerificationCode = "incorrectCode";
-
+        String email = Instancio.of(String.class).generate(Select.allStrings(), x -> x.net().email()).create();
+        String code = encoder.encode("skdfjbn ưa,ẻm ndfnoewanrflsdnflskdfns");
         VerificationByEmail verification = new VerificationByEmail(email, LocalDateTime.now());
-        User user = new User();
-        user.setEmail(email);
-        user.setVerificationCode(incorrectVerificationCode);
+        User user = Instancio.of(User.class)
+            .set(field(User::getEmail), email)
+            .set(field(User::getVerificationCode), code + "fail")
+            .create();
 
-        Mockito.when(encoder.decode(code)).thenReturn("encodedVerification");
-        Mockito.when(VerificationByEmail.fromString("encodedVerification")).thenReturn(verification);
-        Mockito.when(userRepository.findByEmailOrPhone(email)).thenReturn(user);
+        try (MockedStatic<VerificationByEmail> mockedVerification = Mockito.mockStatic(VerificationByEmail.class)) {
+            mockedVerification.when(() -> VerificationByEmail.fromString(encoder.decode(code)))
+                .thenReturn(verification);
 
-        String actualMessage = emailService.checkCode(code);
+            Mockito.when(userRepository.findByEmailOrPhone(eq(email))).thenReturn(user);
 
-        Assertions.assertEquals("Lỗi trong quá trình xác thực!", actualMessage);
+            String actualMessage = emailService.checkCode(code);
+
+            Assertions.assertEquals("Lỗi trong quá trình xác thực!", actualMessage);
+        }
     }
-
     @Test
     void checkCode_WhenVerificationExpired_ThenReturnErrorMessage()
         throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
         InvalidKeyException {
-        String email = "test@example.com";
-        String code = "validCode";
+        String email = Instancio.of(String.class).generate(Select.allStrings(), x -> x.net().email()).create();
+        String code = encoder.encode("skdfjbn ưa,ẻm ndfnoewanrflsdnflskdfns");
+        VerificationByEmail verification = new VerificationByEmail(email, LocalDateTime.now().minusHours(1));
+        User user = Instancio.of(User.class)
+            .set(field(User::getEmail), email)
+            .set(field(User::getVerificationCode), code)
+            .create();
 
-        VerificationByEmail verification = new VerificationByEmail(email, LocalDateTime.now().minusSeconds(5000 + 1));
-        User user = new User();
-        user.setEmail(email);
-        user.setVerificationCode(code);
+        try (MockedStatic<VerificationByEmail> mockedVerification = Mockito.mockStatic(VerificationByEmail.class)) {
+            mockedVerification.when(() -> VerificationByEmail.fromString(encoder.decode(code)))
+                .thenReturn(verification);
 
-        Mockito.when(encoder.decode(code)).thenReturn("encodedVerification");
-        Mockito.when(VerificationByEmail.fromString("encodedVerification")).thenReturn(verification);
-        Mockito.when(userRepository.findByEmailOrPhone(email)).thenReturn(user);
+            Mockito.when(userRepository.findByEmailOrPhone(eq(email))).thenReturn(user);
 
-        String actualMessage = emailService.checkCode(code);
+            String actualMessage = emailService.checkCode(code);
 
-        Assertions.assertEquals("Vượt quá thời gian xác thực!", actualMessage);
-    }
-
-    @Test
-    void checkCode_WhenCodeIsValid_ThenReturnNull()
+            Assertions.assertEquals("Vượt quá thời gian xác thực!", actualMessage);
+        }
+}
+        @Test
+        void checkCode_WhenCodeIsValid_ThenReturnNull ()
         throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
-        InvalidKeyException {
-        String email = "test@example.com";
-        String code = "validCode";
+            InvalidKeyException {
+            String email = Instancio.of(String.class).generate(Select.allStrings(), x -> x.net().email()).create();
+            String code = encoder.encode("skdfjbn ưa,ẻm ndfnoewanrflsdnflskdfns");
+            VerificationByEmail verification = new VerificationByEmail(email, LocalDateTime.now());
+            User user = Instancio.of(User.class)
+                .set(field(User::getEmail), email)
+                .set(field(User::getVerificationCode), code)
+                .create();
 
-        VerificationByEmail verification = new VerificationByEmail(email, LocalDateTime.now());
-        User user = new User();
-        user.setEmail(email);
-        user.setVerificationCode(code);
+            try (MockedStatic<VerificationByEmail> mockedVerification = Mockito.mockStatic(VerificationByEmail.class)) {
+                mockedVerification.when(() -> VerificationByEmail.fromString(encoder.decode(code)))
+                    .thenReturn(verification);
 
-        Mockito.when(encoder.decode(code)).thenReturn("encodedVerification");
-        Mockito.when(VerificationByEmail.fromString("encodedVerification")).thenReturn(verification);
-        Mockito.when(userRepository.findByEmailOrPhone(email)).thenReturn(user);
+                Mockito.when(userRepository.findByEmailOrPhone(eq(email))).thenReturn(user);
 
-        String actualMessage = emailService.checkCode(code);
+                String actualMessage = emailService.checkCode(code);
 
-        Assertions.assertNull(actualMessage);
-    }
+                Assertions.assertNull(actualMessage);
+            }
+        }
 
     @Test
     void getEmailFromCode_WhenCodeIsValid_ThenReturnEmail()
         throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
         InvalidKeyException {
-        String email = "test@example.com";
-        String code = "validCode";
-
+        String email = Instancio.of(String.class).generate(Select.allStrings(), x -> x.net().email()).create();
         VerificationByEmail verification = new VerificationByEmail(email, LocalDateTime.now());
+        String code = encoder.encode(verification.toString());
+        try (MockedStatic<VerificationByEmail> mockedVerification = Mockito.mockStatic(VerificationByEmail.class)) {
+            mockedVerification.when(() -> VerificationByEmail.fromString(encoder.decode(code)))
+                .thenReturn(verification);
 
-        Mockito.when(encoder.decode(code)).thenReturn("encodedVerification");
-        Mockito.when(VerificationByEmail.fromString("encodedVerification")).thenReturn(verification);
+            String actualEmail = emailService.getEmailFromCode(code);
 
-        String actualEmail = emailService.getEmailFromCode(code);
-
-        Assertions.assertEquals(email, actualEmail);
+            Assertions.assertEquals(email, actualEmail);
+        }
     }
 
     @Test
-    void getEmailFromCode_WhenCodeIsInvalid_ThenReturnNull()
-        throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
-        InvalidKeyException {
+    void getEmailFromCode_WhenCodeIsInvalid_ThenReturnNull() {
         String invalidCode = "invalidCode";
-
-        Mockito.when(encoder.decode(invalidCode)).thenThrow(new IllegalArgumentException());
 
         String actualEmail = emailService.getEmailFromCode(invalidCode);
 
