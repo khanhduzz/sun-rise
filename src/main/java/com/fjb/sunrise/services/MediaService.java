@@ -20,7 +20,7 @@ public class MediaService {
     private final MediaRepository mediaRepository;
 
     @Transactional
-    public Media store(MultipartFile file){
+    public Media store(MultipartFile file) {
         if (file == null || file.getOriginalFilename() == null) {
             throw new BadRequestException("File is null");
         }

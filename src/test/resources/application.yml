@@ -40,3 +40,6 @@ default:
   encode-key: abcdefghabcdefgh #gitleaks:allow
   type-encode: AES #gitleaks:allow
   captcha-enable: false
+
+email:
+  verify-link: http://localhost:8086/sun/auth/verify?code="

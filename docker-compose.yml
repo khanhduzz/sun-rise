@@ -22,6 +22,7 @@ services:
       - RECAPTCHA_SITE_KEY
       - CAPTCHA_ENABLE=true
       - TIMING_SEND_EMAIL
+      - EMAIL_VERIFY
     ports:
       - ${SERVER_LOCAL_PORT}:${SERVER_LOCAL_PORT}
     volumes:
