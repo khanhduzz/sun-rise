@@ -9,8 +9,10 @@ import com.fjb.sunrise.enums.EStatus;
 import com.fjb.sunrise.exceptions.DuplicatedException;
 import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.mappers.UserMapper;
+import com.fjb.sunrise.models.Media;
 import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.UserRepository;
+import com.fjb.sunrise.services.MediaService;
 import com.fjb.sunrise.services.UserService;
 import com.fjb.sunrise.utils.Constants;
 import java.util.List;
@@ -25,10 +27,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     @Value("${default.admin-create-key}")
@@ -36,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MediaService mediaService;
 
     @Override
     public String checkRegister(RegisterRequest registerRequest) {
@@ -75,8 +80,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User createUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
         User user = mapper.toEntityCreateByAdmin(byAdminDTO);
+        if (byAdminDTO.getFileCode() != null) {
+            Media media = mediaService.store(byAdminDTO.getFileCode());
+            user.setFileCode(media.getFileCode());
+        }
         user.setUsername(byAdminDTO.getUsername());
         user.setPassword(passwordEncoder.encode(byAdminDTO.getPassword()));
         user.setFirstname(byAdminDTO.getFirstname());
@@ -91,10 +101,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean updateUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
         User user = userRepository.findById(byAdminDTO.getId())
             .orElseThrow(() -> new NotFoundException("User not found"));
-
+        if (byAdminDTO.getFileCode() != null) {
+            Media media = mediaService.store(byAdminDTO.getFileCode());
+            user.setFileCode(media.getFileCode());
+        }
         user.setUsername(byAdminDTO.getUsername());
         user.setFirstname(byAdminDTO.getFirstname());
         user.setLastname(byAdminDTO.getLastname());

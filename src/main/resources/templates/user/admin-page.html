@@ -52,6 +52,7 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Avatar</th>
                                     <th>Địa chỉ Email</th>
                                     <th>Trạng thái tài khoản</th>
                                     <th>Vai trò</th>
@@ -107,9 +108,6 @@
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}" type="application/javascript"></script>
 <script th:src="@{/js/sb-admin-2.min.js}" type="application/javascript"></script>
-<script th:src="@{/vendor/chart.js/Chart.min.js}" type="application/javascript"></script>
-<script th:src="@{/js/demo/chart-area-demo.js}" type="application/javascript"></script>
-<script th:src="@{/js/demo/chart-pie-demo.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}" type="application/javascript"></script>
 
@@ -158,46 +156,66 @@
     };
 
     const cols = [
-        {"data": "id"},
-        {"data": "email"},
-        {"data": "status", "render": function(data, type, row) {
+        {"data": "id", "className": "text-center align-middle"},
+        {
+            "data": "fileCode",
+            "render": function(data, type, row) {
+                return `<div class="d-flex justify-content-center align-items-center" style="height: 100%"><img src="/sun/medias/media/${data}" alt="user" style="width:50px;height:50px;"></div>`;
+            },
+            "className": "text-center align-middle"
+        },
+        {"data": "email", "className": "text-center align-middle"},
+        {
+            "data": "status",
+            "render": function(data, type, row) {
                 return translateStatus(data);
-            }
+            },
+            "className": "text-center align-middle"
         },
-        {"data": "role", "render": function(data, type, row) {
+        {
+            "data": "role",
+            "render": function(data, type, row) {
                 return translateRole(data);
-            }
+            },
+            "className": "text-center align-middle"
         },
-        {"data": null, "render": function(data, type, row) {
+        {
+            "data": null,
+            "render": function(data, type, row) {
                 if (row.id === currentUserId) {
                     return `
-                        <div class="btn-group" role="group" aria-label="User Actions">
-                            <button class="btn btn-outline-info" disabled>
-                                <i class="fas fa-info-circle"></i>
-                            </button>
-                            <button class="btn btn-outline-danger" disabled>
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                            <button class="btn btn-outline-warning" disabled>
-                                <i class="fas fa-ban"></i>
-                            </button>
+                        <div class="d-flex justify-content-center align-items-center" style="height: 100%">
+                            <div class="btn-group" role="group" aria-label="User Actions">
+                                <button class="btn btn-outline-info" disabled>
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" disabled>
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <button class="btn btn-outline-warning" disabled>
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            </div>
                         </div>`;
                 } else {
                     return `
-                        <div class="btn-group" role="group" aria-label="User Actions">
-                            <button class="btn btn-outline-info" onclick="viewUserDetail(${row.id})">
-                                <i class="fas fa-info-circle"></i>
-                            </button>
-                            <button class="btn btn-outline-danger" onclick="deleteUser(${row.id})">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                            <button class="btn ${row.status === 'ACTIVE' ? 'btn-outline-warning' : 'btn-outline-success'}"
-                                onclick="changeUserStatus(${row.id}, '${row.status === 'ACTIVE' ? 'deactivate' : 'activate'}')">
-                                <i class="fas ${row.status === 'ACTIVE' ? 'fa-ban' : 'fa-check-circle'}"></i>
-                            </button>
+                        <div class="d-flex justify-content-center align-items-center" style="height: 100%">
+                            <div class="btn-group" role="group" aria-label="User Actions">
+                                <button class="btn btn-outline-info" onclick="viewUserDetail(${row.id})">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="deleteUser(${row.id})">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <button class="btn ${row.status === 'ACTIVE' ? 'btn-outline-warning' : 'btn-outline-success'}"
+                                    onclick="changeUserStatus(${row.id}, '${row.status === 'ACTIVE' ? 'deactivate' : 'activate'}')">
+                                    <i class="fas ${row.status === 'ACTIVE' ? 'fa-ban' : 'fa-check-circle'}"></i>
+                                </button>
+                            </div>
                         </div>`;
                 }
-            }
+            },
+            "className": "text-center align-middle"
         }
     ];
 

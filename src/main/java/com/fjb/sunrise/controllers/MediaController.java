@@ -41,7 +41,7 @@ public class MediaController {
         } catch (Exception ignored) {
             throw new BadRequestException("Error when upload file");
         }
-        return new ModelAndView("redirect:/medias");
+        return new ModelAndView("redirect:/medias/files");
     }
 
     @GetMapping("/files")
@@ -79,6 +79,21 @@ public class MediaController {
     @GetMapping("/media/{fileCode}")
     public ResponseEntity<ByteArrayResource> getMedia(@PathVariable String fileCode) {
         Media media = mediaService.getMedia(fileCode);
+        if (media == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        ByteArrayResource resource = new ByteArrayResource(media.getData());
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + media.getName() + "\"")
+            .contentType(MediaType.parseMediaType(media.getType()))
+            .contentLength(media.getData().length)
+            .body(resource);
+    }
+
+    @GetMapping("/media/user")
+    public ResponseEntity<ByteArrayResource> getMediaUser() {
+        Media media = mediaService.getMediaOfUser();
         if (media == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
