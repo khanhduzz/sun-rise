@@ -19,6 +19,7 @@ public class MediaService {
 
     private final MediaRepository mediaRepository;
 
+    @Transactional
     public Media store(MultipartFile file){
         if (file == null || file.getOriginalFilename() == null) {
             throw new BadRequestException("File is null");
@@ -45,6 +46,7 @@ public class MediaService {
         return mediaRepository.findByFileCode(fileCode);
     }
 
+    @Transactional
     public Stream<Media> getAllMedias() {
         return mediaRepository.findAll().stream();
     }

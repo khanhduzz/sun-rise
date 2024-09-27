@@ -27,10 +27,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     @Value("${default.admin-create-key}")
@@ -78,6 +80,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User createUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
         User user = mapper.toEntityCreateByAdmin(byAdminDTO);
         if (byAdminDTO.getFileCode() != null) {
@@ -98,6 +101,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean updateUserByAdmin(CreateAndEditUserByAdminDTO byAdminDTO) {
         User user = userRepository.findById(byAdminDTO.getId())
             .orElseThrow(() -> new NotFoundException("User not found"));
@@ -198,6 +202,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean editUser(UserResponseDTO userResponseDTO) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmailOrPhone(name);
