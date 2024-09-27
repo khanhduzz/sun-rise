@@ -37,6 +37,11 @@ spring:
           security: DEBUG
           aop: DEBUG
 
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+
 server:
   port: ${SERVER_LOCAL_PORT}
   servlet:

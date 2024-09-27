@@ -65,5 +65,6 @@ public class WebServletConfig implements WebMvcConfigurer {
         registry.addViewController("/auth/login").setViewName(AUTH_VIEW);
         registry.addViewController("/auth/register").setViewName(AUTH_VIEW);
         registry.addViewController("/category/index").setViewName("category/index");
+        registry.addViewController("/medias").setViewName("media/index");
     }
 }
