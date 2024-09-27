@@ -30,13 +30,8 @@
                    onkeydown="">
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small" sec:authentication="name"></span>
                     <div sec:authorize="isAuthenticated()">
-                        <img alt="profile" class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}">
+                        <img alt="profile" class="img-profile rounded-circle" th:src="@{/medias/media/user}">
                     </div>
-<!--                    <div sec:authorize="isAuthenticated()">-->
-<!--                        <img alt="profile" class="img-profile rounded-circle"-->
-<!--                             th:src="@{/medias/media/${#authentication.principal.fileCode}}" />-->
-<!--                        File Code: <span th:text="${#authentication.principal.fileCode}"></span>-->
-<!--                    </div>-->
                 </a>
                 <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
