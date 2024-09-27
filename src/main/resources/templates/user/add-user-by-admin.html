@@ -54,12 +54,18 @@
                                     <label for="email" class="form-label font-weight-bold">Địa chỉ Email</label>
                                     <input id="email" type="email" class="form-control border-primary" th:field="*{email}" required>
                                     <div id="emailError" class="invalid-feedback">Email không hợp lệ</div>
+                                    <div th:if="${duplicateEmail}" class="text-danger">
+                                        <p th:text="${duplicateEmail}"></p>
+                                    </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="phone" class="form-label font-weight-bold">Số điện thoại</label>
                                     <input id="phone" type="text" class="form-control border-primary" th:field="*{phone}"
                                            pattern="^[0-9]{1,10}$" title="Số điện thoại chỉ được chứa tối đa 10 chữ số từ 0 đến 9." required>
                                     <div id="phoneError" class="invalid-feedback">Số điện thoại chỉ được chứa tối đa 10 chữ số từ 0 đến 9.</div>
+                                    <div th:if="${duplicatePhone}" class="text-danger">
+                                        <p th:text="${duplicatePhone}"></p>
+                                    </div>
                                 </div>
                             </div>
 

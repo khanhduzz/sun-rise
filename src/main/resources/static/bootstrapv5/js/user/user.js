@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Elements
+
     const password = document.getElementById('password');
     const confirmPassword = document.getElementById('confirmPassword');
     const passwordError = document.getElementById('passwordError');
@@ -7,30 +7,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const editUserForm = document.getElementById('editUserForm');
     const emailInput = document.getElementById('email');
     const phoneInput = document.getElementById('phone');
-    const emailError = document.getElementById('emailError');
-    const phoneError = document.getElementById('phoneError');
     const submitBtn = document.getElementById('submitBtn');
     const savePasswordBtn = document.getElementById('savePasswordBtn');
     const inputs = document.querySelectorAll('input, textarea, select');
     const requiredInputs = document.querySelectorAll('input[required]');
     let initialData = {};
 
-    // Lưu giá trị ban đầu của các trường nhập liệu
     document.querySelectorAll('input, select').forEach(input => {
         initialData[input.id] = input.value;
     });
 
-    // Functions
     function checkPasswordMatch() {
         if (password && confirmPassword) {
             if (password.value !== confirmPassword.value) {
                 confirmPassword.classList.add('is-invalid');
-//                passwordError.style.display = 'block';
                 passwordError.classList.remove('hidden');
                 return false;
             } else {
                 confirmPassword.classList.remove('is-invalid');
-//                passwordError.style.display = 'none';
                 passwordError.classList.add('hidden');
                 return true;
             }
@@ -59,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Event listeners
     if (createUserForm) {
         createUserForm.addEventListener('reset', () => {
             inputs.forEach(input => input.classList.remove('valid-input', 'invalid-input'));
@@ -80,6 +73,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 input.value = initialData[input.id];
                 input.classList.remove('is-invalid');
             });
+
+            document.querySelectorAll('.invalid-feedback, .text-danger').forEach(error => {
+                error.style.display = 'none';
+            });
         });
 
         editUserForm.addEventListener('submit', function (event) {
@@ -96,6 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+
     if (savePasswordBtn) {
         savePasswordBtn.addEventListener('click', function () {
             const newPassword = document.getElementById('newPassword').value;
@@ -109,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Common validation logic for email and phone
     [emailInput, phoneInput].forEach(input => {
         if (input) {
             input.addEventListener('input', () => {
@@ -119,7 +116,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Required inputs validation
     requiredInputs.forEach(input => {
         input.addEventListener('invalid', function () {
             // Phần xử lý cho email (type="email")
@@ -129,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else if (!this.value.includes('@')) {
                     this.setCustomValidity('Địa chỉ email phải bao gồm ký tự \'@\'.');
                 } else {
-                    this.setCustomValidity(''); // Xóa thông báo lỗi khi giá trị hợp lệ
+                    this.setCustomValidity('');
                 }
             }
 
@@ -143,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else if (this.value.length > 10) {
                     this.setCustomValidity('Số điện thoại không được quá 10 chữ số.');
                 } else {
-                    this.setCustomValidity(''); // Xóa thông báo lỗi khi giá trị hợp lệ
+                    this.setCustomValidity('');
                 }
             }
 
@@ -151,16 +147,16 @@ document.addEventListener("DOMContentLoaded", function () {
             else if (this.required && this.value === "") {
                 this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin.');
             } else {
-                this.setCustomValidity(''); // Xóa thông báo lỗi khi giá trị hợp lệ
+                this.setCustomValidity('');
             }
         });
 
         input.addEventListener('input', function () {
-            this.setCustomValidity(''); // Xóa thông báo khi người dùng bắt đầu nhập liệu
+            this.setCustomValidity('');
         });
     });
 
-    // DOM loaded handlers
+
     let message = new URLSearchParams(window.location.search).get('message');
     if (message === 'SuccessPassword') {
         $('#successPasswordModal').modal('show');
@@ -173,30 +169,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-function changeVietnamese() {
-    // Lấy phần tử với id "changeVietnamese"
-    var element = document.getElementById('changeVietnamese');
+document.addEventListener("DOMContentLoaded", function() {
+    var roleInput = document.getElementById('role');
+    var roleValue = roleInput.value;
 
-    // Kiểm tra nếu phần tử tồn tại
-    if (element) {
-        var role = 'ROLE_ADMIN'; // Hoặc lấy giá trị role từ đâu đó
-        var displayRole = '';
+    changeVietnamese(roleValue);
+});
 
-        // Kiểm tra giá trị role
-        if (role === 'ROLE_ADMIN') {
-            displayRole = 'Quản trị viên';
-        } else if (role === 'ROLE_USER') {
-            displayRole = 'Người dùng';
-        }
+document.addEventListener("DOMContentLoaded", function() {
+    var roleInput = document.getElementById('role');
+    var roleValue = roleInput.value;
 
-        // Cập nhật nội dung của phần tử với id "changeVietnamese"
-        element.textContent = displayRole;
+    var vietnameseRole = convertRoleToVietnamese(roleValue);
+
+    roleInput.value = vietnameseRole;
+});
+
+function convertRoleToVietnamese(role) {
+    if (role === 'USER') {
+        return 'Người dùng';
+    } else if (role === 'ADMIN') {
+        return 'Quản trị viên';
+    } else {
+        return 'Vai trò không xác định';
     }
 }
 
-// Gọi hàm sau khi DOM đã tải xong
 document.addEventListener('DOMContentLoaded', function() {
-    changeVietnamese(); // Gọi hàm khi trang đã sẵn sàng
+    changeVietnamese();
 });
 
 function togglePasswordVisibility(fieldId, eyeButton) {
