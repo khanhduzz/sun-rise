@@ -49,7 +49,7 @@ public class MediaController {
         List<MediaResponse> files = mediaService.getAllMedias().map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
-                .path("/files/")
+                .path("/medias/files/")
                 .path(dbFile.getFileCode())
                 .toUriString();
 
