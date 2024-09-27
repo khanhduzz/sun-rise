@@ -41,7 +41,7 @@ public class MediaController {
         } catch (Exception ignored) {
             throw new BadRequestException("Error when upload file");
         }
-        return new ModelAndView("redirect:/medias");
+        return new ModelAndView("redirect:/medias/files");
     }
 
     @GetMapping("/files")
