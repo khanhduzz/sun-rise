@@ -15,6 +15,8 @@ public class ReCaptchaServiceImpl implements ReCaptchaService {
     @Value("${default.captcha-enable}")
     private String captchaEnable;
 
+    private final RestTemplate restTemplate = new RestTemplate();
+
     private static final String URL = "https://www.google.com/recaptcha/api/siteverify";
 
     @Override
@@ -22,7 +24,6 @@ public class ReCaptchaServiceImpl implements ReCaptchaService {
         if (captchaEnable.equals("false")) {
             return true;
         }
-        RestTemplate restTemplate = new RestTemplate();
         String url = URL + "?secret=" + recaptchaSecretKey + "&response=" + recaptchaResponse;
         String response = restTemplate.postForObject(url, null, String.class);
         assert response != null;
