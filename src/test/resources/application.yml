@@ -15,6 +15,10 @@ spring:
           auth: true
           starttls:
             enable: true
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
 
 application:
   admin:
