@@ -126,19 +126,25 @@ public class TransactionServiceImpl implements TransactionService {
         final LocalDateTime lastDay = getFirstOrLastDateOfThisYear(true);
         final LocalDateTime firstDayOfThisMonth = getFirstDayOfThisMonth();
 
+        final long count = transactionRepository.count();
+        if (count == 0) {
+            response.setTotalThisYear("0");
+            response.setTotalThisMonth("0");
+            response.setTotalInputThisYear("0");
+        } else {
+            response.setTotalThisMonth(
+                    convertDoubleWithScientificNotationToDouble(
+                            transactionRepository.sumAmountInRange(firstDayOfThisMonth, lastDay)
+                    ));
 
-        response.setTotalThisMonth(
-                convertDoubleWithScientificNotationToDouble(
-                        transactionRepository.sumAmountInRange(firstDayOfThisMonth, lastDay)
-                ));
-
-        response.setTotalThisYear(
-                convertDoubleWithScientificNotationToDouble(
-                        transactionRepository.sumAmountInRange(firstDay, lastDay)
-                ));
-        response.setTotalInputThisYear(convertDoubleWithScientificNotationToDouble(
-                transactionRepository.sumTransactionTypeINInThisYear(ETrans.OUT, firstDay, lastDay)
-        ));
+            response.setTotalThisYear(
+                    convertDoubleWithScientificNotationToDouble(
+                            transactionRepository.sumAmountInRange(firstDay, lastDay)
+                    ));
+            response.setTotalInputThisYear(convertDoubleWithScientificNotationToDouble(
+                    transactionRepository.sumTransactionTypeINInThisYear(ETrans.OUT, firstDay, lastDay)
+            ));
+        }
         return response;
     }
 

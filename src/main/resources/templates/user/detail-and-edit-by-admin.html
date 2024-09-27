@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
+    <meta name="description" content="Trang chỉnh sửa thông tin người dùng">
     <meta name="author" content="">
 
-    <title>Chỉnh sửa thông tin người dùng</title>
+    <title>Budgeting Service</title>
 
     <!-- Custom fonts for this template-->
     <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
@@ -44,45 +44,44 @@
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Tên người dùng</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{username}">
+                                    <label for="username" class="fw-bold">Tên người dùng</label>
+                                    <input id="username" type="text" class="form-control border-primary" th:field="*{username}">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Họ</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{firstname}">
+                                    <label for="firstname" class="fw-bold">Họ</label>
+                                    <input id="firstname" type="text" class="form-control border-primary" th:field="*{firstname}">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Tên</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{lastname}">
+                                    <label for="lastname" class="fw-bold">Tên</label>
+                                    <input id="lastname" type="text" class="form-control border-primary" th:field="*{lastname}">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Địa chỉ Email</label>
+                                    <label for="email" class="fw-bold">Địa chỉ Email</label>
                                     <input id="email" type="email" class="form-control border-primary" th:field="*{email}">
                                     <div id="emailError" class="invalid-feedback">Email không hợp lệ</div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Số điện thoại</label>
-                                    <input id="phone" type="text" class="form-control border-primary" th:field="*{phone}"
-                                           pattern="^[0-9]{1,9}$" title="Số điện thoại chỉ được chứa tối đa 9 chữ số từ 0 đến 9.">
-                                    <div id="phoneError" class="invalid-feedback">Số điện thoại chỉ được chứa tối đa 9 chữ số từ 0 đến 9.</div>
+                                    <label for="phone" class="fw-bold">Số điện thoại</label>
+                                    <input id="phone" type="text" class="form-control border-primary" th:field="*{phone}">
+                                    <div id="phoneError" class="invalid-feedback">Số điện thoại chỉ được chứa tối đa 10 chữ số từ 0 đến 9.</div>
                                 </div>
 
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Vai trò</label>
-                                    <select class="form-select border-primary" th:field="*{role}">
+                                    <label for="role" class="fw-bold">Vai trò</label>
+                                    <select id="role" class="form-select border-primary" th:field="*{role}">
                                         <option value="ADMIN" th:selected="${userDetail.role == 'ROLE_ADMIN'}">Quản trị viên</option>
                                         <option value="USER" th:selected="${userDetail.role == 'ROLE_USER'}">Người dùng</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Trạng thái tài khoản</label>
-                                    <select class="form-select border-primary" th:field="*{status}">
+                                    <label for="status" class="fw-bold">Trạng thái tài khoản</label>
+                                    <select id="status" class="form-select border-primary" th:field="*{status}">
                                         <option value="ACTIVE" th:selected="${userDetail.status == 'ACTIVE'}">Hoạt động</option>
                                         <option value="NOT_ACTIVE" th:selected="${userDetail.status == 'NOT_ACTIVE'}">Không hoạt động</option>
                                     </select>
@@ -90,25 +89,26 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Người khởi tạo</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{createdBy}" readonly>
+                                    <label for="create" class="fw-bold">Người khởi tạo</label>
+                                    <input id="create" type="text" class="form-control border-primary" th:field="*{createdBy}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Ngày khởi tạo</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{createdDate}" readonly>
+                                    <label for="createDate" class="fw-bold">Ngày khởi tạo</label>
+                                    <input id="createDate" type="text" class="form-control border-primary" th:field="*{createdDate}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Chỉnh sửa lần cuối bởi</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{lastModifiedBy}" readonly>
+                                    <label for="modify" class="fw-bold">Chỉnh sửa lần cuối bởi</label>
+                                    <input id="modify" type="text" class="form-control border-primary" th:field="*{lastModifiedBy}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold">Ngày chỉnh sửa lần cuối</label>
-                                    <input type="text" class="form-control border-primary" th:field="*{lastModifiedDate}" readonly>
+                                    <label for="modifyDate" class="fw-bold">Ngày chỉnh sửa lần cuối</label>
+                                    <input id="modifyDate" type="text" class="form-control border-primary" th:field="*{lastModifiedDate}" readonly>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mt-3">
-                                <button id="submitBtn" type="submit" class="btn btn-success me-2" disabled>Lưu thay đổi</button>
-                                <button type="reset" class="btn btn-secondary">Hủy bỏ</button>
+                                <button id="submitBtn" type="submit" class="btn btn-success me-4">Lưu thay đổi</button>
+                                <button type="reset" class="btn btn-secondary me-4">Hủy bỏ</button>
+                                <button type="button" class="btn btn-primary me-4" onclick="history.back()">Trở lại</button>
                             </div>
                         </form>
                     </div>
