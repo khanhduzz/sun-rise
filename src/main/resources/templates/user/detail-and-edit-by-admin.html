@@ -73,15 +73,15 @@
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="role" class="fw-bold">Vai trò</label>
-                                    <select id="role" class="form-select border-primary" th:field="*{role}">
+                                    <label for="roleEdit" class="fw-bold">Vai trò</label>
+                                    <select id="roleEdit" class="form-select border-primary" th:field="*{role}">
                                         <option value="ADMIN" th:selected="${userDetail.role == 'ROLE_ADMIN'}">Quản trị viên</option>
                                         <option value="USER" th:selected="${userDetail.role == 'ROLE_USER'}">Người dùng</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="status" class="fw-bold">Trạng thái tài khoản</label>
-                                    <select id="status" class="form-select border-primary" th:field="*{status}">
+                                    <label for="statusEdit" class="fw-bold">Trạng thái tài khoản</label>
+                                    <select id="statusEdit" class="form-select border-primary" th:field="*{status}">
                                         <option value="ACTIVE" th:selected="${userDetail.status == 'ACTIVE'}">Hoạt động</option>
                                         <option value="NOT_ACTIVE" th:selected="${userDetail.status == 'NOT_ACTIVE'}">Không hoạt động</option>
                                     </select>
