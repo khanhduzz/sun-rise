@@ -21,6 +21,11 @@ const passwordLogin = document.getElementById("password-login");
 const buttonSubmitLogin = document.getElementById("submit-button-login");
 const buttonSendMail = document.getElementById("btn-sendMail");
 const buttonChangePassword = document.getElementById("submit-new-password");
+const buttonCreateUserByAdmin = document.getElementById("submit-button-register-by-admin");
+const buttonEditUserByAdmin = document.getElementById("submit-button-edit-by-admin");
+const buttonEditInfor = document.getElementById("button-edit-infor");
+const newPasswordEditInfor= document.getElementById("newPassword");
+const newPasswordConfirmEditInfor= document.getElementById("confirmNewPassword");
 
 function addValidationListeners(inputElement, validationFunction) {
     if (inputElement != null) {
@@ -40,6 +45,8 @@ addValidationListeners(phone, validPhone);
 addValidationListeners(passwordRegister, validPassword);
 addValidationListeners(rePasswordRegister, (element) => validRePassword(passwordRegister, element));
 addValidationListeners(username, validUsername);
+addValidationListeners(newPasswordEditInfor, validPassword);
+addValidationListeners(newPasswordConfirmEditInfor, (element) => validRePassword(newPasswordEditInfor, element));
 
 function validName(element) {
     const value = element.value;
@@ -222,6 +229,7 @@ function hideMessage(inputField) {
         popover.classList.remove('show');
     }
 }
+
 buttonSubmitRegister?.addEventListener("mouseover", () => changeTypeSubmit(buttonSubmitRegister,
     validName(firstname) && validName(lastname) && validEmail(email)
     && validPhone(phone) && validPassword(passwordRegister)
@@ -234,6 +242,18 @@ buttonSendMail?.addEventListener("mouseover", () => changeTypeSubmit(buttonSendM
 
 buttonChangePassword?.addEventListener("mouseover", () =>
     changeTypeSubmit(buttonChangePassword, validPassword(passwordRegister) && validRePassword(passwordRegister, rePasswordRegister)));
+
+buttonCreateUserByAdmin?.addEventListener("mouseover", () => changeTypeSubmit(buttonCreateUserByAdmin,
+    validName(firstname) && validName(lastname) && validEmail(email)
+    && validPhone(phone) && validPassword(passwordRegister)
+    && validRePassword(passwordRegister, rePasswordRegister)));
+
+buttonEditUserByAdmin?.addEventListener("mouseover", () => changeTypeSubmit(buttonEditUserByAdmin,
+    validName(firstname) && validName(lastname) && validEmail(email)
+    && validPhone(phone)));
+
+buttonEditInfor?.addEventListener("mouseover", () => changeTypeSubmit(buttonEditInfor,
+    validName(firstname) && validName(lastname)));
 
 function changeTypeSubmit(element, isValid) {
     if(isValid) {

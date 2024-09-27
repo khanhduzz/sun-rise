@@ -20,6 +20,7 @@
     <!-- Bootstrap 5 -->
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/auth/style.css}" type="text/css">
 </head>
 
 <body id="page-top">
@@ -34,6 +35,23 @@
 
             <!-- Begin Page Content -->
             <div class="container my-5">
+                <div class="modal fade" id="popup" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5">NHẮC NHỞ</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Vui lòng điền chính xác và đầy đủ thông tin!</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="button" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row justify-content-center">
                     <div class="col-md-6">
                         <div class="card shadow mb-4">
@@ -42,7 +60,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary text-center">Chỉnh sửa thông tin</h6>
                             </div>
                             <div class="card-body">
-                                <form id="editUserForm" th:action="@{/user/edit-infor}" th:object="${userInfor}" method="POST">
+                                <form th:action="@{/user/edit-infor}" th:object="${userInfor}" method="POST">
                                     <input type="hidden" th:field="*{id}">
                                     <div class="mb-3">
                                         <div class="input-group">
@@ -54,8 +72,10 @@
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">Họ</span>
                                         <input type="text" class="form-control" aria-label="Họ" th:field="*{firstname}">
+                                        <div id="message-firstname" class="popover"></div>
                                         <span class="input-group-text">Tên</span>
                                         <input type="text" class="form-control" aria-label="Tên" th:field="*{lastname}">
+                                        <div id="message-lastname" class="popover"></div>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
@@ -68,7 +88,7 @@
                                     </div>
                                     <!-- Button trigger modal -->
                                     <hr>
-                                    <button type="button" class="btn btn-success d-block mx-auto" data-toggle="modal" data-target="#passwordModal">Đổi mật khẩu</button>
+                                    <button style="width: 150px !important;" type="button" class="btn btn-success d-block mx-auto" data-toggle="modal" data-target="#passwordModal">Đổi mật khẩu</button>
                                     <hr>
                                     <div class="row">
                                         <div class="mb-3">
@@ -90,8 +110,8 @@
                                     </div>
                                     <hr>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary me-4">Lưu thay đổi</button>
-                                        <button type="button" class="btn btn-warning me-4" onclick="history.back()">Trở lại</button>
+                                        <button id="button-edit-infor" style="width: 200px !important;" type="submit" class="btn btn-primary me-4">Lưu thay đổi</button>
+                                        <button style="width: 200px !important;" type="button" class="btn btn-warning me-4" onclick="history.back()">Trở lại</button>
                                     </div>
                                 </form>
                             </div>
@@ -113,7 +133,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="passwordModalLabel">Đổi mật khẩu</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button style="max-width: fit-content !important;" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -124,9 +144,6 @@
                         <div class="input-group">
                             <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('oldPassword', this)">
-                                    <i class="fas fa-eye"></i>
-                                </button>
                             </div>
                         </div>
                         <small id="oldPasswordError" class="text-danger" style="display: none;">Mật khẩu cũ không đúng!</small>
@@ -135,30 +152,21 @@
                         <label for="newPassword" class="form-label">Mật khẩu mới</label>
                         <div class="input-group">
                             <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('newPassword', this)">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
+                            <div id="message-newPassword" class="popover"></div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="confirmNewPassword" class="form-label">Nhập lại mật khẩu mới</label>
                         <div class="input-group">
                             <input type="password" class="form-control" id="confirmNewPassword" name="confirmPassword" required>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('confirmNewPassword', this)">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
+                            <div id="message-confirmNewPassword" class="popover"></div>
                         </div>
-                        <small id="newPasswordError" class="text-danger" style="display: none;">Mật khẩu không khớp!</small>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
-                <button type="button" class="btn btn-primary" id="savePasswordBtn">Lưu thay đổi</button>
+            <div class="d-flex justify-content-center align-items-center m-3">
+                <button style="margin-right: 20px; width: 150px !important;" type="button" class="btn btn-primary" id="savePasswordBtn">Lưu thay đổi</button>
+                <button style="width: 150px !important;" type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
             </div>
         </div>
     </div>
@@ -170,7 +178,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="successPasswordModalLabel">Đổi mật khẩu thành công</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button style="max-width: fit-content !important;" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -190,7 +198,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="successChangeInfoModalLabel">Đổi thông tin thành công</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button style="max-width: fit-content !important;" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -198,7 +206,7 @@
                 <p>Thông tin của bạn đã được thay đổi thành công!</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="history.back()">Xác nhận</button>
+                <button style="max-width: fit-content !important;" type="button" class="btn btn-success" data-dismiss="modal" onclick="history.back()">Xác nhận</button>
             </div>
         </div>
     </div>
@@ -211,7 +219,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">NHẮC NHỞ</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button style="max-width: fit-content !important;" type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -231,5 +239,8 @@
 <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
 <script th:src="@{/js/user/user.js}" type="application/javascript"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/auth/action.js}"></script>
+<script type="text/javascript" th:src="@{/js/auth/valid.js}"></script>
 </body>
 </html>
