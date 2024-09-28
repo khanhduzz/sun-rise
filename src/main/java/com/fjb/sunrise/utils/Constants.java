@@ -32,6 +32,8 @@ public class Constants {
 
         public static final String CATEGORY_INDEX = "category/index";
         public static final String CATEGORY_REDIRECT = "redirect:/category/index";
+        public static final String HOME_REDIRECT = "redirect:/transaction/create";
+
 
         public static final String TRANSACTION_INDEX = "transaction/index";
         public static final String CATEGORIES = "categories";

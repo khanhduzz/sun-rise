@@ -215,8 +215,6 @@ class CategoryServiceTest {
         }
     }
 
-
-
     @Nested
     class DisableCategoryTests {
         @Test
@@ -249,7 +247,6 @@ class CategoryServiceTest {
         }
     }
 
-
     @Nested
     class EnableCategoryTests {
         @Test
@@ -281,7 +278,6 @@ class CategoryServiceTest {
             verify(categoryRepository, never()).save(any(Category.class));
         }
     }
-
 
     @Test
     public void testGetCategoryList() {
