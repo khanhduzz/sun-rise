@@ -35,23 +35,7 @@
 
             <!-- Begin Page Content -->
             <div class="container my-5">
-                <div class="modal fade" id="popup" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5">NHẮC NHỞ</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Vui lòng điền chính xác và đầy đủ thông tin!</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="button" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <th:block th:replace="~{fragmentUser :: errorPopup}"></th:block>
                 <div class="row justify-content-center">
                     <div class="col-md-6">
                         <div class="card shadow mb-4">
@@ -64,8 +48,8 @@
                                     <input type="hidden" th:field="*{id}">
                                     <div class="mb-3">
                                         <div class="input-group">
-                                            <span class="input-group-text">Tên người dùng</span>
-                                            <input type="text" class="form-control" aria-describedby="basic-addon3 basic-addon4" th:field="*{username}">
+                                            <label for="username" class="input-group-text">Tên người dùng</label>
+                                            <input id="username" type="text" class="form-control" aria-describedby="basic-addon3 basic-addon4" th:field="*{username}">
                                         </div>
                                     </div>
                                     <hr>
@@ -86,10 +70,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Button trigger modal -->
-                                    <hr>
-                                    <button style="width: 150px !important;" type="button" class="btn btn-success d-block mx-auto" data-toggle="modal" data-target="#passwordModal">Đổi mật khẩu</button>
-                                    <hr>
+                                   <hr>
                                     <div class="row">
                                         <div class="mb-3">
                                             <div class="input-group">
@@ -110,8 +91,10 @@
                                     </div>
                                     <hr>
                                     <div class="text-center">
-                                        <button id="button-edit-infor" style="width: 200px !important;" type="submit" class="btn btn-primary me-4">Lưu thay đổi</button>
-                                        <button style="width: 200px !important;" type="button" class="btn btn-warning me-4" onclick="history.back()">Trở lại</button>
+                                        <button id="button-edit-infor" style="width: 150px !important;" type="submit" class="btn btn-primary me-3">Lưu thay đổi</button>
+                                        <button style="width: 150px !important;" type="button" class="btn btn-warning me-3" onclick="history.back()">Trở lại</button>
+                                        <!-- Button trigger modal -->
+                                        <button style="width: 150px !important;" type="button" class="btn btn-success me-3  " data-toggle="modal" data-target="#passwordModal">Đổi mật khẩu</button>
                                     </div>
                                 </form>
                             </div>
