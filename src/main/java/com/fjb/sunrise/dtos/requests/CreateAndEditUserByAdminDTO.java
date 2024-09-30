@@ -3,6 +3,7 @@ package com.fjb.sunrise.dtos.requests;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -20,4 +21,5 @@ public class CreateAndEditUserByAdminDTO {
     private LocalDateTime createdDate;
     private String lastModifiedBy;
     private LocalDateTime lastModifiedDate;
+    private MultipartFile fileCode;
 }

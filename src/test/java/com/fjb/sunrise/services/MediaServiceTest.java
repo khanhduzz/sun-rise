@@ -2,19 +2,25 @@ package com.fjb.sunrise.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import com.fjb.sunrise.exceptions.BadRequestException;
+import com.fjb.sunrise.exceptions.NotFoundException;
 import com.fjb.sunrise.models.Media;
+import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.MediaRepository;
+import com.fjb.sunrise.repositories.UserRepository;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -27,11 +33,15 @@ class MediaServiceTest {
     @Mock
     private MediaRepository mediaRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
     @InjectMocks
     private MediaService mediaService;
 
     private Media mockMedia;
     private MultipartFile mockFile;
+    private User user;
 
     void mockFile() throws IOException {
         mockFile = mock(MultipartFile.class);
@@ -48,6 +58,16 @@ class MediaServiceTest {
             .fileCode(UUID.randomUUID().toString())
             .data("mock data".getBytes())
             .build();
+    }
+
+    void initUserData() {
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn("test@example.com");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        user = new User();
+        user.setEmail("test@example.com");
+        user.setFileCode("file123");
     }
 
     @Test
@@ -117,5 +137,39 @@ class MediaServiceTest {
 
         assertNotNull(retrievedMedia);
         assertEquals(mockMedia.getName(), retrievedMedia.getName());
+    }
+
+    @Test
+    public void testGetMediaOfUser_UserExistsWithFileCode() {
+        initUserData();
+        when(userRepository.findByEmailOrPhone("test@example.com")).thenReturn(user);
+        Media expectedMedia = new Media();
+
+        when(mediaService.getMedia(user.getFileCode())).thenReturn(expectedMedia);
+
+        Media actualMedia = mediaService.getMediaOfUser();
+
+        assertNotNull(actualMedia);
+        assertEquals(expectedMedia, actualMedia);
+        verify(userRepository).findByEmailOrPhone("test@example.com");
+    }
+
+    @Test
+    public void testGetMediaOfUser_UserExistsWithoutFileCode() {
+        initUserData();
+        user.setFileCode(null);
+        Media media = new Media();
+        when(userRepository.findByEmailOrPhone("test@example.com")).thenReturn(user);
+
+        Media actualMedia = mediaService.getMediaOfUser();
+
+        assertNotNull(actualMedia);
+    }
+
+    @Test
+    public void testGetMediaOfUser_UserNotFound() {
+        when(userRepository.findByEmailOrPhone("test@example.com")).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> mediaService.getMediaOfUser());
     }
 }

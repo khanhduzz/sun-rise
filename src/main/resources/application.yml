@@ -71,3 +71,6 @@ default:
   recaptcha-secret-key: ${RECAPTCHA_SECRET_KEY}
   recaptcha-site-key: ${RECAPTCHA_SITE_KEY}
   captcha-enable: ${CAPTCHA_ENABLE}
+
+email:
+  verify-link: ${EMAIL_VERIFY}

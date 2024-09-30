@@ -42,9 +42,13 @@ public class UserController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/edit-infor")
-    public ModelAndView editUserInfo(@ModelAttribute("userInfor") UserResponseDTO userResponseDTO) {
+    public ModelAndView editUserInfo(@ModelAttribute("userInfor") UserResponseDTO userResponseDTO,
+                                     BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         boolean editInfor = userService.editUser(userResponseDTO);
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("redirect:/user/edit-infor");
+        }
         if (editInfor) {
             modelAndView.setViewName(Constants.ApiConstant.USER_CHANGE_INFO_SUCCESS);
         } else {
