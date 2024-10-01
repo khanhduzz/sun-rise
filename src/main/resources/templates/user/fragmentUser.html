@@ -31,6 +31,15 @@
     <script type="text/javascript" th:src="@{/js/auth/valid.js}"></script>
 </div>
 
+<th:block th:fragment="inputUsername">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label font-weight-bold" for="username">Tên người dùng</label>
+            <input type="text" th:field="*{username}" class="form-control border-primary" id="username">
+        </div>
+    </div>
+</th:block>
+
 <th:block th:fragment="inputFristAndLastName">
     <div class="col-md-6 mb-3">
         <label for="firstname" class="fw-bold">Họ</label>
@@ -42,6 +51,18 @@
         <input id="lastname" type="text" class="form-control border-primary" th:field="*{lastname}">
         <div id="message-lastname" class="popover"></div>
     </div>
+</th:block>
+
+<th:block th:fragment="inputEmail">
+    <label for="email" class="form-label font-weight-bold">Địa chỉ Email</label>
+    <input id="email" type="email" class="form-control border-primary" th:field="*{email}">
+    <div id="message-email" class="popover"></div>
+</th:block>
+
+<th:block th:fragment="inputPhone">
+    <label for="phone" class="form-label font-weight-bold">Số điện thoại</label>
+    <input id="phone" type="text" class="form-control border-primary" th:field="*{phone}">
+    <div id="message-phone" class="popover"></div>
 </th:block>
 </body>
 </html>

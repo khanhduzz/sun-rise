@@ -35,27 +35,18 @@
                     </div>
                     <div class="card-body">
                         <form id="createUserForm" th:action="@{/user/add-user-by-admin}" th:object="${newUser}" method="POST">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label font-weight-bold" for="username">Tên người dùng</label>
-                                    <input type="text" th:field="*{username}" class="form-control border-primary" id="username">
-                                </div>
-                            </div>
+                            <th:block th:replace="~{/user/fragmentUser :: inputUsername}"></th:block>
 
                             <div class="row">
                                 <th:block th:replace="~{/user/fragmentUser :: inputFristAndLastName}"></th:block>
                                 <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label font-weight-bold">Địa chỉ Email</label>
-                                    <input id="email" type="email" class="form-control border-primary" th:field="*{email}">
-                                    <div id="message-email" class="popover"></div>
+                                    <th:block th:replace="~{/user/fragmentUser :: inputEmail}"></th:block>
                                     <div th:if="${duplicateEmail}" class="text-danger">
                                         <p th:text="${duplicateEmail}"></p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="phone" class="form-label font-weight-bold">Số điện thoại</label>
-                                    <input id="phone" type="text" class="form-control border-primary" th:field="*{phone}">
-                                    <div id="message-phone" class="popover"></div>
+                                    <th:block th:replace="~{/user/fragmentUser :: inputPhone}"></th:block>
                                     <div th:if="${duplicatePhone}" class="text-danger">
                                         <p th:text="${duplicatePhone}"></p>
                                     </div>

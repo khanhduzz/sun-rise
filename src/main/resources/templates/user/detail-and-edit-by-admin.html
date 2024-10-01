@@ -43,23 +43,14 @@
                         <form th:action="@{/user/detail-and-edit/{id}(id=${userDetail.id})}" th:object="${userDetail}" method="post"
                               enctype="multipart/form-data">
                             <input type="hidden" th:field="*{id}">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="username" class="fw-bold">Tên người dùng</label>
-                                    <input id="username" type="text" class="form-control border-primary" th:field="*{username}">
-                                </div>
-                            </div>
+                            <th:block th:replace="~{/user/fragmentUser :: inputUsername}"></th:block>
                             <div class="row">
                                 <th:block th:replace="~{/user/fragmentUser :: inputFristAndLastName}"></th:block>
                                 <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label font-weight-bold">Địa chỉ Email</label>
-                                    <input id="email" type="email" class="form-control border-primary" th:field="*{email}">
-                                    <div id="message-email" class="popover"></div>
+                                    <th:block th:replace="~{/user/fragmentUser :: inputEmail}"></th:block>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="phone" class="form-label font-weight-bold">Số điện thoại</label>
-                                    <input id="phone" type="text" class="form-control border-primary" th:field="*{phone}">
-                                    <div id="message-phone" class="popover"></div>
+                                    <th:block th:replace="~{/user/fragmentUser :: inputPhone}"></th:block>
                                 </div>
                             </div>
 
