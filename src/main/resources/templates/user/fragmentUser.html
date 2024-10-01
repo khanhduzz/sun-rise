@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Fragment</title>
+<body>
+
+<th:block>
+    <div th:fragment="cardHeader(title)">
+        <div class="card-header py-3 text-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="font-size: 1.5rem;">
+                <span th:text="${title}"></span>
+            </h6>
+        </div>
+    </div>
+</th:block>
+
+<div th:fragment="errorPopup">
+    <div class="modal fade" id="popup" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">NHẮC NHỞ</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Vui lòng điền chính xác và đầy đủ thông tin!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="button" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="scripts">
+    <script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
+    <script th:src="@{/js/user/user.js}" type="application/javascript"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/auth/action.js}"></script>
+    <script type="text/javascript" th:src="@{/js/auth/valid.js}"></script>
+</div>
+
+<th:block th:fragment="inputUsername">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label font-weight-bold" for="username">Tên người dùng</label>
+            <input type="text" th:field="*{username}" class="form-control border-primary" id="username">
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="inputFristAndLastName">
+    <div class="col-md-6 mb-3">
+        <label for="firstname" class="fw-bold">Họ</label>
+        <input id="firstname" type="text" class="form-control border-primary" th:field="*{firstname}">
+        <div id="message-firstname" class="popover"></div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="lastname" class="fw-bold">Tên</label>
+        <input id="lastname" type="text" class="form-control border-primary" th:field="*{lastname}">
+        <div id="message-lastname" class="popover"></div>
+    </div>
+</th:block>
+
+<th:block th:fragment="inputEmail">
+    <label for="email" class="form-label font-weight-bold">Địa chỉ Email</label>
+    <input id="email" type="email" class="form-control border-primary" th:field="*{email}">
+    <div id="message-email" class="popover"></div>
+</th:block>
+
+<th:block th:fragment="inputPhone">
+    <label for="phone" class="form-label font-weight-bold">Số điện thoại</label>
+    <input id="phone" type="text" class="form-control border-primary" th:field="*{phone}">
+    <div id="message-phone" class="popover"></div>
+</th:block>
+
+<th:block th:fragment="formButtons(submitButtonId, submitText)">
+    <div class="d-flex justify-content-center mt-3">
+        <button th:id="${submitButtonId}" type="submit" class="btn btn-success me-4">
+            <span th:text="${submitText}"></span>
+        </button>
+        <button type="reset" class="btn btn-secondary me-4">Hủy bỏ</button>
+        <button type="button" class="btn btn-primary me-4" onclick="history.back()">Trở lại</button>
+    </div>
+</th:block>
+</body>
+</html>

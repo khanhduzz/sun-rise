@@ -58,11 +58,9 @@ public class Constants {
         public static final String USER_CHANGE_INFO_SUCCESS = "redirect:/user/edit-infor?message=SuccessInfo";
         public static final String USER_CHANGE_PASS_WORD_SUCCESS = "redirect:/user/edit-infor?message=SuccessPassword";
         public static final String USER_CHANGE_PASS_WORD_FAIL = "redirect:/user/edit-infor";
-        public static final String USER_REDIRECT = "redirect:/user/edit-infor";
 
         public static final String MESSAGE = "message";
         public static final String VALUE = "value";
-
 
         public static final String CODE_200 = "200";
         public static final String OK = "Ok";

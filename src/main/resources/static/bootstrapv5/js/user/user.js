@@ -53,20 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    if (createUserForm) {
-        createUserForm.addEventListener('reset', () => {
-            inputs.forEach(input => input.classList.remove('valid-input', 'invalid-input'));
-        });
-
-        createUserForm.addEventListener('submit', function (event) {
-            if (!checkPasswordMatch()) {
-                event.preventDefault();
-            }
-        });
-
-        confirmPassword.addEventListener('input', checkPasswordMatch);
-    }
-
     if (editUserForm) {
         editUserForm.addEventListener('reset', () => {
             document.querySelectorAll('input, select').forEach(input => {
@@ -93,7 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-
     if (savePasswordBtn) {
         savePasswordBtn.addEventListener('click', function () {
             const newPassword = document.getElementById('newPassword').value;
@@ -106,55 +91,6 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('changePasswordForm').submit();
         });
     }
-
-    [emailInput, phoneInput].forEach(input => {
-        if (input) {
-            input.addEventListener('input', () => {
-                checkValidation(input, input.id === 'email' ? emailError : phoneError);
-                checkIfChanged();
-            });
-        }
-    });
-
-    requiredInputs.forEach(input => {
-        input.addEventListener('invalid', function () {
-            // Phần xử lý cho email (type="email")
-            if (this.id === 'email') {
-                if (this.value === "") {
-                    this.setCustomValidity('Xin vui lòng nhập địa chỉ email.');
-                } else if (!this.value.includes('@')) {
-                    this.setCustomValidity('Địa chỉ email phải bao gồm ký tự \'@\'.');
-                } else {
-                    this.setCustomValidity('');
-                }
-            }
-
-            // Phần xử lý cho số điện thoại (id="phone")
-            else if (this.id === 'phone') {
-                const phonePattern = /^\d+$/;
-                if (this.value === "") {
-                    this.setCustomValidity('Xin vui lòng nhập số điện thoại.');
-                } else if (!phonePattern.test(this.value)) {
-                    this.setCustomValidity('Số điện thoại chỉ được chứa các chữ số.');
-                } else if (this.value.length > 10) {
-                    this.setCustomValidity('Số điện thoại không được quá 10 chữ số.');
-                } else {
-                    this.setCustomValidity('');
-                }
-            }
-
-            // Phần xử lý cho các trường khác
-            else if (this.required && this.value === "") {
-                this.setCustomValidity('Xin vui lòng điền đầy đủ thông tin.');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-
-        input.addEventListener('input', function () {
-            this.setCustomValidity('');
-        });
-    });
 
 
     let message = new URLSearchParams(window.location.search).get('message');
@@ -169,40 +105,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    var roleInput = document.getElementById('role');
-    var roleValue = roleInput.value;
-
-    changeVietnamese(roleValue);
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    var roleInput = document.getElementById('role');
-    var roleValue = roleInput.value;
-
-    var vietnameseRole = convertRoleToVietnamese(roleValue);
-
-    roleInput.value = vietnameseRole;
-});
-
-function convertRoleToVietnamese(role) {
-    if (role === 'USER') {
-        return 'Người dùng';
-    } else if (role === 'ADMIN') {
-        return 'Quản trị viên';
-    } else {
-        return 'Vai trò không xác định';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    changeVietnamese();
-});
-
-function togglePasswordVisibility(fieldId, eyeButton) {
-    var field = document.getElementById(fieldId);
-    field.type = (field.type === "password") ? "text" : "password";
-    eyeButton.innerHTML = (field.type === "password")
-        ? '<i class="fas fa-eye"></i>'
-        : '<i class="fas fa-eye-slash"></i>';
-}
