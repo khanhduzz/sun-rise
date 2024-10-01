@@ -3,6 +3,17 @@
 <head>
     <title>Fragment</title>
 <body>
+
+<th:block>
+    <div th:fragment="cardHeader(title)">
+        <div class="card-header py-3 text-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="font-size: 1.5rem;">
+                <span th:text="${title}"></span>
+            </h6>
+        </div>
+    </div>
+</th:block>
+
 <div th:fragment="errorPopup">
     <div class="modal fade" id="popup" tabindex="-1">
         <div class="modal-dialog">
@@ -63,6 +74,16 @@
     <label for="phone" class="form-label font-weight-bold">Số điện thoại</label>
     <input id="phone" type="text" class="form-control border-primary" th:field="*{phone}">
     <div id="message-phone" class="popover"></div>
+</th:block>
+
+<th:block th:fragment="formButtons(submitButtonId, submitText)">
+    <div class="d-flex justify-content-center mt-3">
+        <button th:id="${submitButtonId}" type="submit" class="btn btn-success me-4">
+            <span th:text="${submitText}"></span>
+        </button>
+        <button type="reset" class="btn btn-secondary me-4">Hủy bỏ</button>
+        <button type="button" class="btn btn-primary me-4" onclick="history.back()">Trở lại</button>
+    </div>
 </th:block>
 </body>
 </html>
