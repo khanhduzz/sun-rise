@@ -15,6 +15,7 @@
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/auth/style.css}" type="text/css">
 </head>
 
 <body id="page-top">
@@ -24,7 +25,7 @@
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <div th:replace="~{header :: header}"></div>
-
+            <th:block th:replace="~{/user/fragmentUser :: errorPopup}"></th:block>
             <div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100vh;">
                 <div class="card shadow mb-4" style="width: 50%;">
                     <div class="card-header py-3 text-center">
@@ -43,26 +44,27 @@
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="ho" class="form-label font-weight-bold">Họ</label>
-                                    <input id="ho" type="text" class="form-control border-primary" th:field="*{firstname}" required>
+                                    <label for="firstname" class="form-label font-weight-bold">Họ</label>
+                                    <input id="firstname" type="text" class="form-control border-primary" th:field="*{firstname}">
+                                    <div id="message-firstname" class="popover"></div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="ten" class="form-label font-weight-bold">Tên</label>
-                                    <input id="ten" type="text" class="form-control border-primary" th:field="*{lastname}" required>
+                                    <label for="lastname" class="form-label font-weight-bold">Tên</label>
+                                    <input id="lastname" type="text" class="form-control border-primary" th:field="*{lastname}">
+                                    <div id="message-lastname" class="popover"></div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="email" class="form-label font-weight-bold">Địa chỉ Email</label>
-                                    <input id="email" type="email" class="form-control border-primary" th:field="*{email}" required>
-                                    <div id="emailError" class="invalid-feedback">Email không hợp lệ</div>
+                                    <input id="email" type="email" class="form-control border-primary" th:field="*{email}">
+                                    <div id="message-email" class="popover"></div>
                                     <div th:if="${duplicateEmail}" class="text-danger">
                                         <p th:text="${duplicateEmail}"></p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="phone" class="form-label font-weight-bold">Số điện thoại</label>
-                                    <input id="phone" type="text" class="form-control border-primary" th:field="*{phone}"
-                                           pattern="^[0-9]{1,10}$" title="Số điện thoại chỉ được chứa tối đa 10 chữ số từ 0 đến 9." required>
-                                    <div id="phoneError" class="invalid-feedback">Số điện thoại chỉ được chứa tối đa 10 chữ số từ 0 đến 9.</div>
+                                    <input id="phone" type="text" class="form-control border-primary" th:field="*{phone}">
+                                    <div id="message-phone" class="popover"></div>
                                     <div th:if="${duplicatePhone}" class="text-danger">
                                         <p th:text="${duplicatePhone}"></p>
                                     </div>
@@ -87,33 +89,24 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="password" class="form-label font-weight-bold">Mật khẩu</label>
+                                    <label for="password-register" class="form-label font-weight-bold">Mật khẩu</label>
                                     <div class="input-group">
-                                        <input type="password" th:field="*{password}" class="form-control border-primary" id="password" required>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('password', this)">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </div>
+                                        <input type="password" th:field="*{password}" class="form-control border-primary" id="password-register" name="password">
+                                        <div id="message-password-register" class="popover"></div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label for="confirmPassword" class="form-label font-weight-bold">Nhập lại mật khẩu</label>
+                                    <label for="re-password-register" class="form-label font-weight-bold">Nhập lại mật khẩu</label>
                                     <div class="input-group">
-                                        <input type="password" class="form-control border-primary" id="confirmPassword" required>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('confirmPassword', this)">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </div>
+                                        <input type="password" class="form-control border-primary" id="re-password-register" name="confirmPassword">
+                                        <div id="message-re-password-register" class="popover"></div>
                                     </div>
-                                    <small id="passwordError" class="text-danger d-none">Mật khẩu không khớp!</small>
                                 </div>
                             </div>
 
                             <div class="d-flex justify-content-center">
-                                <button type="submit" id="createUserBtn" class="btn btn-success me-4">Khởi tạo</button>
+                                <button type="submit" id="submit-button-register-by-admin" class="btn btn-success me-4">Khởi tạo</button>
                                 <button type="reset" class="btn btn-secondary me-4">Hủy bỏ</button>
                                 <button type="button" class="btn btn-primary me-4" onclick="history.back()">Trở lại</button>
                             </div>
@@ -125,8 +118,6 @@
         <div th:replace="~{footer :: footer}"></div>
     </div>
 </div>
-<script th:src="@{/vendor/jquery/jquery.min.js}" type="application/javascript"></script>
-<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
-<script th:src="@{/js/user/user.js}" type="application/javascript"></script>
+<div th:replace="~{/user/fragmentUser :: scripts}"></div>
 </body>
 </html>

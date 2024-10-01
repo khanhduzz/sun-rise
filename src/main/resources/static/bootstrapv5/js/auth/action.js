@@ -4,12 +4,14 @@ const boxLogin = document.getElementById("box-login");
 window.onload = function() {
     let page = window.location.href.split("/").pop();
 
-    if (page === "register") {
-        boxRegister.style.visibility = "visible";
-        boxRegister.style.opacity = "1";
-    } else {
-        boxLogin.style.visibility = "visible";
-        boxLogin.style.opacity = "1";
+    if(boxRegister != null) {
+        if (page === "register") {
+            boxRegister.style.visibility = "visible";
+            boxRegister.style.opacity = "1";
+        } else {
+            boxLogin.style.visibility = "visible";
+            boxLogin.style.opacity = "1";
+        }
     }
 }
 
