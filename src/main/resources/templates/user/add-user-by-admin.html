@@ -43,16 +43,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="firstname" class="form-label font-weight-bold">Họ</label>
-                                    <input id="firstname" type="text" class="form-control border-primary" th:field="*{firstname}">
-                                    <div id="message-firstname" class="popover"></div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="lastname" class="form-label font-weight-bold">Tên</label>
-                                    <input id="lastname" type="text" class="form-control border-primary" th:field="*{lastname}">
-                                    <div id="message-lastname" class="popover"></div>
-                                </div>
+                                <th:block th:replace="~{/user/fragmentUser :: inputFristAndLastName}"></th:block>
                                 <div class="col-md-6 mb-3">
                                     <label for="email" class="form-label font-weight-bold">Địa chỉ Email</label>
                                     <input id="email" type="email" class="form-control border-primary" th:field="*{email}">

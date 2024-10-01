@@ -30,5 +30,18 @@
     <script type="text/javascript" th:src="@{/js/auth/action.js}"></script>
     <script type="text/javascript" th:src="@{/js/auth/valid.js}"></script>
 </div>
+
+<th:block th:fragment="inputFristAndLastName">
+    <div class="col-md-6 mb-3">
+        <label for="firstname" class="fw-bold">Họ</label>
+        <input id="firstname" type="text" class="form-control border-primary" th:field="*{firstname}">
+        <div id="message-firstname" class="popover"></div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="lastname" class="fw-bold">Tên</label>
+        <input id="lastname" type="text" class="form-control border-primary" th:field="*{lastname}">
+        <div id="message-lastname" class="popover"></div>
+    </div>
+</th:block>
 </body>
 </html>
