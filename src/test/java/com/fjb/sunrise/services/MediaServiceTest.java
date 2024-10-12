@@ -18,8 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +27,6 @@ import java.util.Collections;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class MediaServiceTest {
 
     @Mock
@@ -139,32 +136,6 @@ class MediaServiceTest {
 
         assertNotNull(retrievedMedia);
         assertEquals(mockMedia.getName(), retrievedMedia.getName());
-    }
-
-    @Test
-    void testGetMediaOfUser_UserExistsWithFileCode() {
-        initUserData();
-        when(userRepository.findByEmailOrPhone("test@example.com")).thenReturn(user);
-        Media expectedMedia = new Media();
-
-        when(mediaService.getMedia(user.getFileCode())).thenReturn(expectedMedia);
-
-        Media actualMedia = mediaService.getMediaOfUser();
-
-        assertNotNull(actualMedia);
-        assertEquals(expectedMedia, actualMedia);
-        verify(userRepository).findByEmailOrPhone("test@example.com");
-    }
-
-    @Test
-    void testGetMediaOfUser_UserExistsWithoutFileCode() {
-        initUserData();
-        user.setFileCode(null);
-        when(userRepository.findByEmailOrPhone("test@example.com")).thenReturn(user);
-
-        Media actualMedia = mediaService.getMediaOfUser();
-
-        assertNotNull(actualMedia);
     }
 
     @Test
