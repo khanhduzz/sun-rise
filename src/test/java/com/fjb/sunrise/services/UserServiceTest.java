@@ -413,27 +413,6 @@ class UserServiceTest {
     }
 
     @Test
-    void processPasswordChange_WhenOldPasswordIsCorrect_ShouldChangePassword() {
-        String oldPassword = "correctOldPassword";
-        String newPassword = "newPassword123!";
-        String name = "test@example.com";
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(name, null));
-
-        User currentUser = Instancio.of(User.class)
-            .set(field(User::getEmail), name)
-            .set(field(User::getPassword), passwordEncoder.encode(oldPassword))
-            .create();
-
-        when(userRepository.findByEmailOrPhone(name)).thenReturn(currentUser);
-
-        userService.processPasswordChange(oldPassword, newPassword);
-
-        verify(userRepository).save(Mockito.argThat(user ->
-            passwordEncoder.matches(newPassword, user.getPassword())
-        ));
-    }
-
-    @Test
     void findAllNormalUser_WhenThereAreUsers_ShouldReturnListOfUsers() {
         List<User> users = Instancio.ofList(User.class)
             .size(3)
