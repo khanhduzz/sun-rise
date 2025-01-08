@@ -1,0 +1,93 @@
+<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar"
+    th:fragment="tab-bar-v2" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-start p-3 text-decoration-none" th:href="@{/v2/home}">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink fs-3"></i>
+        </div>
+        <div class="mx-3 fs-4">Budgeting Service</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Home -->
+    <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" th:href="@{/v2/home}">
+            <i class="fas fa-fw fa-home"></i>
+            <span class="ms-2">Trang chủ</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+        <a class="nav-link d-flex align-items-center" th:href="@{/v2/home}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span class="ms-2">Tổng quan</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading ms-3">Quản trị</div>
+
+    <!-- Nav Item - Categories Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCategories"
+           aria-expanded="false" aria-controls="collapseCategories">
+            <i class="fas fa-fw fa-folder"></i>
+            <span class="ms-2">Danh mục</span>
+        </a>
+        <div id="collapseCategories" class="collapse" aria-labelledby="headingCategories" data-bs-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" th:href="@{/category/index}">Danh sách danh mục</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Users Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUsers"
+           aria-expanded="false" aria-controls="collapseUsers">
+            <i class="fas fa-fw fa-user"></i>
+            <span class="ms-2">Người dùng</span>
+        </a>
+        <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-bs-parent="#accordionSidebar">
+            <!-- Admin Section -->
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="bg-white py-2 collapse-inner rounded d-flex flex-column">
+                    <a class="collapse-item" th:href="@{/user/admin-page}">Quản lý người dùng</a>
+                    <a class="collapse-item" th:href="@{/user/add-user-by-admin}">Thêm người dùng mới</a>
+                </div>
+            </div>
+            <!-- User Section -->
+            <div sec:authorize="hasRole('ROLE_USER')">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" th:href="@{/user/edit-infor}">Thông tin cá nhân</a>
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Media -->
+    <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" th:href="@{/medias/files}">
+            <i class="fas fa-fw fa-folder"></i>
+            <span class="ms-2">Đa phương tiện</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Sidebar Toggler -->
+    <div class="text-center d-none d-md-inline">
+        <button class="btn btn-outline-light rounded-circle border-0" id="sidebarToggle">
+            <i class="fas fa-angle-double-left"></i>
+        </button>
+    </div>
+</ul>

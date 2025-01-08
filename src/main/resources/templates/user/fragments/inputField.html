@@ -1,0 +1,9 @@
+<!-- inputFieldFragment.html -->
+<th:block th:fragment="inputField(label, fieldId, fieldValue, placeholder)" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="col-md-6 mb-3">
+        <label th:for="${fieldId}" class="fw-bold" th:text="${label}"></label>
+        <input th:id="${fieldId}" type="text" class="field-custom"
+               th:field="*{${fieldValue}}" th:placeholder="${placeholder}">
+        <div th:id="'message-' + ${fieldId}" class="popover"></div>
+    </div>
+</th:block>

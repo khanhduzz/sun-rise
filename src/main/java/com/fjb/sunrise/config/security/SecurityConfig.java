@@ -24,6 +24,8 @@ public class SecurityConfig {
 
     static final String[] PUBLIC_ENDPOINTS = {"/img/**", "/css/**", "/js/**", "/auth/**", "/health/**", "/vendor/**"};
 
+    static final String[] PUBLIC_ENDPOINTS_V2 = {"/v2/home"};
+
     static final String[] ALLOWED_METHODS = {"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"};
 
     static final String[] ALLOWED_ORIGINS = {"*"};
@@ -41,11 +43,12 @@ public class SecurityConfig {
             }))
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(PUBLIC_ENDPOINTS_V2).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/auth/login")
-                .defaultSuccessUrl("/transaction/create", true)
+                .defaultSuccessUrl("/v2/home", true)
                 .permitAll()
             )
             .logout(logout -> logout
