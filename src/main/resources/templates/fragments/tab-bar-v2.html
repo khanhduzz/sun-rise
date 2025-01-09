@@ -1,9 +1,10 @@
-<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar"
+<ul class="navbar-nav sidebar bg-info sidebar-dark accordion text-white" id="accordionSidebar"
     th:fragment="tab-bar-v2" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
     xmlns:th="http://www.w3.org/1999/xhtml">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-start p-3 text-decoration-none" th:href="@{/v2/home}">
+    <a class="sidebar-brand d-flex align-items-center justify-content-start p-3 text-decoration-none text-white"
+       th:href="@{/v2/home}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink fs-3"></i>
         </div>
@@ -14,7 +15,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Home -->
-    <li class="nav-item">
+    <li class="nav-item active btn text-white">
         <a class="nav-link d-flex align-items-center" th:href="@{/v2/home}">
             <i class="fas fa-fw fa-home"></i>
             <span class="ms-2">Trang chủ</span>
@@ -22,7 +23,7 @@
     </li>
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item btn text-white">
         <a class="nav-link d-flex align-items-center" th:href="@{/v2/home}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span class="ms-2">Tổng quan</span>
@@ -36,32 +37,37 @@
     <div class="sidebar-heading ms-3">Quản trị</div>
 
     <!-- Nav Item - Categories Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCategories"
+    <li class="nav-item btn text-white">
+        <a class="nav-link collapsed d-flex align-items-center text-decoration-none btn" href="#" data-bs-toggle="collapse"
+           data-bs-target="#collapseCategories"
            aria-expanded="false" aria-controls="collapseCategories">
             <i class="fas fa-fw fa-folder"></i>
-            <span class="ms-2">Danh mục</span>
+            <span class="ms-2 text-decoration-none">Danh mục</span>
         </a>
-        <div id="collapseCategories" class="collapse" aria-labelledby="headingCategories" data-bs-parent="#accordionSidebar">
+        <div id="collapseCategories" class="collapse" aria-labelledby="headingCategories"
+             data-bs-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" th:href="@{/category/index}">Danh sách danh mục</a>
+                <a class="collapse-item text-decoration-none btn text-black" th:href="@{/category/index}">Danh sách danh mục</a>
             </div>
         </div>
     </li>
 
     <!-- Nav Item - Users Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUsers"
+    <li class="nav-item btn text-white">
+        <a class="nav-link collapsed d-flex align-items-center" href="#" data-bs-toggle="collapse"
+           data-bs-target="#collapseUsers"
            aria-expanded="false" aria-controls="collapseUsers">
             <i class="fas fa-fw fa-user"></i>
             <span class="ms-2">Người dùng</span>
         </a>
         <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-bs-parent="#accordionSidebar">
             <!-- Admin Section -->
-            <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <div sec:authorize="hasRole('ROLE_ADMIN')" class="d-flex flex-column gap-2">
                 <div class="bg-white py-2 collapse-inner rounded d-flex flex-column">
-                    <a class="collapse-item" th:href="@{/user/admin-page}">Quản lý người dùng</a>
-                    <a class="collapse-item" th:href="@{/user/add-user-by-admin}">Thêm người dùng mới</a>
+                    <a class="collapse-item text-decoration-none btn text-black" th:href="@{/user/admin-page}">Quản lý người dùng</a>
+                </div>
+                <div class="bg-white py-2 collapse-inner rounded d-flex flex-column">
+                    <a class="collapse-item text-decoration-none btn text-black" th:href="@{/user/add-user-by-admin}">Thêm người dùng mới</a>
                 </div>
             </div>
             <!-- User Section -->
@@ -74,7 +80,7 @@
     </li>
 
     <!-- Nav Item - Media -->
-    <li class="nav-item">
+    <li class="nav-item btn text-white">
         <a class="nav-link d-flex align-items-center" th:href="@{/medias/files}">
             <i class="fas fa-fw fa-folder"></i>
             <span class="ms-2">Đa phương tiện</span>

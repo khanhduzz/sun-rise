@@ -5,24 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sunrise</title>
-<!--    <link rel="stylesheet" th:src="@{/js/style-v2.css}">-->
+    <link rel="stylesheet" th:href="@{/css/style-v2.css}" type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body id="page-top">
 <div id="wrapper" class="d-flex">
-<!--     Tab Bar-->
+    <!--     Tab Bar-->
     <div class="bg-gradient-primary sidebar sidebar-dark" th:replace="~{fragments/tab-bar-v2 :: tab-bar-v2}"
          style="min-height: 100vh; width: 300px;">
     </div>
 
-<!--     Content Area-->
+    <!--     Content Area-->
     <div id="content-wrapper" class="flex-grow-1 d-flex flex-column border-none">
         <div id="content">
             <!-- Header -->
             <div th:replace="~{fragments/header-v2 :: header-v2}"></div>
-<!--            <div th:replace="~{fragments/tab-bar-v2 :: tab-bar-v2}"></div>-->
+            <!--            <div th:replace="~{fragments/tab-bar-v2 :: tab-bar-v2}"></div>-->
 
             <!-- Main Content -->
             <div class="container border" style="min-height: 68vh;">
@@ -36,7 +36,8 @@
             <div th:replace="~{fragments/footer-v2 :: footer-v2}"></div>
         </div>
     </div>
-<!--<script th:src="@{/js/script-v2.js}"></script>-->
+</div>
+<script th:src="@{/js/script-v2.js}" type="application/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

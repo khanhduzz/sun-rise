@@ -32,7 +32,8 @@
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img alt="profile" class="rounded-circle me-2"
-                             th:src="@{/medias/media/user}" style="width: 40px; height: 40px;">
+                             th:src="@{/medias/media/user}" style="width: 40px; height: 40px;"
+                             onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/5556/5556468.png';">
                         <span class="text-gray-600 small" sec:authentication="name"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow animated--grow-in"
@@ -42,7 +43,9 @@
                                 <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i> Account
                             </a>
                         </li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li>
                             <a class="dropdown-item text-danger" th:href="@{/logout}">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i> Logout
