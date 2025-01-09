@@ -2,6 +2,7 @@ package com.fjb.sunrise.config;
 
 import static com.fjb.sunrise.utils.Constants.ApiConstant.AUTH_VIEW;
 
+import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,6 +40,7 @@ public class WebServletConfig implements WebMvcConfigurer {
         engine.setTemplateResolver(templateResolver());
         engine.setEnableSpringELCompiler(true);
         engine.addDialect(new SpringSecurityDialect());
+        engine.addDialect(new LayoutDialect());
         return engine;
     }
 
@@ -66,5 +68,7 @@ public class WebServletConfig implements WebMvcConfigurer {
         registry.addViewController("/auth/register").setViewName(AUTH_VIEW);
         registry.addViewController("/category/index").setViewName("category/index");
         registry.addViewController("/medias").setViewName("media/index");
+
+        registry.addViewController("/v2/home").setViewName("home-v2");
     }
 }

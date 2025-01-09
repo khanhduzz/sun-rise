@@ -13,6 +13,7 @@ public class Constants {
         public static final String USER_ALREADY_EXISTED = "USER_ALREADY_EXISTED";
         public static final String CATEGORY_NOT_FOUND = "CATEGORY_NOT_FOUND";
         public static final String CATEGORY_ALREADY_EXISTED = "CATEGORY_ALREADY_EXISTED";
+        public static final String ACCOUNT_HAS_BEEN_BLOCKED = "ACCOUNT_HAS_BEEN_BLOCKED";
     }
 
     public static final class PageableConstant {
