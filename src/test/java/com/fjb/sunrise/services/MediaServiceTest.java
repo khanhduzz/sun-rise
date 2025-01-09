@@ -143,6 +143,7 @@ class MediaServiceTest {
 
     @Test
     void testGetMediaOfUser_UserNotFound() {
+        initUserData();
         when(userRepository.findByEmailOrPhone("test@example.com")).thenReturn(null);
 
         assertThrows(NotFoundException.class, () -> mediaService.getMediaOfUser());

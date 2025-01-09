@@ -33,11 +33,11 @@ public class CustomUserDetailService implements UserDetailsService {
                 throw new RuntimeException(e);
             }
         }
-//        return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
-//            .password(user.getPassword())
-//            .roles(String.valueOf(user.getRole()))
-//            .disabled(isDisable)
-//            .build();
+        //return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
+        //    .password(user.getPassword())
+        //    .roles(String.valueOf(user.getRole()))
+        //    .disabled(isDisable)
+        //    .build();
 
         return user;
     }
