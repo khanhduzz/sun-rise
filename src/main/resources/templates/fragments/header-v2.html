@@ -29,13 +29,13 @@
 
                 <!-- User Dropdown (Authenticated Users Only) -->
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
-                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
+                       data-bs-toggle="dropdown" aria-expanded="false">
                         <img alt="profile" class="rounded-circle me-2"
                              th:src="@{/medias/media/user}" style="width: 40px; height: 40px;"
                              onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/5556/5556468.png';">
                         <span class="text-gray-600 small" sec:authentication="name"></span>
-                    </a>
+                    </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow animated--grow-in"
                         aria-labelledby="userDropdown">
                         <li>
