@@ -1,6 +1,8 @@
 # Budgeting Service System
 Budgeting Service System is a project provides features for tracking and managing budget, money, users, and trading transactions.
 
+_This is currently in refactoring code, cannot perform now_
+
 [![sun-rise](https://github.com/khanhduzz/sun-rise/actions/workflows/pipeline-sun.yml/badge.svg)](https://github.com/khanhduzz/sun-rise/actions/workflows/pipeline-sun.yml)
 [![codecov](https://codecov.io/github/khanhduzz/sun-rise/graph/badge.svg?token=GJEDWMOLU9)](https://codecov.io/github/khanhduzz/sun-rise)
 
