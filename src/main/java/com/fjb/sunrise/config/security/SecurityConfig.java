@@ -48,7 +48,7 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/auth/login")
-                .defaultSuccessUrl("/v2/home", true)
+                .defaultSuccessUrl("/transaction/create", true)
                 .permitAll()
             )
             .logout(logout -> logout
