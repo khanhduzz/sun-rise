@@ -1,62 +1,50 @@
 <header th:fragment="header-v2"
         xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
         xmlns:th="http://www.thymeleaf.org">
-    <nav class="navbar navbar-expand-lg bg-white shadow mb-4">
-        <!-- Sidebar Toggle Button (Mobile) -->
-        <!-- Removed the toggle button since you want the navbar to always show -->
 
-        <!-- Navbar Content -->
-        <div class="container-fluid">
-            <!-- Navbar Brand -->
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+    <nav class="navbar navbar-expand-lg shadow-sm border-bottom px-4 py-3"
+         style="background-color: #f8f9fa;">
+
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+
+            <!-- Search -->
+            <form class="d-flex align-items-center" role="search">
+                <input class="form-control rounded-pill me-2 shadow-sm border-light-subtle" type="search"
+                       placeholder="Tìm kiếm..." aria-label="Search">
+                <button class="btn btn-outline-primary rounded-pill px-3" type="submit">Tìm</button>
             </form>
 
-            <!-- Right Side of Navbar -->
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item mr-2">
-                    <a class="nav-link active" aria-current="page" href="#">
-                        <button type="button" class="btn position-relative p-0 border-none">
-                            <i class="bi bi-envelope position-relative text-info fs-2 wh-100"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success fw-light">
-                                3
-                                <span class="visually-hidden">unread messages</span>
-                            </span>
-                        </button>
+            <!-- Right Side Icons -->
+            <ul class="navbar-nav ms-auto align-items-center gap-3">
+                <li class="nav-item">
+                    <a class="nav-link position-relative p-0" href="#">
+                        <i class="bi bi-envelope fs-4 text-primary"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                            3
+                        </span>
                     </a>
                 </li>
 
-                <!-- User Dropdown (Authenticated Users Only) -->
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                    <button class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        <img alt="profile" class="rounded-circle me-2"
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
+                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img alt="profile" class="rounded-circle me-2 shadow-sm"
                              th:src="@{/medias/media/user}" style="width: 40px; height: 40px;"
                              onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/5556/5556468.png';">
-                        <span class="text-gray-600 small" sec:authentication="name"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow animated--grow-in"
+                        <span class="text-dark fw-semibold small" sec:authentication="name"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3"
                         aria-labelledby="userDropdown">
-                        <li>
-                            <a class="dropdown-item" th:href="@{/user/edit-infor}">
-                                <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i> Account
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item text-danger" th:href="@{/logout}">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i> Logout
-                            </a>
-                        </li>
+                        <li><a class="dropdown-item" th:href="@{/user/edit-infor}">
+                            <i class="fas fa-user fa-sm fa-fw me-2 text-muted"></i> Tài khoản</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" th:href="@{/logout}">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-muted"></i> Đăng xuất</a></li>
                     </ul>
                 </li>
 
-                <!-- Login Button (Unauthenticated Users Only) -->
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
-                    <a class="btn btn-outline-info" th:href="@{/auth/login}">Login</a>
+                    <a class="btn btn-outline-primary rounded-pill px-4" th:href="@{/auth/login}">Đăng nhập</a>
                 </li>
             </ul>
         </div>

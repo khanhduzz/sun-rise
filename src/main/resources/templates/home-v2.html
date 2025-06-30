@@ -1,13 +1,154 @@
-<section layout:fragment="content" xmlns:th="http://www.w3.org/1999/xhtml"
-         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-         layout:decorate="~{layout.html}">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+
+<head>
+    <title>Sunrise Home</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<section layout:fragment="content">
+
+    <!-- Hero Banner -->
     <div class="w-100">
-        <div class="d-flex flex-column justify-content-center align-items-center py-5 bg-info text-white">
-            <h1 class="display-4 mb-4">Welcome to the Sunrise</h1>
-            <p class="lead mb-4">This is a budgeting service system, for manage your money, bill,...</p>
+        <div class="d-flex flex-column justify-content-center align-items-center py-5 bg-light text-dark">
+            <h1 class="display-4 mb-3">Welcome to Sunrise</h1>
+            <p class="lead mb-4 text-muted">A modern budgeting service for managing your money, bills, and goals.</p>
+            <a th:href="@{/v2/home}" class="btn btn-outline-info btn-lg">Get Started</a>
         </div>
-        <div class="vh-25">
-            <a th:href="@{/v2/home}" class="btn btn-outline-info btn-lg mt-2">Homepage</a>
+
+        <!-- Quick Overview Dashboard -->
+        <div class="container py-5">
+            <div class="row gy-4">
+                <!-- Expense by Category Chart -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">Expenses by Category</h5>
+                            <canvas id="chartExpenses"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- Income vs Expense Chart -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">Income vs Expenses</h5>
+                            <canvas id="chartIncomeVsExpense"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About the App -->
+        <div class="container py-5 bg-white">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2>Why Choose Sunrise?</h2>
+                    <p class="text-muted">Sync your accounts, set budgets, create savings goals, and track progress in real time. Our interface is designed to be intuitive, empowering and beautiful.</p>
+                    <ul class="list-unstyled">
+                        <li>✔️ Automatic bank sync & categorization</li>
+                        <li>✔️ Envelope-style budgeting</li>
+                        <li>✔️ Goal Tracking & Forecasting</li>
+                        <li>✔️ Secure data—you own your info</li>
+                    </ul>
+                </div>
+<!--                <div class="col-md-6 text-center">-->
+<!--                    <img src="https://via.placeholder.com/400x300" alt="App screenshot" class="img-fluid rounded shadow-sm">-->
+<!--                </div>-->
+            </div>
+        </div>
+
+        <!-- Competitive Apps Section -->
+        <div class="container py-5">
+            <h3 class="mb-4">Popular Budget Apps</h3>
+            <div class="row gy-3">
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">YNAB</h5>
+                            <p class="card-text small">Zero-based budgeting, envelope system—pro budgeting tool since 2004.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Mint</h5>
+                            <p class="card-text small">Free, links with thousands of banks, helps track all your finances in one place.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Actual Budget</h5>
+                            <p class="card-text small">Envelope-style budgeting with a focus on privacy and speed.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">PocketGuard</h5>
+                            <p class="card-text small">Simple and smart tracking for daily expenses and savings goals.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 </section>
+
+<!-- Chart.js CDN + Inline Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            const ctx1 = document.getElementById('chartExpenses');
+            if (ctx1) {
+                new Chart(ctx1, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Rent', 'Food', 'Transport', 'Entertainment'],
+                        datasets: [{
+                            data: [500, 300, 150, 100],
+                            backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545']
+                        }]
+                    }
+                });
+            }
+
+            const ctx2 = document.getElementById('chartIncomeVsExpense');
+            if (ctx2) {
+                new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+                        datasets: [
+                            {
+                                label: 'Income',
+                                data: [3000, 3200, 3100, 3300],
+                                backgroundColor: '#0d6efd'
+                            },
+                            {
+                                label: 'Expenses',
+                                data: [2500, 2600, 2400, 2700],
+                                backgroundColor: '#dc3545'
+                            }
+                        ]
+                    }
+                });
+            }
+
+        } catch (err) {
+            console.error('Chart rendering error:', err);
+        }
+    });
+</script>
+</body>
+</html>

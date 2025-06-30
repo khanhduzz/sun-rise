@@ -6,6 +6,7 @@ import com.fjb.sunrise.dtos.responses.StatisticResponse;
 import com.fjb.sunrise.enums.ETrans;
 import com.fjb.sunrise.models.Category;
 import com.fjb.sunrise.models.Transaction;
+import com.fjb.sunrise.models.User;
 import com.fjb.sunrise.repositories.CategoryRepository;
 import com.fjb.sunrise.repositories.TransactionRepository;
 import com.fjb.sunrise.repositories.UserRepository;
@@ -16,7 +17,6 @@ import jakarta.transaction.Transactional;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
@@ -31,7 +31,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -72,7 +72,7 @@ public class TransactionServiceImpl implements TransactionService {
         final String keyword = payload.getSearch().getOrDefault("value", "");
         Specification<Transaction> specs = null;
         specs = Specification.where((root, query, builder) -> {
-            com.fjb.sunrise.models.User dbUser = null;
+            User dbUser = null;
             if (email.equals("null")) {
                 dbUser = userRepository.findByEmailOrPhone(getCurrentUserName());
             } else {
@@ -164,8 +164,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     private String getCurrentUserName() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
-        return user.getUsername();
+        User userDetails = (User) auth.getPrincipal();
+        return userDetails.getUsername();
     }
 
     private LocalDateTime getFirstOrLastDateOfThisYear(boolean isLast) {

@@ -1,34 +1,34 @@
 services:
-  sunrise:
-    build: .
-    image: ghcr.io/khanhduzz/sun-rise:latest
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mock_project
-      - SERVER_SERVLET_CONTEXT_PATH=/sun
-      - DB_USERNAME=admin
-      - DB_PASSWORD=admin
-      - SERVER_LOCAL_PORT
-      - ADMIN_DEFAULT_USERNAME=sunrise
-      - ADMIN_DEFAULT_PASSWORD=test1234
-      - ADMIN_DEFAULT_FIRST=james
-      - ADMIN_DEFAULT_LAST=bond
-      - ADMIN_CREATE_KEY=dfjkNdkMAnje
-      - ADMIN_DEFAULT_EMAIL=sun@sun.com
-      - ENCODE_KEY
-      - TYPE_ENCODE
-      - EMAIL_SERVER
-      - PASSWORD_EMAIL_SERVER
-      - RECAPTCHA_SECRET_KEY
-      - RECAPTCHA_SITE_KEY
-      - CAPTCHA_ENABLE=true
-      - TIMING_SEND_EMAIL
-      - EMAIL_VERIFY
-    ports:
-      - ${SERVER_LOCAL_PORT}:${SERVER_LOCAL_PORT}
-    volumes:
-      - ./deployment/app-config:/app-config
-    networks:
-      - sun-network
+#  sunrise:
+#    build: .
+#    image: ghcr.io/khanhduzz/sun-rise:latest
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mock_project
+#      - SERVER_SERVLET_CONTEXT_PATH=/sun
+#      - DB_USERNAME=admin
+#      - DB_PASSWORD=admin
+#      - SERVER_LOCAL_PORT
+#      - ADMIN_DEFAULT_USERNAME=sunrise
+#      - ADMIN_DEFAULT_PASSWORD=test1234
+#      - ADMIN_DEFAULT_FIRST=james
+#      - ADMIN_DEFAULT_LAST=bond
+#      - ADMIN_CREATE_KEY=dfjkNdkMAnje
+#      - ADMIN_DEFAULT_EMAIL=sun@sun.com
+#      - ENCODE_KEY
+#      - TYPE_ENCODE
+#      - EMAIL_SERVER
+#      - PASSWORD_EMAIL_SERVER
+#      - RECAPTCHA_SECRET_KEY
+#      - RECAPTCHA_SITE_KEY
+#      - CAPTCHA_ENABLE=true
+#      - TIMING_SEND_EMAIL
+#      - EMAIL_VERIFY
+#    ports:
+#      - ${SERVER_LOCAL_PORT}:${SERVER_LOCAL_PORT}
+#    volumes:
+#      - ./deployment/app-config:/app-config
+#    networks:
+#      - sun-network
 
   postgres:
     image: debezium/postgres:15-alpine

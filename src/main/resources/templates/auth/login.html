@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sunrise Budgeting</title>
+    <link rel="icon" th:href="@{/img/spreadsheet_17087859.png}" type="image/png">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', 'Inter', sans-serif;
+            margin: 0;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .auth-box {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .auth-form {
+            flex: 1 1 50%;
+            padding: 3rem;
+        }
+
+        .auth-form h2 {
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #343a40;
+        }
+
+        .form-control {
+            font-size: 1.05rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+        }
+
+        .form-check-label a {
+            color: #495057;
+            text-decoration: none;
+        }
+
+        .form-check-label a:hover {
+            text-decoration: underline;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .auth-side {
+            flex: 1 1 50%;
+            background: linear-gradient(135deg, #e3f2fd, #e8f5e9);
+            color: #343a40;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+        }
+
+        .auth-side h3 {
+            font-weight: 600;
+        }
+
+        .auth-side i {
+            font-size: 120px;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            padding: 0.75rem;
+            font-size: 1.1rem;
+            border-radius: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+<div class="auth-wrapper">
+    <div class="auth-box">
+        <div class="auth-form">
+            <h2>Đăng nhập</h2>
+            <form th:action="@{/auth/login}" th:object="${login}" method="post">
+                <div class="mb-3">
+                    <input type="text" th:field="*{username}" class="form-control" placeholder="Email hoặc số điện thoại">
+                </div>
+                <div class="mb-3">
+                    <input type="password" th:field="*{password}" class="form-control" placeholder="Mật khẩu">
+                </div>
+                <div class="mb-3 text-center">
+                    <div id="recaptcha-login"></div>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="remember-me" name="remember-me">
+                    <label class="form-check-label" for="remember-me">
+                        <a>Ghi nhớ đăng nhập</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+                <div class="form-footer">
+                    <a th:href="@{/auth/forgotPassword}" class="d-block my-2">Quên mật khẩu?</a>
+                    <a th:href="@{/auth/register}">Tạo tài khoản mới</a>
+                </div>
+            </form>
+        </div>
+        <div class="auth-side text-center">
+            <h3>Chào mừng bạn trở lại!</h3>
+            <p>Nhập thông tin để truy cập hệ thống quản lý tài chính.</p>
+            <i class="bi bi-graph-up-arrow text-primary"></i>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit" async defer></script>
+<script>
+    let CaptchaCallback = function () {
+        try {
+            if (document.getElementById('recaptcha-login')) {
+                grecaptcha.render('recaptcha-login', {
+                    'sitekey': '[[${recaptchaSiteKey}]]'
+                });
+            }
+        } catch (e) {
+            console.error("reCAPTCHA error:", e);
+        }
+    };
+</script>
+</body>
+</html>

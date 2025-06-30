@@ -1,98 +1,108 @@
-<ul class="navbar-nav sidebar bg-info sidebar-dark accordion text-white" id="accordionSidebar"
-    th:fragment="tab-bar-v2" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-    xmlns:th="http://www.w3.org/1999/xhtml">
+<ul class="navbar-nav sidebar accordion shadow-sm" id="accordionSidebar"
+    th:fragment="tab-bar-v2"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    xmlns:th="http://www.w3.org/1999/xhtml"
+    style="background: #f8f9fa; min-height: 100vh;">
 
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-start p-3 text-decoration-none text-white"
-       th:href="@{/v2/home}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink fs-3"></i>
+    <!-- Sidebar Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-start px-4 py-4 text-decoration-none"
+       th:href="@{/v2/home}" style="color: #3b3b3b;">
+        <div class="sidebar-brand-icon me-2 text-primary">
+            <i class="fas fa-sun fs-3"></i>
         </div>
-        <div class="mx-3 fs-4">Budgeting Service</div>
+        <span class="fs-5 fw-semibold">Sunrise Budgeting</span>
     </a>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
+    <hr class="sidebar-divider my-2">
 
-    <!-- Nav Item - Home -->
-    <li class="nav-item active btn text-white">
-        <a class="nav-link d-flex align-items-center" th:href="@{/v2/home}">
-            <i class="fas fa-fw fa-home"></i>
-            <span class="ms-2">Trang chủ</span>
+    <!-- Home -->
+    <li class="nav-item">
+        <a class="nav-link px-4 py-2 d-flex align-items-center rounded text-dark" th:href="@{/v2/home}">
+            <i class="fas fa-fw fa-home me-2 text-primary"></i>
+            <span>Trang chủ</span>
         </a>
     </li>
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item btn text-white">
-        <a class="nav-link d-flex align-items-center" th:href="@{/v2/home}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span class="ms-2">Tổng quan</span>
+    <!-- Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link px-4 py-2 d-flex align-items-center rounded text-dark" th:href="@{/v2/home}">
+            <i class="fas fa-fw fa-chart-line me-2 text-success"></i>
+            <span>Tổng quan</span>
         </a>
     </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+    <hr class="sidebar-divider my-2">
 
     <!-- Heading -->
-    <div class="sidebar-heading ms-3">Quản trị</div>
+    <div class="sidebar-heading text-uppercase px-4 small text-muted">Quản trị</div>
 
-    <!-- Nav Item - Categories Collapse Menu -->
-    <li class="nav-item btn text-white">
-        <a class="nav-link collapsed d-flex align-items-center text-decoration-none btn" href="#" data-bs-toggle="collapse"
-           data-bs-target="#collapseCategories"
-           aria-expanded="false" aria-controls="collapseCategories">
-            <i class="fas fa-fw fa-folder"></i>
-            <span class="ms-2 text-decoration-none">Danh mục</span>
+    <!-- Categories Menu -->
+    <li class="nav-item">
+        <a class="nav-link px-4 py-2 d-flex align-items-center text-dark rounded" href="#" data-bs-toggle="collapse"
+           data-bs-target="#collapseCategories" aria-expanded="false" aria-controls="collapseCategories">
+            <i class="fas fa-fw fa-folder me-2 text-warning"></i>
+            <span>Danh mục</span>
         </a>
-        <div id="collapseCategories" class="collapse" aria-labelledby="headingCategories"
-             data-bs-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item text-decoration-none btn text-black" th:href="@{/category/index}">Danh sách danh mục</a>
-            </div>
+        <div id="collapseCategories" class="collapse" data-bs-parent="#accordionSidebar">
+            <ul class="list-unstyled ps-5 py-2">
+                <li>
+                    <a class="text-secondary text-decoration-none d-block py-1" th:href="@{/v2/category/index}">
+                        Danh sách danh mục
+                    </a>
+                </li>
+            </ul>
         </div>
     </li>
 
-    <!-- Nav Item - Users Collapse Menu -->
-    <li class="nav-item btn text-white">
-        <a class="nav-link collapsed d-flex align-items-center" href="#" data-bs-toggle="collapse"
-           data-bs-target="#collapseUsers"
-           aria-expanded="false" aria-controls="collapseUsers">
-            <i class="fas fa-fw fa-user"></i>
-            <span class="ms-2">Người dùng</span>
+    <!-- Users Menu -->
+    <li class="nav-item">
+        <a class="nav-link px-4 py-2 d-flex align-items-center text-dark rounded" href="#" data-bs-toggle="collapse"
+           data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
+            <i class="fas fa-fw fa-user me-2 text-info"></i>
+            <span>Người dùng</span>
         </a>
-        <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-bs-parent="#accordionSidebar">
-            <!-- Admin Section -->
-            <div sec:authorize="hasRole('ROLE_ADMIN')" class="d-flex flex-column gap-2">
-                <div class="bg-white py-2 collapse-inner rounded d-flex flex-column">
-                    <a class="collapse-item text-decoration-none btn text-black" th:href="@{/user/admin-page}">Quản lý người dùng</a>
+        <div id="collapseUsers" class="collapse" data-bs-parent="#accordionSidebar">
+            <ul class="list-unstyled ps-5 py-2">
+
+                <!-- Admin Section -->
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li>
+                        <a class="text-secondary text-decoration-none d-block py-1" th:href="@{/user/admin-page}">
+                            Quản lý người dùng
+                        </a>
+                    </li>
+                    <li>
+                        <a class="text-secondary text-decoration-none d-block py-1" th:href="@{/user/add-user-by-admin}">
+                            Thêm người dùng mới
+                        </a>
+                    </li>
                 </div>
-                <div class="bg-white py-2 collapse-inner rounded d-flex flex-column">
-                    <a class="collapse-item text-decoration-none btn text-black" th:href="@{/user/add-user-by-admin}">Thêm người dùng mới</a>
+
+                <!-- User Section -->
+                <div sec:authorize="hasRole('ROLE_USER')">
+                    <li class="mt-2">
+                        <a class="text-secondary text-decoration-none d-block py-1" th:href="@{/user/edit-infor}">
+                            Thông tin cá nhân
+                        </a>
+                    </li>
                 </div>
-            </div>
-            <!-- User Section -->
-            <div sec:authorize="hasRole('ROLE_USER')">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" th:href="@{/user/edit-infor}">Thông tin cá nhân</a>
-                </div>
-            </div>
+            </ul>
         </div>
     </li>
 
-    <!-- Nav Item - Media -->
-    <li class="nav-item btn text-white">
-        <a class="nav-link d-flex align-items-center" th:href="@{/medias/files}">
-            <i class="fas fa-fw fa-folder"></i>
-            <span class="ms-2">Đa phương tiện</span>
+    <!-- Media -->
+    <li class="nav-item">
+        <a class="nav-link px-4 py-2 d-flex align-items-center text-dark rounded" th:href="@{/medias/files}">
+            <i class="fas fa-fw fa-photo-video me-2 text-danger"></i>
+            <span>Đa phương tiện</span>
         </a>
     </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+    <hr class="sidebar-divider my-2">
 
-    <!-- Sidebar Toggler -->
-    <div class="text-center d-none d-md-inline">
-        <button class="btn btn-outline-light rounded-circle border-0" id="sidebarToggle">
+    <!-- Sidebar Toggle -->
+    <div class="text-center d-none d-md-inline mt-3 mb-4">
+        <button class="btn btn-outline-secondary rounded-circle border-0 shadow-sm" id="sidebarToggle">
             <i class="fas fa-angle-double-left"></i>
         </button>
     </div>
