@@ -30,7 +30,8 @@
             max-width: 900px;
             width: 100%;
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: row; /* force horizontal layout */
+            align-items: stretch;
         }
 
         .auth-form {
@@ -45,9 +46,21 @@
         }
 
         .form-control {
+            width: 100%;
             font-size: 1.05rem;
             padding: 0.75rem 1rem;
             border-radius: 0.75rem;
+            border: 1px solid #dee2e6;
+            background-color: #f9f9f9;
+            color: #495057;
+            box-shadow: none;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: #fff;
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
         }
 
         .form-check-label a {
